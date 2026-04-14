@@ -1,0 +1,153 @@
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
+
+// Uses SubtleCrypto interface from Web Crypto API, native to browsers
+// Not all browsers are compatible, see: https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto#browser_compatibility
+// Generate new keypair
+export async function generateEd25519KeyPair() {
+    try {
+        const { publicKey, privateKey } = await crypto.subtle.generateKey(
+            {
+                name: "Ed25519",
+            },
+            true,
+            ["sign", "verify"],
+        );
+        return { publicKey, privateKey };
+    } catch (error) {
+        console.error("generateEd25519KeyPair failed:", error);
+        return null;
+    }
+}
+
+// Export CryptoKey object to portable format (JSON Web Key)
+export async function exportKey(key: CryptoKey) {
+    try {
+        return await crypto.subtle.exportKey("jwk", key);
+    } catch (error) {
+        console.error("exportKey failed:", error);
+        return null;
+    }
+}
+
+// Import JSON Web Key to CryptoKey object (private)
+export async function importPrivateKey(jwk: JsonWebKey) {
+    try {
+        return await crypto.subtle.importKey(
+            "jwk",
+            jwk,
+            {
+                name: "Ed25519",
+            },
+            true,
+            ["sign"],
+        );
+    } catch (error) {
+        console.error("importPrivateKey failed:", error);
+        return null;
+    }
+}
+
+// Import JSON Web Key to CryptoKey object (public)
+export async function importPublicKey(jwk: JsonWebKey) {
+    try {
+        return await crypto.subtle.importKey(
+            "jwk",
+            jwk,
+            {
+                name: "Ed25519",
+            },
+            true,
+            ["verify"],
+        );
+    } catch (error) {
+        console.error("importPublicKey failed:", error);
+        return null;
+    }
+}
+
+// Generate digital signature
+export async function signData(privateKey: CryptoKey, encodedData: BufferSource) {
+    try {
+        return await crypto.subtle.sign(
+            {
+                name: "Ed25519",
+            },
+            privateKey,
+            encodedData,
+        );
+    } catch (error) {
+        console.error("signData failed:", error);
+        return null;
+    }
+}
+
+// Verify digital signature
+export async function verifyData(publicKey: CryptoKey, signature: ArrayBuffer, encodedData: BufferSource) {
+    try {
+        return await crypto.subtle.verify(
+            {
+                name: "Ed25519",
+            },
+            publicKey,
+            signature,
+            encodedData,
+        );
+    } catch (error) {
+        console.error("verifyData failed:", error);
+        return null;
+    }
+}
+
+// Uses TextEncoder/TextDecoder interface from Encoding API, compatible with old browser versions
+// Encode data to buffer
+export function encodeData(data: string) {
+    try {
+        return encoder.encode(data);
+    } catch (error) {
+        console.error("encodeData failed:", error);
+        return null;
+    }
+}
+
+// Decode data from buffer (might be unnecessary)
+export function decodeData(data: BufferSource) {
+    try {
+        return decoder.decode(data);
+    } catch (error) {
+        console.error("decodeData failed:", error);
+        return null;
+    }
+}
+
+// Uses fromBase64() and toBase64() methods from Uint8Array built-in object
+// See browser compatibility: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array#browser_compatibility
+// Encode signature buffer to Base64 string
+export function bufferToBase64(data: ArrayBuffer) {
+    try {
+        return new Uint8Array(data).toBase64();
+    } catch (error) {
+        console.error("bufferToBase64 failed:", error);
+        return null;
+    }
+}
+
+// Encode Base64 string to buffer
+export function base64ToBuffer(data: string) {
+    try {
+        return Uint8Array.fromBase64(data).buffer;
+    } catch (error) {
+        console.error("base64ToBuffer failed:", error);
+        return null;
+    }
+}
+
+// Generate UUIDv4 using Crypto interface from Web Crypto API
+export function generateUUID() {
+    try {
+        return crypto.randomUUID();
+    } catch (error) {
+        console.error("generateUUID failed:", error);
+        return null;
+    }
+}
