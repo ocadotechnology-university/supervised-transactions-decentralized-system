@@ -12,7 +12,10 @@ export default function SupervisorAuth() {
 
     const handleLogin = () => {
         const hashed = CryptoJS.SHA256(password).toString();
+
         if (hashed === HASH) {
+            // session storage as auth - not safe but without backend nothing else can be done
+            localStorage.setItem("isSupervisor", "true");
             navigate("/supervisor/main");
         } else {
             alert("Wrong password");
