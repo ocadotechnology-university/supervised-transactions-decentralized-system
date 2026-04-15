@@ -1,12 +1,12 @@
-import { toCanvas } from "qrcode";
+import { toCanvas, type QRCodeErrorCorrectionLevel } from "qrcode";
 
 interface drawQRProps {
-    data: string,
+    data: JSON,
     QRversion: number,
-    errorCorrectionLevel: string
+    errorCorrectionLevel: QRCodeErrorCorrectionLevel
 }
 
-export async function drawQR({data, QRversion, errorCorrectionLevel}: drawQRProps): Promise<HTMLCanvasElement>{
+export async function drawQR({data, QRversion, errorCorrectionLevel = "L"}: drawQRProps): Promise<HTMLCanvasElement>{
     /* 
     Function gets canvas from html div and creates QR code
     */
@@ -17,11 +17,13 @@ export async function drawQR({data, QRversion, errorCorrectionLevel}: drawQRProp
         errorCorrectionLevel: errorCorrectionLevel,
     };
 
-    
-    try{
-        await toCanvas(canvas, data, options);
+    // to generate QR code function needs data as string
+    var stringData = JSON.stringify(data)
 
+    try{
+        await toCanvas(canvas, stringData, options);
         return canvas;
+
     } catch (error){
         console.error("Error while creating QR code: ", error);
         throw error;
