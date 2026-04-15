@@ -5,6 +5,7 @@ import Page2 from "./pages/Page2";
 import SupervisorAuth from "./pages/SupervisorAuth";
 import SupervisorMain from "./pages/SupervisorMain";
 import ProtectedRoute from "./components/ProtectedRoute";
+import RegisterTrader from "./pages/SupervisorRegister";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
                   {/* protected group */}
                   <Route element={<ProtectedRoute />}>
                       <Route path="main" element={<SupervisorMain />} />
+                      <Route path="registerTrader" element={<RegisterTrader />} />
 
                       {/* future pages go here */}
                   </Route>
