@@ -16,7 +16,7 @@ export async function generateEd25519KeyPair() {
         return { publicKey, privateKey };
     } catch (error) {
         console.error("generateEd25519KeyPair failed:", error);
-        return null;
+        throw error;
     }
 }
 
@@ -26,7 +26,7 @@ export async function exportKey(key: CryptoKey) {
         return await crypto.subtle.exportKey("jwk", key);
     } catch (error) {
         console.error("exportKey failed:", error);
-        return null;
+        throw error;
     }
 }
 
@@ -44,7 +44,7 @@ export async function importPrivateKey(jwk: JsonWebKey) {
         );
     } catch (error) {
         console.error("importPrivateKey failed:", error);
-        return null;
+        throw error;
     }
 }
 
@@ -62,7 +62,7 @@ export async function importPublicKey(jwk: JsonWebKey) {
         );
     } catch (error) {
         console.error("importPublicKey failed:", error);
-        return null;
+        throw error;
     }
 }
 
@@ -78,7 +78,7 @@ export async function signData(privateKey: CryptoKey, encodedData: BufferSource)
         );
     } catch (error) {
         console.error("signData failed:", error);
-        return null;
+        throw error;
     }
 }
 
@@ -95,7 +95,7 @@ export async function verifyData(publicKey: CryptoKey, signature: ArrayBuffer, e
         );
     } catch (error) {
         console.error("verifyData failed:", error);
-        return null;
+        throw error;
     }
 }
 
@@ -106,7 +106,7 @@ export function encodeData(data: string) {
         return encoder.encode(data);
     } catch (error) {
         console.error("encodeData failed:", error);
-        return null;
+        throw error;
     }
 }
 
@@ -116,7 +116,17 @@ export function decodeData(data: BufferSource) {
         return decoder.decode(data);
     } catch (error) {
         console.error("decodeData failed:", error);
-        return null;
+        throw error;
+    }
+}
+
+//Generate SHA256 digest
+export async function digestData(data: BufferSource) {
+    try {
+        return await crypto.subtle.digest("SHA-256", data);
+    } catch (error) {
+        console.error("digestData:", error);
+        throw error;
     }
 }
 
@@ -128,7 +138,7 @@ export function bufferToBase64(data: ArrayBuffer) {
         return new Uint8Array(data).toBase64();
     } catch (error) {
         console.error("bufferToBase64 failed:", error);
-        return null;
+        throw error;
     }
 }
 
@@ -138,7 +148,7 @@ export function base64ToBuffer(data: string) {
         return Uint8Array.fromBase64(data).buffer;
     } catch (error) {
         console.error("base64ToBuffer failed:", error);
-        return null;
+        throw error;
     }
 }
 
@@ -148,6 +158,6 @@ export function generateUUID() {
         return crypto.randomUUID();
     } catch (error) {
         console.error("generateUUID failed:", error);
-        return null;
+        throw error;
     }
 }
