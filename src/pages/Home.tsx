@@ -9,10 +9,10 @@ export default function Home() {
             <h1 className="title">WHO ARE YOU</h1>
 
             <div className="buttonContainer">
-                <button className="button" onClick={() => navigate("/page/1")}>
+                <button className="button">
                     CUSTOMER
                 </button>
-                <button className="button" onClick={() => navigate("/page/2")}>
+                <button className="button">
                     TRADER
                 </button>
                 <button className="button" onClick={() => navigate("/supervisor")}>
