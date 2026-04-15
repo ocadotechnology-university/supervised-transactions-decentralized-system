@@ -6,7 +6,7 @@ interface drawQRProps {
     errorCorrectionLevel: QRCodeErrorCorrectionLevel
 }
 
-export async function drawQR({data, QRversion, errorCorrectionLevel = "L"}: drawQRProps): Promise<HTMLCanvasElement>{
+export async function drawQR({data, QRversion, errorCorrectionLevel}: drawQRProps): Promise<HTMLCanvasElement>{
     /* 
     Function gets canvas from html div and creates QR code
     */
