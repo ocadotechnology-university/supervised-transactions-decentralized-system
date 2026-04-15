@@ -1,13 +1,15 @@
 import "../styles.css";
-import { drawQR } from "../drawQR";
-import { generateEd25519KeyPair, exportKey } from "../cryptography.ts";
+import { drawQR } from "../components/drawQR.ts";
+import { generateEd25519KeyPair, exportKey } from "../components/cryptoutils.ts";
 import { useEffect, useRef } from "react";
 
-async function jwkPubKey() {
+async function jwkPrivKey() {
     // Generating public key to export with QR code
-    const keys = await generateEd25519KeyPair();
-    if (keys) {
-        return await exportKey(keys.publicKey);
+    try {
+        const keys = await generateEd25519KeyPair();
+        return await exportKey(keys.privateKey);
+    } catch (error) {
+        alert("Key generation failed");
     }
 }
 
@@ -17,9 +19,9 @@ export default function RegisterTrader(){
 
     useEffect(() => {
         async function displayToken(){
-            // Displaying QR code to canvas);
-        
-            const jwk = await jwkPubKey();
+            // Displaying QR code to canvas
+
+            const jwk = await jwkPrivKey();
         
             // data has to be in string to proper show QR code
             const data = JSON.stringify(jwk);
