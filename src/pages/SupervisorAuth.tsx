@@ -1,17 +1,33 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CryptoJS from "crypto-js";
+import { encodeData, digestData, bufferToBase64 } from '../components/cryptoutils.ts';
 import "../styles.css";
+
+export async function passHash(text: string) {
+    try {
+        const encodedText = encodeData(text);
+        const rawHashBuffer = await digestData(encodedText);
+        return bufferToBase64(rawHashBuffer);
+    } catch (error) {
+        console.error("Failed to hash text:", error);
+        return null;
+    }
+}
 
 export default function SupervisorAuth() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
     // hardcoded hash sha256 of "admin123" - will change later
-    const HASH = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
+    const HASH = "JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk=";
 
-    const handleLogin = () => {
-        const hashed = CryptoJS.SHA256(password).toString();
+    const handleLogin = async () => {
+        const hashed = await passHash(password);
+
+        if (hashed === null) {
+            alert("System: Encryption failed");
+            return;
+        }
 
         if (hashed === HASH) {
             // session storage as auth - not safe but without backend nothing else can be done
