@@ -12,6 +12,12 @@ export async function drawQR({data, QRversion, errorCorrectionLevel}: drawQRProp
     */
     const canvas = document.createElement("canvas")
 
+    // CSS canvas styles
+    canvas.style.maxWidth = "100%";
+    canvas.style.height = "auto";
+    canvas.style.display = "block";
+    canvas.style.margin = "0 auto";
+
     const options = {
         version: QRversion,
         errorCorrectionLevel: errorCorrectionLevel,
