@@ -4,6 +4,7 @@ import SupervisorAuth from "./pages/SupervisorAuth";
 import SupervisorMain from "./pages/SupervisorMain";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RegisterTrader from "./pages/SupervisorRegister";
+import SupervisorTraderQR from "./pages/SupervisorTraderQR.tsx";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
                   <Route element={<ProtectedRoute />}>
                       <Route path="main" element={<SupervisorMain />} />
                       <Route path="registerTrader" element={<RegisterTrader />} />
+                      <Route path="registerTrader/qr" element={<SupervisorTraderQR />} />
 
                       {/* future pages go here */}
                   </Route>

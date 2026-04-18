@@ -1,53 +1,109 @@
 import "../styles.css";
-import { drawQR } from "../components/drawQR.ts";
-import { generateEd25519KeyPair, exportKey } from "../components/cryptoutils.ts";
-import { useEffect, useRef } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { generateEd25519KeyPair, exportKey } from "../components/cryptoutils";
 
-async function jwkPrivKey() {
-    // Generating public key to export with QR code
-    try {
-        const keys = await generateEd25519KeyPair();
-        return await exportKey(keys.privateKey);
-    } catch (error) {
-        alert("Key generation failed");
-    }
-}
+export default function RegisterTrader() {
+    const [name, setName] = useState("");
+    const [points, setPoints] = useState("");
 
-export default function RegisterTrader(){
-    
-    const containerRef = useRef<HTMLDivElement>(null);
+    const [nameError, setNameError] = useState("");
+    const [pointsError, setPointsError] = useState("");
 
-    useEffect(() => {
-        async function displayToken(){
-            // Displaying QR code to canvas
+    const navigate = useNavigate();
 
-            const jwk = await jwkPrivKey();
-        
-            // data has to be in string to proper show QR code
-            const data = JSON.stringify(jwk);
-            const QRversion = 10;
-            const errorCorrectionLevel = "L";
-        
-            if(containerRef.current){
-                const QRcode = await drawQR({data, QRversion, errorCorrectionLevel});
-        
-                containerRef.current.innerHTML = '';
+    function validate(): boolean {
+        let valid = true;
 
-                containerRef.current.appendChild(QRcode);
-            }
+        // reset errors
+        setNameError("");
+        setPointsError("");
+
+        // sanitize name (trim + basic cleanup)
+        const trimmedName = name.trim();
+
+        if (!trimmedName) {
+            setNameError("Trader name is required");
+            valid = false;
+        } else if (trimmedName.length > 20) {
+            setNameError("Max 20 characters");
+            valid = false;
         }
 
-        displayToken();
-    }, [])
+        // validate points (must be number)
+        if (!points.trim()) {
+            setPointsError("Point pool is required");
+            valid = false;
+        } else if (!/^[0-9]+$/.test(points)) {
+            setPointsError("Must be a number");
+            valid = false;
+        }
 
-    return(
-        <div className="screen" style={{padding: '20px'}}>
-            <h1> SCAN CODE QR</h1>
-            <h1>TO REGISTER A TRADER</h1>
-            <div
-            ref={containerRef}
-            style={{width: '100%', maxWidth: '400px', margin: '0 auto'}}
-            ></div>
+        return valid;
+    }
+
+    async function handleGenerate() {
+        if (!validate()) return;
+
+        try {
+            const keys = await generateEd25519KeyPair();
+
+            const privJwk = await exportKey(keys.privateKey);
+            const pubJwk = await exportKey(keys.publicKey);
+
+            // store public key of Trader nin Supervisor sessionStorage
+            const stored = JSON.parse(sessionStorage.getItem("pubKeys") || "[]");
+            stored.push(pubJwk);
+            sessionStorage.setItem("pubKeys", JSON.stringify(stored));
+
+            const payload = {
+                name: name.trim(),
+                points: Number(points),
+                privateKey: privJwk,
+                publicKey: pubJwk,
+            };
+
+            navigate("/supervisor/registerTrader/qr", { state: payload });
+
+        } catch (error) {
+            console.error(error);
+            alert("Failed to generate QR");
+        }
+    }
+
+    return (
+        <div className="screen">
+            <h1 className="title">ENTER TRADER DETAILS</h1>
+
+            <input
+                className="input"
+                placeholder="TRADER NAME"
+                value={name}
+                maxLength={20}
+                onChange={(e) => setName(e.target.value)}
+            />
+            {nameError && <p className="error">{nameError}</p>}
+
+            <input
+                className="input"
+                placeholder="POINT POOL"
+                value={points}
+                onChange={(e) => setPoints(e.target.value)}
+            />
+            {pointsError && <p className="error">{pointsError}</p>}
+
+            <div className="buttonContainer">
+                <button className="button" onClick={handleGenerate} disabled={!points.trim()}>
+                    OK
+                </button>
+
+                <button
+                    className="button"
+                    onClick={() => navigate("/supervisor/main")}
+                >
+                    BACK
+                </button>
+            </div>
         </div>
     );
 }
