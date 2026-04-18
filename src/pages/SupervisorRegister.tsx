@@ -41,10 +41,13 @@ export default function RegisterTrader(){
     }, [])
 
     return(
-        <div className="screen">
+        <div className="screen" style={{padding: '20px'}}>
             <h1> SCAN CODE QR</h1>
             <h1>TO REGISTER A TRADER</h1>
-            <div ref={containerRef}></div>
+            <div
+            ref={containerRef}
+            style={{width: '100%', maxWidth: '400px', margin: '0 auto'}}
+            ></div>
         </div>
     );
 }
