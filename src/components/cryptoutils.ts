@@ -161,3 +161,15 @@ export function generateUUID() {
         throw error;
     }
 }
+
+// Hash a string using SHA256 - this is used for password checking only
+export async function passHash(text: string) {
+    try {
+        const encodedText = encodeData(text);
+        const rawHashBuffer = await digestData(encodedText);
+        return bufferToBase64(rawHashBuffer);
+    } catch (error) {
+        console.error("Failed to hash text:", error);
+        return null;
+    }
+}
