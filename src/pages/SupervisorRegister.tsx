@@ -9,6 +9,14 @@ type TraderEntry = {
     timestamp: number;
 };
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+// removes entries older than DAY_MS (24h)
+function getValidEntries(stored: TraderEntry[]): TraderEntry[] {
+    const now = Date.now();
+    return stored.filter((entry) => now - entry.timestamp < DAY_MS);
+}
+
 export default function RegisterTrader() {
     const [name, setName] = useState("");
     const [points, setPoints] = useState("");
@@ -45,6 +53,26 @@ export default function RegisterTrader() {
             valid = false;
         }
 
+        if (valid) {
+            const STORAGE_KEY = "traders";
+
+            const stored: TraderEntry[] = JSON.parse(
+                localStorage.getItem(STORAGE_KEY) || "[]"
+            );
+
+            const validEntries = getValidEntries(stored);
+
+            const exists = validEntries.some(
+                (entry) =>
+                    entry.name.toLowerCase() === trimmedName.toLowerCase()
+            );
+
+            if (exists) {
+                setNameError("Trader with this name already exists");
+                valid = false;
+            }
+        }
+
         return valid;
     }
 
@@ -64,11 +92,8 @@ export default function RegisterTrader() {
                 localStorage.getItem(STORAGE_KEY) || "[]"
             );
 
-            // remove entries older than 24h
+            const validEntries = getValidEntries(stored);
             const now = Date.now();
-            const validEntries = stored.filter((entry) => {
-                return now - entry.timestamp < 24 * 60 * 60 * 1000;
-            });
 
             validEntries.push({
                 name: name.trim(),
@@ -85,7 +110,7 @@ export default function RegisterTrader() {
                 publicKey: pubJwk,
             };
 
-            navigate("/supervisor/registerTrader/qr", { state: payload });
+            navigate("/supervisor/registerTrader/qr", { state: payload, replace: true });
 
         } catch (error) {
             console.error(error);
