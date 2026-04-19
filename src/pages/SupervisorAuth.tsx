@@ -37,7 +37,7 @@ export default function SupervisorAuth() {
         }
 
         if (hashed === HASH) {
-            localStorage.setItem("isSupervisor", "true");
+            sessionStorage.setItem("isSupervisor", "true");
             navigate("/supervisor/main");
         } else {
             setError("Wrong password");
