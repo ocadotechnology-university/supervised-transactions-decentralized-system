@@ -56,7 +56,7 @@ export default function SupervisorTraderQR() {
 
             <button
                 className="button"
-                onClick={() => navigate("/supervisor/registerTrader")}
+                onClick={() => navigate("/supervisor/registerTrader", { replace: true })}
             >
                 DONE
             </button>
