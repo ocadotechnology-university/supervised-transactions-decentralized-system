@@ -125,7 +125,7 @@ export async function digestData(data: BufferSource) {
     try {
         return await crypto.subtle.digest("SHA-256", data);
     } catch (error) {
-        console.error("digestData:", error);
+        console.error("digestData failed:", error);
         throw error;
     }
 }
@@ -163,11 +163,11 @@ export function generateUUID() {
 }
 
 // Hash a string using SHA256 - this is used for password checking only
-export async function passHash(text: string) {
+export async function passHash(data: string) {
     try {
-        const encodedText = encodeData(text);
-        const rawHashBuffer = await digestData(encodedText);
-        return bufferToBase64(rawHashBuffer);
+        const encoded = encodeData(data);
+        const hashBuffer = await digestData(encoded);
+        return bufferToBase64(hashBuffer);
     } catch (error) {
         console.error("Failed to hash text:", error);
         return null;

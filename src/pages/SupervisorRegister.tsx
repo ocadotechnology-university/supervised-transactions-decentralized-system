@@ -5,6 +5,7 @@ import { generateEd25519KeyPair, exportKey } from "../components/cryptoutils";
 
 type TraderEntry = {
     name: string;
+    points: number,
     publicKey: JsonWebKey;
     timestamp: number;
 };
@@ -97,6 +98,7 @@ export default function RegisterTrader() {
 
             validEntries.push({
                 name: name.trim(),
+                points: Number(points),
                 publicKey: pubJwk,
                 timestamp: now,
             });
@@ -107,7 +109,7 @@ export default function RegisterTrader() {
                 name: name.trim(),
                 points: Number(points),
                 privateKey: privJwk,
-                publicKey: pubJwk,
+                timestamp: now,
             };
 
             navigate("/supervisor/registerTrader/qr", { state: payload, replace: true });

@@ -9,7 +9,7 @@ export default function Home() {
             <h1 className="title">WHO ARE YOU</h1>
 
             <div className="buttonContainer">
-                <button className="button">
+                <button className="button" onClick={() => navigate("/customer")}>
                     CUSTOMER
                 </button>
                 <button className="button">
