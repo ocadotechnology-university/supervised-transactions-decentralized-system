@@ -3,6 +3,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { generateEd25519KeyPair, exportKey } from "../components/cryptoutils";
 
+type TraderEntry = {
+    name: string;
+    publicKey: JsonWebKey;
+    timestamp: number;
+};
+
 export default function RegisterTrader() {
     const [name, setName] = useState("");
     const [points, setPoints] = useState("");
@@ -51,10 +57,26 @@ export default function RegisterTrader() {
             const privJwk = await exportKey(keys.privateKey);
             const pubJwk = await exportKey(keys.publicKey);
 
-            // store public key of Trader nin Supervisor sessionStorage
-            const stored = JSON.parse(sessionStorage.getItem("pubKeys") || "[]");
-            stored.push(pubJwk);
-            sessionStorage.setItem("pubKeys", JSON.stringify(stored));
+            // store trader name, public key and timestamp in Supervisor localStorage
+            const STORAGE_KEY = "traders";
+
+            const stored: TraderEntry[] = JSON.parse(
+                localStorage.getItem(STORAGE_KEY) || "[]"
+            );
+
+            // remove entries older than 24h
+            const now = Date.now();
+            const validEntries = stored.filter((entry) => {
+                return now - entry.timestamp < 24 * 60 * 60 * 1000;
+            });
+
+            validEntries.push({
+                name: name.trim(),
+                publicKey: pubJwk,
+                timestamp: now,
+            });
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(validEntries));
 
             const payload = {
                 name: name.trim(),
