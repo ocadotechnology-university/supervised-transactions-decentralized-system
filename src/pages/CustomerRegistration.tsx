@@ -1,14 +1,22 @@
 import "../styles.css";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {generateUUID} from "../components/cryptoutils.ts";
 
 export default function CustomerRegistration() {
-    const [name, setName] = useState("");
+    const STORAGE_KEY = "customerName";
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        const customerData = localStorage.getItem(STORAGE_KEY);
+        if (customerData) {
+            navigate("/customer/main", { replace: true });
+        }
+    }, []);
+
+    const [name, setName] = useState("");
     const [nameError, setNameError] = useState("");
 
-    const navigate = useNavigate();
 
     function validate(): boolean {
         let valid = true;
@@ -35,17 +43,16 @@ export default function CustomerRegistration() {
 
         try {
             // store customer name, uuid and timestamp in localStorage
-            const STORAGE_KEY = "customerName";
 
             const payload = {
                 name: name.trim(),
-                uuid: generateUUID(),
+                uuid: generateUUID().slice(-6),
                 timestamp: Date.now(),
             };
 
             localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
             sessionStorage.setItem("isCustomer", "true");
-            navigate("/customer/main");
+            navigate("/customer/main", { replace: true });
         } catch (error) {
             console.error(error);
             alert("Failed to register");

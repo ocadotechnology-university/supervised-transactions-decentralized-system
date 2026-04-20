@@ -1,11 +1,56 @@
-
 import "../styles.css";
+import {useEffect, useState} from "react";
+
+type CustomerEntry = {
+    name: string;
+    uuid: string;
+    timestamp: number;
+}
 
 export default function CustomerMain() {
+    const CUSTOMER_KEY = "customerName";
+    const POINTS_KEY = "customerTransactions";
+
+    const [name, setName] = useState("CUSTOMER#000000");
+    const [points, setPoints] = useState("0");
+
+    useEffect(() => {
+        const storedCustomerData = localStorage.getItem(CUSTOMER_KEY);
+        if (storedCustomerData) {
+            const customerData: CustomerEntry = JSON.parse(storedCustomerData);
+            setName(`${customerData.name.toUpperCase()}#${customerData.uuid}`);
+        }
+
+        const storedCustomerPoints = localStorage.getItem(POINTS_KEY);
+        if (storedCustomerPoints) {
+            // WIP - need to make transactions
+            const customerPoints = JSON.parse(storedCustomerPoints);
+            setPoints(customerPoints.points)
+        }
+    }, []);
 
     return (
         <div className="screen">
-            <h1 className="title">wip</h1>
+            <h1 className="title">{name}</h1>
+
+            <div className="pointsContainer">
+                <div className="circle">
+                    <span className="pointsValue">{points}</span>
+                </div>
+                <h2 className="pointsLabel">POINTS</h2>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="buttonContainer">
+                <button className="button">
+                    SCAN TRANSACTION
+                </button>
+
+                <button className="button">
+                    CASHOUT POINTS
+                </button>
+            </div>
         </div>
     );
 }
+
