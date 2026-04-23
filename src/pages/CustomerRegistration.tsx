@@ -21,10 +21,8 @@ export default function CustomerRegistration() {
     function validate(): boolean {
         let valid = true;
 
-        // reset errors
         setNameError("");
 
-        // sanitize name (trim + basic cleanup)
         const trimmedName = name.trim().toLowerCase();
 
         if (!trimmedName) {
@@ -42,8 +40,6 @@ export default function CustomerRegistration() {
         if (!validate()) return;
 
         try {
-            // store customer name, uuid and timestamp in localStorage
-
             const payload = {
                 name: name.trim(),
                 uuid: generateUUID().slice(-6),
@@ -51,8 +47,7 @@ export default function CustomerRegistration() {
             };
 
             localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-            sessionStorage.setItem("isCustomer", "true");
-            navigate("/customer/main", { replace: true });
+            navigate("/customer", { replace: true });
         } catch (error) {
             console.error(error);
             alert("Failed to register");

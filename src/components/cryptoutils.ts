@@ -3,7 +3,6 @@ const decoder = new TextDecoder();
 
 // Uses SubtleCrypto interface from Web Crypto API, native to browsers
 // Not all browsers are compatible, see: https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto#browser_compatibility
-// Generate new keypair
 export async function generateEd25519KeyPair() {
     try {
         const { publicKey, privateKey } = await crypto.subtle.generateKey(
@@ -20,7 +19,6 @@ export async function generateEd25519KeyPair() {
     }
 }
 
-// Export CryptoKey object to portable format (JSON Web Key)
 export async function exportKey(key: CryptoKey) {
     try {
         return await crypto.subtle.exportKey("jwk", key);
@@ -30,7 +28,6 @@ export async function exportKey(key: CryptoKey) {
     }
 }
 
-// Import JSON Web Key to CryptoKey object (private)
 export async function importPrivateKey(jwk: JsonWebKey) {
     try {
         return await crypto.subtle.importKey(
@@ -48,7 +45,6 @@ export async function importPrivateKey(jwk: JsonWebKey) {
     }
 }
 
-// Import JSON Web Key to CryptoKey object (public)
 export async function importPublicKey(jwk: JsonWebKey) {
     try {
         return await crypto.subtle.importKey(
@@ -66,7 +62,6 @@ export async function importPublicKey(jwk: JsonWebKey) {
     }
 }
 
-// Generate digital signature
 export async function signData(privateKey: CryptoKey, encodedData: BufferSource) {
     try {
         return await crypto.subtle.sign(
@@ -82,7 +77,6 @@ export async function signData(privateKey: CryptoKey, encodedData: BufferSource)
     }
 }
 
-// Verify digital signature
 export async function verifyData(publicKey: CryptoKey, signature: ArrayBuffer, encodedData: BufferSource) {
     try {
         return await crypto.subtle.verify(
@@ -99,8 +93,6 @@ export async function verifyData(publicKey: CryptoKey, signature: ArrayBuffer, e
     }
 }
 
-// Uses TextEncoder/TextDecoder interface from Encoding API, compatible with old browser versions
-// Encode data to buffer
 export function encodeData(data: string) {
     try {
         return encoder.encode(data);
@@ -110,7 +102,6 @@ export function encodeData(data: string) {
     }
 }
 
-// Decode data from buffer (might be unnecessary)
 export function decodeData(data: BufferSource) {
     try {
         return decoder.decode(data);
@@ -120,7 +111,6 @@ export function decodeData(data: BufferSource) {
     }
 }
 
-//Generate SHA256 digest
 export async function digestData(data: BufferSource) {
     try {
         return await crypto.subtle.digest("SHA-256", data);
@@ -132,7 +122,6 @@ export async function digestData(data: BufferSource) {
 
 // Uses fromBase64() and toBase64() methods from Uint8Array built-in object
 // See browser compatibility: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array#browser_compatibility
-// Encode signature buffer to Base64 string
 export function bufferToBase64(data: ArrayBuffer) {
     try {
         return new Uint8Array(data).toBase64();
@@ -142,7 +131,6 @@ export function bufferToBase64(data: ArrayBuffer) {
     }
 }
 
-// Encode Base64 string to buffer
 export function base64ToBuffer(data: string) {
     try {
         return Uint8Array.fromBase64(data).buffer;
@@ -152,7 +140,6 @@ export function base64ToBuffer(data: string) {
     }
 }
 
-// Generate UUIDv4 using Crypto interface from Web Crypto API
 export function generateUUID() {
     try {
         return crypto.randomUUID();
@@ -162,7 +149,6 @@ export function generateUUID() {
     }
 }
 
-// Hash a string using SHA256 - this is used for password checking only
 export async function passHash(data: string) {
     try {
         const encoded = encodeData(data);

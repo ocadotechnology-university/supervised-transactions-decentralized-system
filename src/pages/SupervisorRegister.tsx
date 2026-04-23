@@ -10,9 +10,9 @@ type TraderEntry = {
     timestamp: number;
 };
 
+// equals to 24 hours
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-// removes entries older than DAY_MS (24h)
 function getValidEntries(stored: TraderEntry[]): TraderEntry[] {
     const now = Date.now();
     return stored.filter((entry) => now - entry.timestamp < DAY_MS);
@@ -30,11 +30,9 @@ export default function RegisterTrader() {
     function validate(): boolean {
         let valid = true;
 
-        // reset errors
         setNameError("");
         setPointsError("");
 
-        // sanitize name (trim + basic cleanup)
         const trimmedName = name.trim();
 
         if (!trimmedName) {
@@ -45,7 +43,6 @@ export default function RegisterTrader() {
             valid = false;
         }
 
-        // validate points (must be number)
         if (!points.trim()) {
             setPointsError("Point pool is required");
             valid = false;
@@ -86,7 +83,6 @@ export default function RegisterTrader() {
             const privJwk = await exportKey(keys.privateKey);
             const pubJwk = await exportKey(keys.publicKey);
 
-            // store trader name, public key and timestamp in Supervisor localStorage
             const STORAGE_KEY = "traders";
 
             const stored: TraderEntry[] = JSON.parse(
@@ -148,7 +144,7 @@ export default function RegisterTrader() {
 
                 <button
                     className="button"
-                    onClick={() => navigate("/supervisor/main")}
+                    onClick={() => navigate("/supervisor")}
                 >
                     BACK
                 </button>

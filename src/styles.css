@@ -39,20 +39,6 @@
     font-family: 'Balsamiq Sans', cursive;
 }
 
-.screenCenter {
-    min-height: 100vh;
-    width: 100%;
-    background-color: #eaeaea;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Balsamiq Sans', cursive;
-    padding: 20px;
-    box-sizing: border-box;
-    text-align: center;
-}
-
 .input {
     width: 100%;
     max-width: 320px;

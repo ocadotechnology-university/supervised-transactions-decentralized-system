@@ -7,12 +7,9 @@ interface drawQRProps {
 }
 
 export async function drawQR({data, QRversion, errorCorrectionLevel}: drawQRProps): Promise<HTMLCanvasElement>{
-    /* 
-    Function gets canvas from html div and creates QR code
-    */
+
     const canvas = document.createElement("canvas")
 
-    // CSS canvas styles
     canvas.style.maxWidth = "100%";
     canvas.style.height = "auto";
     canvas.style.display = "block";
