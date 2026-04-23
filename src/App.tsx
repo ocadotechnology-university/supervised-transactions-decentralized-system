@@ -15,23 +15,16 @@ export default function App() {
               <Route path="/" element={<Home />} />
 
               <Route path="/customer">
-                  {/* login page */}
-                  <Route index element={<CustomerRegistration />} />
-                  {/* must add protected route*/}
-                  <Route path="main" element={<CustomerMain />} />
+                  <Route index element={<CustomerMain />} />
+                  <Route path="register" element={<CustomerRegistration />} />
               </Route>
 
               <Route path="/supervisor">
-                  {/* login page */}
-                  <Route index element={<SupervisorAuth />} />
-
-                  {/* protected group */}
+                  <Route path="login" element={<SupervisorAuth />} />
                   <Route element={<ProtectedRoute />}>
-                      <Route path="main" element={<SupervisorMain />} />
+                      <Route index element={<SupervisorMain />} />
                       <Route path="registerTrader" element={<RegisterTrader />} />
                       <Route path="registerTrader/qr" element={<SupervisorTraderQR />} />
-
-                      {/* future pages go here */}
                   </Route>
               </Route>
           </Routes>

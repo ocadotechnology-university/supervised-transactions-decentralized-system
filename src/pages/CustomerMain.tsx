@@ -23,7 +23,7 @@ export default function CustomerMain() {
             setName(`${customerData.name.toUpperCase()}#${customerData.uuid}`);
         }
         else {
-            navigate("/customer", { replace: true });
+            navigate("/customer/register", { replace: true });
         }
 
         const storedCustomerPoints = localStorage.getItem(POINTS_KEY);
@@ -45,7 +45,6 @@ export default function CustomerMain() {
                 <h2 className="pointsLabel">POINTS</h2>
             </div>
 
-            {/* Action Buttons */}
             <div className="buttonContainer">
                 <button className="button">
                     SCAN TRANSACTION
