@@ -1,7 +1,7 @@
 import "../styles.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef } from "react";
-import { drawQR } from "../components/drawQR";
+import { drawQR } from "../utils/drawQR";
 
 export default function SupervisorTraderQR() {
     const location = useLocation();

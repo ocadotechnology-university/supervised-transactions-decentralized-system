@@ -1,7 +1,7 @@
 import "../styles.css";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {generateUUID} from "../components/cryptoutils.ts";
+import {generateUUID} from "../utils/cryptoutils.ts";
 
 export default function CustomerRegistration() {
     const STORAGE_KEY = "customerName";
