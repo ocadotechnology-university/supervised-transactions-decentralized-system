@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { passHash } from '../components/cryptoutils';
+import { passHash } from '../utils/cryptoutils';
 import "../styles.css";
 
 

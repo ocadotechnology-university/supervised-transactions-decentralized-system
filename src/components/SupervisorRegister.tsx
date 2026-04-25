@@ -1,7 +1,7 @@
 import "../styles.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { generateEd25519KeyPair, exportKey } from "../components/cryptoutils";
+import { generateEd25519KeyPair, exportKey } from "../utils/cryptoutils";
 
 type TraderEntry = {
     name: string;
