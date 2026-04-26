@@ -11,31 +11,31 @@ permissions:
 
 jobs:
   deploy:
-  runs-on: ubuntu-latest
-  steps:
-    - name: Taking the code
-      uses: actions/checkout@v4
+    runs-on: ubuntu-latest
+    steps:
+      - name: Taking the code
+        uses: actions/checkout@v4
 
-    - name: Node.js installation
-      uses: actions/setup-node@v4
-      with:
-        node-version: 25
-        cache: 'npm'
+      - name: Node.js installation
+        uses: actions/setup-node@v4
+        with:
+          node-version: '25'
+          cache: 'npm'
 
-    - name: Installing depencies
-      run: npm ci
+      - name: Installing depencies
+        run: npm ci
 
-    - name: Project build
-      run: npm run build
+      - name: Project build
+        run: npm run build
 
-    - name: Github Pages configuration
-      uses: actions/configure-pages@v4
-        
-    - name: Artifacts upload
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: './dist'
+      - name: Github Pages configuration
+        uses: actions/configure-pages@v4
           
-    - name: Deploy
-      id: deployment
-      uses: actions/deploy-pages@v4
+      - name: Artifacts upload
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+            
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
