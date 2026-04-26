@@ -91,3 +91,11 @@
     margin: 0;
     letter-spacing: 2px;
 }
+
+.scannerWrapper {
+    width: 100%;
+    max-width: 320px;
+    margin-bottom: 60px;
+    display: flex;
+    justify-content: center;
+}

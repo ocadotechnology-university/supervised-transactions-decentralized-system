@@ -6,6 +6,7 @@ import SupervisorTraderQR from "./pages/SupervisorTraderQR.tsx";
 import CustomerRegistration from "./pages/CustomerRegistration.tsx";
 import CustomerMain from "./pages/CustomerMain.tsx";
 import TraderRegistration from "./pages/TraderRegistration.tsx";
+import TraderMain from "./pages/TraderMain.tsx";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
 
               <Route path="/trader">
                   <Route index element={<TraderRegistration />} />
+                  <Route path="traderMain" element={<TraderMain />} />
               </Route>
 
               <Route path="/supervisor">
