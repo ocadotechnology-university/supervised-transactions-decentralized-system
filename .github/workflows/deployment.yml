@@ -18,9 +18,9 @@ jobs:
 
     - name: Node.js installation
       uses: actions/setup-node@v4
-        with:
-          node-version: 25
-          cache: 'npm'
+      with:
+        node-version: 25
+        cache: 'npm'
 
     - name: Installing depencies
       run: npm ci
