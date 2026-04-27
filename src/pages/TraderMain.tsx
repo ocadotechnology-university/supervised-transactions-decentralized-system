@@ -1,32 +1,42 @@
 import "../styles.css";
+import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
 
-type JWK = JsonWebKey;
-
-type TraderPayload = {
+type TraderEntry = {
     name: string;
     points: number;
-    privateKey: JWK;
+    privateKey: JsonWebKey;
     timestamp: number;
 };
 
 export default function TraderMain() {
-    const stored = localStorage.getItem("traderPayload");
+    const TRADER_KEY = "traderData";
+    const navigate = useNavigate();
 
-    if (!stored) {
-        return <div className="screen">No data</div>;
-    }
+    const [name, setName] = useState("TRADER");
+    const [points, setPoints] = useState(0);
 
-    const data: TraderPayload = JSON.parse(stored);
+    useEffect(() => {
+        const storedTraderData = localStorage.getItem(TRADER_KEY);
+        if (storedTraderData) {
+            const traderData: TraderEntry = JSON.parse(storedTraderData);
+            setName(traderData.name.toUpperCase());
+            setPoints(traderData.points)
+        }
+        else {
+            navigate("/trader/registration", { replace: true });
+        }
+    }, []);
 
     return (
         <div className="screen">
-            <h1 className="title">{data.name}</h1>
+            <h1 className="title">{name}</h1>
 
             <div className="pointsContainer">
                 <div className="circle">
-                    <span className="pointsValue">{data.points}</span>
+                    <span className="pointsValue">{points}</span>
                 </div>
-                <p className="pointsLabel">POINTS AVAILABLE</p>
+                <h2 className="pointsLabel">POINTS</h2>
             </div>
 
             <button className="button">TRANSFER POINTS</button>

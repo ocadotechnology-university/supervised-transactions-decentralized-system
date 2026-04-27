@@ -19,14 +19,14 @@ export default function TraderRegistration() {
                     !!data.privateKey;
 
                 if (!isValid) {
-                    console.error("Invalid payload structure");
+                    console.error("Invalid data structure");
                     return;
                 }
 
-                localStorage.setItem("traderPayload", decodedString);
+                localStorage.setItem("traderData", decodedString);
 
                 setIsScanning(false);
-                navigate("/trader/traderMain");
+                navigate("/trader", { replace: true });
             } catch (e) {
                 console.error("Invalid QR payload", e);
             }

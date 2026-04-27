@@ -20,8 +20,8 @@ export default function App() {
               </Route>
 
               <Route path="/trader">
-                  <Route index element={<TraderRegistration />} />
-                  <Route path="traderMain" element={<TraderMain />} />
+                  <Route index element={<TraderMain />} />
+                  <Route path="registration" element={<TraderRegistration />} />
               </Route>
 
               <Route path="/supervisor">
