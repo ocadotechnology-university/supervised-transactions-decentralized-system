@@ -35,12 +35,11 @@ export default function SupervisorTraderQR() {
         return (
             <div className="screen">
                 <h1 className="title">NO DATA</h1>
-                <button
-                    className="button"
-                    onClick={() => navigate("/supervisor/registerTrader")}
-                >
-                    BACK
-                </button>
+                <div className="buttonContainer">
+                    <button className="button" onClick={() => navigate("/supervisor", { replace: true })}>
+                        BACK
+                    </button>
+                </div>
             </div>
         );
     }
@@ -53,13 +52,11 @@ export default function SupervisorTraderQR() {
                 ref={containerRef}
                 style={{ width: "100%", maxWidth: "300px", margin: "20px auto" }}
             />
-
-            <button
-                className="button"
-                onClick={() => navigate("/supervisor/registerTrader", { replace: true })}
-            >
-                DONE
-            </button>
+            <div className="buttonContainer">
+                <button className="button" onClick={() => navigate("/supervisor/registerTrader", { replace: true })}>
+                    DONE
+                </button>
+            </div>
         </div>
     );
 }

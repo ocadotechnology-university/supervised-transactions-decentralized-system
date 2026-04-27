@@ -5,8 +5,10 @@ import RegisterTrader from "./pages/SupervisorRegister";
 import SupervisorTraderQR from "./pages/SupervisorTraderQR.tsx";
 import CustomerRegistration from "./pages/CustomerRegistration.tsx";
 import CustomerMain from "./pages/CustomerMain.tsx";
+import CustomerScan from "./pages/CustomerScan.tsx";
 import TraderRegistration from "./pages/TraderRegistration.tsx";
 import TraderMain from "./pages/TraderMain.tsx";
+import CustomerScanResults from "./pages/CustomerScanResults.tsx";
 
 export default function App() {
   return (
@@ -17,11 +19,13 @@ export default function App() {
               <Route path="/customer">
                   <Route index element={<CustomerMain />} />
                   <Route path="register" element={<CustomerRegistration />} />
+                  <Route path="scan" element={<CustomerScan />} />
+                  <Route path="scan/results" element={<CustomerScanResults />} />
               </Route>
 
               <Route path="/trader">
                   <Route index element={<TraderMain />} />
-                  <Route path="registration" element={<TraderRegistration />} />
+                  <Route path="register" element={<TraderRegistration />} />
               </Route>
 
               <Route path="/supervisor">

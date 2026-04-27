@@ -108,7 +108,7 @@ export default function RegisterTrader() {
                 timestamp: now,
             };
 
-            navigate("/supervisor/registerTrader/qr", { state: payload, replace: true });
+            navigate("/supervisor/registerTrader/qr", { state: payload});
 
         } catch (error) {
             console.error(error);
@@ -138,13 +138,13 @@ export default function RegisterTrader() {
             {pointsError && <p className="error">{pointsError}</p>}
 
             <div className="buttonContainer">
-                <button className="button" onClick={handleGenerate} disabled={!points.trim()}>
+                <button className="button" onClick={handleGenerate} >
                     OK
                 </button>
 
                 <button
                     className="button"
-                    onClick={() => navigate("/supervisor")}
+                    onClick={() => navigate("/supervisor", { replace: true })}
                 >
                     BACK
                 </button>

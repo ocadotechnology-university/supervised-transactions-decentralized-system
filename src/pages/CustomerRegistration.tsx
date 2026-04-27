@@ -68,14 +68,11 @@ export default function CustomerRegistration() {
             {nameError && <p className="error">{nameError}</p>}
 
             <div className="buttonContainer">
-                <button className="button" onClick={handleRegister} disabled={!name.trim()}>
+                <button className="button" onClick={handleRegister}>
                     OK
                 </button>
 
-                <button
-                    className="button"
-                    onClick={() => navigate("/")}
-                >
+                <button className="button" onClick={() => navigate("/", { replace: true })}>
                     BACK
                 </button>
             </div>

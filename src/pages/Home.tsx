@@ -12,9 +12,11 @@ export default function Home() {
                 <button className="button" onClick={() => navigate("/customer")}>
                     CUSTOMER
                 </button>
+
                 <button className="button" onClick={() => navigate("/trader")}>
                     TRADER
                 </button>
+
                 <button className="button" onClick={() => navigate("/supervisor")}>
                     SUPERVISOR
                 </button>

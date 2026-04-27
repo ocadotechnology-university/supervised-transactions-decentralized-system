@@ -24,7 +24,7 @@ export default function TraderMain() {
             setPoints(traderData.points)
         }
         else {
-            navigate("/trader/registration", { replace: true });
+            navigate("/trader/register", { replace: true });
         }
     }, []);
 
@@ -39,7 +39,11 @@ export default function TraderMain() {
                 <h2 className="pointsLabel">POINTS</h2>
             </div>
 
-            <button className="button">TRANSFER POINTS</button>
+            <div className="buttonContainer">
+                <button className="button">
+                    TRANSFER POINTS
+                </button>
+            </div>
         </div>
     );
 }

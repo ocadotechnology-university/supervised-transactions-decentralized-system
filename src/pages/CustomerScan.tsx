@@ -3,7 +3,28 @@ import { useNavigate } from "react-router-dom";
 import ScanQR from "../components/ScanQR";
 import "../styles.css";
 
-export default function TraderRegistration() {
+type Transaction = {
+    name: string;
+    points: number;
+    uuid: string;
+    timestamp: number;
+    signature: string;
+}
+
+function addToStorage(transactionData: Transaction) {
+    const STORAGE_KEY = "customerTransactions";
+    let transactionAll: Transaction[] = [];
+
+    const transactionStored = localStorage.getItem(STORAGE_KEY)
+    if (transactionStored) {
+        transactionAll = JSON.parse(transactionStored)
+    }
+
+    transactionAll.push(transactionData);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(transactionAll));
+}
+
+export default function CustomerScan() {
     const navigate = useNavigate();
     const [isScanning, setIsScanning] = useState<boolean>(false);
 
@@ -15,20 +36,33 @@ export default function TraderRegistration() {
                 const isValid =
                     typeof data.name === "string" &&
                     typeof data.points === "number" &&
+                    typeof data.uuid === "string" &&
                     typeof data.timestamp === "number" &&
-                    !!data.privateKey;
+                    typeof data.signature === "string";
 
                 if (!isValid) {
                     console.error("Invalid data structure");
+                    setIsScanning(false);
+                    navigate("/customer/scan/results", { state: { success: false } });
                     return;
                 }
 
-                localStorage.setItem("traderData", decodedString);
+                const transactionData: Transaction = {
+                    name: data.name,
+                    points: data.points,
+                    uuid: data.uuid,
+                    timestamp: data.timestamp,
+                    signature: data.signature
+                };
+
+                addToStorage(transactionData);
 
                 setIsScanning(false);
-                navigate("/trader", { replace: true });
+                navigate("/customer/scan/results", { state: { success: true, transactionPoints: transactionData.points} });
             } catch (e) {
                 console.error("Invalid QR payload", e);
+                setIsScanning(false);
+                navigate("/customer/scan/results", { state: { success: false } });
             }
         },
         []
@@ -36,7 +70,7 @@ export default function TraderRegistration() {
 
     return (
         <div className="screen">
-            <h1 className="title">SCAN SUPERVISOR CODE</h1>
+            <h1 className="title">SCAN TRANSACTION</h1>
 
             {!isScanning ? (
                 <div className="buttonContainer">
@@ -44,10 +78,7 @@ export default function TraderRegistration() {
                         SCAN
                     </button>
 
-                    <button
-                        className="button"
-                        onClick={() => navigate("/", { replace: true })}
-                    >
+                    <button className="button" onClick={() => navigate("/customer", { replace: true })}>
                         BACK
                     </button>
                 </div>
@@ -62,7 +93,7 @@ export default function TraderRegistration() {
                             className="button"
                             onClick={() => {
                                 setIsScanning(false);
-                                navigate("/", { replace: true });
+                                navigate("/customer", { replace: true });
                             }}
                         >
                             BACK

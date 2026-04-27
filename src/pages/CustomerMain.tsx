@@ -46,7 +46,7 @@ export default function CustomerMain() {
             </div>
 
             <div className="buttonContainer">
-                <button className="button">
+                <button className="button" onClick={() => navigate("/customer/scan")}>
                     SCAN TRANSACTION
                 </button>
 
