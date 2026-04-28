@@ -8,6 +8,8 @@ import CustomerMain from "./pages/CustomerMain.tsx";
 import CustomerScan from "./pages/CustomerScan.tsx";
 import TraderRegistration from "./pages/TraderRegistration.tsx";
 import TraderMain from "./pages/TraderMain.tsx";
+import TraderPoints from "./pages/TraderPoints";
+import TraderPointsQR from "./pages/TraderPointsQR";
 import CustomerScanResults from "./pages/CustomerScanResults.tsx";
 
 export default function App() {
@@ -26,6 +28,8 @@ export default function App() {
               <Route path="/trader">
                   <Route index element={<TraderMain />} />
                   <Route path="register" element={<TraderRegistration />} />
+                  <Route path="points" element={<TraderPoints />} />
+                  <Route path="points/qr" element={<TraderPointsQR />} />
               </Route>
 
               <Route path="/supervisor">

@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 
 type TraderEntry = {
     name: string;
+    uuid: string;
     points: number;
     privateKey: JsonWebKey;
     timestamp: number;
@@ -40,7 +41,10 @@ export default function TraderMain() {
             </div>
 
             <div className="buttonContainer">
-                <button className="button">
+                <button
+                    className="button"
+                    onClick={() => navigate("/trader/points")}
+                >
                     TRANSFER POINTS
                 </button>
             </div>
