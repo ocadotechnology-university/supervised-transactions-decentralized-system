@@ -1,11 +1,10 @@
 import "../styles.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { generateEd25519KeyPair, exportKey, generateUUID} from "../utils/cryptoutils";
+import { generateEd25519KeyPair, exportKey} from "../utils/cryptoutils";
 
 type TraderEntry = {
     name: string;
-    uuid: string;
     points: number,
     publicKey: JsonWebKey;
     timestamp: number;
@@ -80,7 +79,6 @@ export default function RegisterTrader() {
 
         try {
             const keys = await generateEd25519KeyPair();
-            const traderUUID = generateUUID();
 
             const privJwk = await exportKey(keys.privateKey);
             const pubJwk = await exportKey(keys.publicKey);
@@ -96,7 +94,6 @@ export default function RegisterTrader() {
 
             validEntries.push({
                 name: name.trim(),
-                uuid: traderUUID,
                 points: Number(points),
                 publicKey: pubJwk,
                 timestamp: now,
@@ -106,7 +103,6 @@ export default function RegisterTrader() {
 
             const payload = {
                 name: name.trim(),
-                uuid: traderUUID,
                 points: Number(points),
                 privateKey: privJwk,
                 timestamp: now,

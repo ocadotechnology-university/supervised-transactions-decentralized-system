@@ -14,7 +14,6 @@ type TraderEntry = {
     points: number;
     privateKey: JsonWebKey;
     timestamp: number;
-    uuid: string;
 };
 
 export default function TraderPoints() {
@@ -51,7 +50,7 @@ export default function TraderPoints() {
 
             const message = JSON.stringify({
                 amount,
-                traderUUID: trader.uuid,
+                name: trader.name,
                 nonce,
             });
 
@@ -62,7 +61,7 @@ export default function TraderPoints() {
 
             const payload = {
                 amount,
-                traderUUID: trader.uuid,
+                name: trader.name,
                 nonce,
                 signature,
             };

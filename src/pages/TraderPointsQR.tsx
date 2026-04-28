@@ -1,35 +1,11 @@
 import "../styles.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useRef } from "react";
-import { drawQR } from "../utils/drawQR";
+import GenerateQR from "../components/GenerateQR";
 
 export default function TraderPointsQR() {
     const location = useLocation();
     const navigate = useNavigate();
-    const containerRef = useRef<HTMLDivElement>(null);
-
     const data = location.state;
-
-    useEffect(() => {
-        async function generateQR() {
-            if (!data) return;
-
-            const qrData = JSON.stringify(data);
-
-            const canvas = await drawQR({
-                data: qrData,
-                QRversion: 14,
-                errorCorrectionLevel: "L",
-            });
-
-            if (containerRef.current) {
-                containerRef.current.innerHTML = "";
-                containerRef.current.appendChild(canvas);
-            }
-        }
-
-        generateQR();
-    }, [data]);
 
     if (!data) {
         return (
@@ -38,7 +14,7 @@ export default function TraderPointsQR() {
                 <div className="buttonContainer">
                     <button
                         className="button"
-                        onClick={() => navigate("/trader/main", { replace: true })}
+                        onClick={() => navigate("/trader", { replace: true })}
                     >
                         BACK
                     </button>
@@ -51,15 +27,12 @@ export default function TraderPointsQR() {
         <div className="screen">
             <h1 className="title">SHOW QR TO SUPERVISOR</h1>
 
-            <div
-                ref={containerRef}
-                style={{ width: "100%", maxWidth: "300px", margin: "20px auto" }}
-            />
+            <GenerateQR data={data} />
 
             <div className="buttonContainer">
                 <button
                     className="button"
-                    onClick={() => navigate("/trader/main", { replace: true })}
+                    onClick={() => navigate("/trader", { replace: true })}
                 >
                     DONE
                 </button>
