@@ -15,6 +15,7 @@ import CustomerCashout from "./pages/CustomerCashout.tsx";
 import CustomerCashoutQR from "./pages/CustomerCashoutQR.tsx";
 import SupervisorVerify from "./pages/SupervisorVerify.tsx";
 import SupervisorVerifyResults from "./pages/SupervisorVerifyResults.tsx";
+import { SupervisorRanking } from "./pages/SupervisorRanking.tsx";
 
 export default function App() {
   return (
@@ -44,6 +45,7 @@ export default function App() {
                   <Route path="registerTrader/qr" element={<SupervisorTraderQR />} />
                   <Route path="verify" element={<SupervisorVerify />} />
                   <Route path="verify/results" element={<SupervisorVerifyResults />} />
+                  <Route path="ranking" element={<SupervisorRanking />} />
               </Route>
           </Routes>
       </Router>
