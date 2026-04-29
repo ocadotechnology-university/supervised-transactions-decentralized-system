@@ -2,6 +2,12 @@ import ScanQR from "../components/ScanQR";
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
+import {
+    importPublicKey,
+    verifyData,
+    encodeData,
+    base64ToBuffer
+} from "../utils/cryptoutils";
 
 type Transaction = {
     name: string;
@@ -18,20 +24,36 @@ type TraderEntry = {
     timestamp: number;
 };
 
-function checkPool(points: number, traderName: string){
+async function verifyTransaction(transactionData: Transaction, message: object){
     const STORAGE_KEY = "traders";
     
     let stored: TraderEntry[] = JSON.parse(
         localStorage.getItem(STORAGE_KEY) || "[]"
     );
 
-    const foundTrader = stored.find(trader => trader.name === traderName)
+    const foundTrader = stored.find(trader => trader.name === transactionData.name);
+    if (!foundTrader) {
+        return false;
+    }
+
+    try {
+        const messageString = JSON.stringify(message);
+        const messageEncoded = encodeData(messageString);
+        const signatureBuffer = base64ToBuffer(transactionData.signature);
+        const pubKey = await importPublicKey(foundTrader.publicKey)
+        const isVerified = await verifyData(pubKey, signatureBuffer, messageEncoded);
+
+        if (!isVerified) {
+            return false;
+        }
+    }
+    catch (error) {
+        return false;
+    }
     
-    if(foundTrader && foundTrader.points >= points){
-        foundTrader.points -= points;
-
+    if(foundTrader.points >= transactionData.points){
+        foundTrader.points -= transactionData.points;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(stored))
-
         return true;
     }
     
@@ -43,7 +65,7 @@ export default function SupervisorVerify(){
     const [isScanning, setIsScanning] = useState<boolean>(false);
 
     const handleScanSuccess = useCallback(
-        (decodedString: string) => {
+        async (decodedString: string) => {
             try {
                 const data = JSON.parse(decodedString);
 
@@ -70,25 +92,25 @@ export default function SupervisorVerify(){
                     signature: data.signature
                 };
                 
-                const scanedTransaction = transactionData.signature
-                
-                if(localStorage.getItem(scanedTransaction)) {
+                if(localStorage.getItem(transactionData.signature)) {
                     // token is used
+                    setIsScanning(false);
                     navigate("/supervisor/verify/results", { state: { success: false } })
-                }
-                else {
-                    // token isn't used
-                    if(checkPool(transactionData.points, transactionData.name)) {
-                        // trader is real and has pool
-                        localStorage.setItem(transactionData.signature, JSON.stringify(data))
-                        navigate("/supervisor/verify/results", { state: { success: true, transactionPoints: transactionData.points, customerData: data.customerData } })
-                    }
-                    else {
-                        navigate("/supervisor/verify/results", { state: { success: false } })
-                    }
+                    return;
                 }
 
-                setIsScanning(false);
+                const verifyResult = await verifyTransaction(transactionData, data.message);
+
+                if(verifyResult) {
+                    // trader is real and has pool
+                    localStorage.setItem(transactionData.signature, JSON.stringify(data))
+                    setIsScanning(false);
+                    navigate("/supervisor/verify/results", { state: { success: true, transactionPoints: transactionData.points, customerData: data.customerData } })
+                }
+                else {
+                    setIsScanning(false);
+                    navigate("/supervisor/verify/results", { state: { success: false } })
+                }
             } catch (e) {
                 console.error("Invalid QR payload", e);
                 setIsScanning(false);
