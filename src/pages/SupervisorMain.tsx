@@ -13,7 +13,7 @@ export default function SupervisorMain() {
                     REGISTER A TRADER
                 </button>
 
-                <button className="button" onClick={() => navigate("/supervisor/verifyTransaction")}>
+                <button className="button" onClick={() => navigate("/supervisor/verify")}>
                     VERIFY POINTS
                 </button>
             </div>

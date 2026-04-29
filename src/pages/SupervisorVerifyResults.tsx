@@ -1,7 +1,7 @@
 import "../styles.css";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export default function CustomerScanResults() {
+export default function SupervisorVerifyResults() {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -39,12 +39,12 @@ export default function CustomerScanResults() {
             )}
 
             <div className="buttonContainer">
-                <button className="button" onClick={() => navigate("/supervisor/verifyTransaction", { replace: true })}>
+                <button className="button" onClick={() => navigate("/supervisor/verify", { replace: true })}>
                     SCAN AGAIN
                 </button>
 
-                <button className="button" onClick={() => navigate("/customer", { replace: true })}>
-                    BACK
+                <button className="button" onClick={() => navigate("/supervisor", { replace: true })}>
+                    DONE
                 </button>
             </div>
         </div>

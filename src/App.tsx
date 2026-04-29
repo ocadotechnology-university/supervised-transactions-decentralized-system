@@ -13,7 +13,8 @@ import TraderPointsQR from "./pages/TraderPointsQR";
 import CustomerScanResults from "./pages/CustomerScanResults.tsx";
 import CustomerCashout from "./pages/CustomerCashout.tsx";
 import CustomerCashoutQR from "./pages/CustomerCashoutQR.tsx";
-import TokenVerify from "./pages/SupervisorVerify.tsx";
+import SupervisorVerify from "./pages/SupervisorVerify.tsx";
+import SupervisorVerifyResults from "./pages/SupervisorVerifyResults.tsx";
 
 export default function App() {
   return (
@@ -41,8 +42,8 @@ export default function App() {
                   <Route index element={<SupervisorMain />} />
                   <Route path="registerTrader" element={<RegisterTrader />} />
                   <Route path="registerTrader/qr" element={<SupervisorTraderQR />} />
-                  <Route path="verifyTransaction" element={<TokenVerify />} />
-                  <Route path="verifyTransaction/results" element={<TokenVerify />} />
+                  <Route path="verify" element={<SupervisorVerify />} />
+                  <Route path="verify/results" element={<SupervisorVerifyResults />} />
               </Route>
           </Routes>
       </Router>

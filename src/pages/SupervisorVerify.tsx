@@ -38,7 +38,7 @@ function checkPool(points: number, traderName: string){
     return false;
 }
 
-export default function TokenVerify(){
+export default function SupervisorVerify(){
     const navigate = useNavigate();
     const [isScanning, setIsScanning] = useState<boolean>(false);
 
@@ -48,16 +48,16 @@ export default function TokenVerify(){
                 const data = JSON.parse(decodedString);
 
                 const isValid =
-                    typeof data.name === "string" &&
-                    typeof data.points === "number" &&
-                    typeof data.uuid === "string" &&
-                    typeof data.timestamp === "number" &&
+                    typeof data.message.name === "string" &&
+                    typeof data.message.points === "number" &&
+                    typeof data.message.uuid === "string" &&
+                    typeof data.message.timestamp === "number" &&
                     typeof data.signature === "string";
 
                 if (!isValid) {
                     console.error("Invalid data structure");
                     setIsScanning(false);
-                    navigate("/supervisor/verifyTransaction/results", { state: { success: false } });
+                    navigate("/supervisor/verify/results", { state: { success: false } });
                     return;
                 }
 
@@ -69,7 +69,7 @@ export default function TokenVerify(){
                     signature: data.signature
                 };
                 
-                const scanedTransaction = transactionData["signature"]
+                const scanedTransaction = transactionData.signature
                 
                 if(localStorage.getItem(scanedTransaction)) {
                     // token is used
@@ -78,11 +78,11 @@ export default function TokenVerify(){
                     // token isn't used
                     if(checkPool(transactionData.points, transactionData.name)) {
                         // trader is real and has pool
-                        localStorage.setItem(transactionData["signature"], JSON.stringify(transactionData))
-                        navigate("/supervisor/verifyTransaction/results", { state: { success: true } })
+                        localStorage.setItem(transactionData.signature, JSON.stringify(transactionData))
+                        navigate("/supervisor/verify/results", { state: { success: true } })
                     }
                     else {
-                        navigate("/supervisor/verifyTransaction/results", { state: { success: false } })
+                        navigate("/supervisor/verify/results", { state: { success: false } })
                     }
                 }
 
@@ -90,7 +90,7 @@ export default function TokenVerify(){
             } catch (e) {
                 console.error("Invalid QR payload", e);
                 setIsScanning(false);
-                navigate("/supervisor/verifyTransaction/results", { state: { success: false } });
+                navigate("/supervisor/verify/results", { state: { success: false } });
             }
         },
         []
