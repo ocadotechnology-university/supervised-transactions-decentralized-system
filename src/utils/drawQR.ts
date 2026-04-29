@@ -1,6 +1,6 @@
 import { toCanvas, type QRCodeErrorCorrectionLevel } from "qrcode";
 
-interface drawQRProps {
+type drawQRProps = {
     data: string,
     QRversion: number,
     errorCorrectionLevel: QRCodeErrorCorrectionLevel
