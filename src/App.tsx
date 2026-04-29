@@ -42,8 +42,8 @@ export default function App() {
                   <Route index element={<SupervisorMain />} />
                   <Route path="registerTrader" element={<RegisterTrader />} />
                   <Route path="registerTrader/qr" element={<SupervisorTraderQR />} />
-                  <Route path="verifyTransaction" element={<TokenVerify />} />
-                  <Route path="verifyTransaction/results" element={<SupervisorScanResults />} />
+                  <Route path="verifyTransaction" element={<SupervisorVerify />} />
+                  <Route path="verifyTransaction/results" element={<SupervisorVerifyResults />} />
               </Route>
           </Routes>
       </Router>
