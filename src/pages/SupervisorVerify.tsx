@@ -27,8 +27,8 @@ function checkPool(points: number, traderName: string){
 
     const foundTrader = stored.find(trader => trader.name === traderName)
     
-    if(foundTrader && foundTrader.points > points){
-        foundTrader.points =- points;
+    if(foundTrader && foundTrader.points >= points){
+        foundTrader.points -= points;
 
         localStorage.setItem(STORAGE_KEY, JSON.stringify(stored))
 
@@ -62,10 +62,10 @@ export default function SupervisorVerify(){
                 }
 
                 const transactionData: Transaction = {
-                    name: data.name,
-                    points: data.points,
-                    uuid: data.uuid,
-                    timestamp: data.timestamp,
+                    name: data.message.name,
+                    points: data.message.points,
+                    uuid: data.message.uuid,
+                    timestamp: data.message.timestamp,
                     signature: data.signature
                 };
                 
@@ -73,6 +73,7 @@ export default function SupervisorVerify(){
                 
                 if(localStorage.getItem(scanedTransaction)) {
                     // token is used
+                    navigate("/supervisor/verifyTransaction/results", { state: { success: false } })
                 }
                 else {
                     // token isn't used
