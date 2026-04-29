@@ -11,6 +11,8 @@ import TraderMain from "./pages/TraderMain.tsx";
 import TraderPoints from "./pages/TraderPoints";
 import TraderPointsQR from "./pages/TraderPointsQR";
 import CustomerScanResults from "./pages/CustomerScanResults.tsx";
+import CustomerCashout from "./pages/CustomerCashout.tsx";
+import CustomerCashoutQR from "./pages/CustomerCashoutQR.tsx";
 
 export default function App() {
   return (
@@ -23,6 +25,8 @@ export default function App() {
                   <Route path="register" element={<CustomerRegistration />} />
                   <Route path="scan" element={<CustomerScan />} />
                   <Route path="scan/results" element={<CustomerScanResults />} />
+                  <Route path="cashout" element={<CustomerCashout />} />
+                  <Route path="cashout/qr" element={<CustomerCashoutQR />} />
               </Route>
 
               <Route path="/trader">

@@ -58,7 +58,7 @@ export default function CustomerScanResults() {
                 </button>
 
                 <button className="button" onClick={() => navigate("/customer", { replace: true })}>
-                    BACK
+                    DONE
                 </button>
             </div>
         </div>
