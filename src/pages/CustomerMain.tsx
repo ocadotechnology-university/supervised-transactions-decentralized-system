@@ -8,29 +8,40 @@ type CustomerEntry = {
     timestamp: number;
 }
 
+type Transaction = {
+    name: string;
+    points: number;
+    uuid: string;
+    timestamp: number;
+    signature: string;
+}
+
 export default function CustomerMain() {
-    const CUSTOMER_KEY = "customerName";
+    const CUSTOMER_KEY = "customerData";
     const POINTS_KEY = "customerTransactions";
     const navigate = useNavigate();
 
     const [name, setName] = useState("CUSTOMER#000000");
-    const [points, setPoints] = useState("0");
+    const [points, setPoints] = useState(0);
 
     useEffect(() => {
         const storedCustomerData = localStorage.getItem(CUSTOMER_KEY);
         if (storedCustomerData) {
             const customerData: CustomerEntry = JSON.parse(storedCustomerData);
-            setName(`${customerData.name.toUpperCase()}#${customerData.uuid}`);
+            setName(`${customerData.name}#${customerData.uuid}`);
         }
         else {
             navigate("/customer/register", { replace: true });
+            return;
         }
 
         const storedCustomerPoints = localStorage.getItem(POINTS_KEY);
         if (storedCustomerPoints) {
-            // WIP - need to make transactions
-            const customerPoints = JSON.parse(storedCustomerPoints);
-            setPoints(customerPoints.points)
+            const storedTransactions: Transaction[] = JSON.parse(storedCustomerPoints);
+            const customerPoints = storedTransactions.reduce((accumulator, transaction) => {
+                return accumulator + transaction.points;
+            }, 0);
+            setPoints(customerPoints)
         }
     }, []);
 

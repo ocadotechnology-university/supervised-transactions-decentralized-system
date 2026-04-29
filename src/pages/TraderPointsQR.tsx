@@ -25,7 +25,7 @@ export default function TraderPointsQR() {
 
     return (
         <div className="screen">
-            <h1 className="title">SHOW QR TO SUPERVISOR</h1>
+            <h1 className="title">SHOW QR TO CUSTOMER</h1>
 
             <GenerateQR data={data} />
 

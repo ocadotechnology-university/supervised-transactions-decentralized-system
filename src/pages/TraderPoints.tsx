@@ -46,27 +46,21 @@ export default function TraderPoints() {
         try {
             const privKey = await importPrivateKey(trader.privateKey);
 
-            const nonce = generateUUID();
-
-            const message = JSON.stringify({
-                amount,
+            const message = {
                 name: trader.name,
-                nonce,
-            });
+                points: amount,
+                uuid: generateUUID(),
+                timestamp: Date.now(),
+            };
 
-            const encoded = encodeData(message);
-
+            const encoded = encodeData(JSON.stringify(message));
             const signatureBuffer = await signData(privKey, encoded);
             const signature = bufferToBase64(signatureBuffer);
 
             const payload = {
-                amount,
-                name: trader.name,
-                nonce,
-                signature,
+                message,
+                signature
             };
-
-            console.log("SIGNED PAYLOAD:", payload);
 
             const updatedTrader = {
                 ...trader,
@@ -74,10 +68,7 @@ export default function TraderPoints() {
             };
 
             localStorage.setItem(TRADER_KEY, JSON.stringify(updatedTrader));
-            setTrader(updatedTrader);
-
-
-            navigate("/trader/points/qr", { state: payload, replace: true });
+            navigate("/trader/points/qr", { state: payload });
 
         } catch (e) {
             console.error(e);
@@ -92,7 +83,7 @@ export default function TraderPoints() {
             <h1 className="title">SELECT POINT AMOUNT</h1>
 
             <div className="pointsGrid">
-                {[10, 60, 20, 70, 30, 80, 40, 90, 50, 100].map((val) => (
+                {[10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map((val) => (
                     <button
                         key={val}
                         className="button"
@@ -103,12 +94,11 @@ export default function TraderPoints() {
                 ))}
             </div>
 
-            {error && <p className="error">{error}</p>}
-
             <div className="buttonContainer" style={{ marginTop: "40px" }}>
+                {error && <p className="error">{error}</p>}
                 <button
                     className="button"
-                    onClick={() => navigate("/trader")}
+                    onClick={() => navigate("/trader", {replace: true})}
                 >
                     BACK
                 </button>

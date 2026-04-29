@@ -4,13 +4,13 @@ import {useNavigate} from "react-router-dom";
 import {generateUUID} from "../utils/cryptoutils.ts";
 
 export default function CustomerRegistration() {
-    const STORAGE_KEY = "customerName";
+    const STORAGE_KEY = "customerData";
     const navigate = useNavigate();
 
     useEffect(() => {
         const customerData = localStorage.getItem(STORAGE_KEY);
         if (customerData) {
-            navigate("/customer/main", { replace: true });
+            navigate("/customer", { replace: true });
         }
     }, []);
 
@@ -19,21 +19,20 @@ export default function CustomerRegistration() {
 
 
     function validate(): boolean {
-        let valid = true;
 
         setNameError("");
 
-        const trimmedName = name.trim().toLowerCase();
+        const trimmedName = name.trim();
 
         if (!trimmedName) {
             setNameError("Customer name is required");
-            valid = false;
+            return false;
         } else if (trimmedName.length > 20) {
             setNameError("Max 20 characters");
-            valid = false;
+            return false;
         }
 
-        return valid;
+        return true;
     }
 
     async function handleRegister() {
@@ -41,7 +40,7 @@ export default function CustomerRegistration() {
 
         try {
             const payload = {
-                name: name.trim(),
+                name: name.trim().toUpperCase(),
                 uuid: generateUUID().slice(-6),
                 timestamp: Date.now(),
             };

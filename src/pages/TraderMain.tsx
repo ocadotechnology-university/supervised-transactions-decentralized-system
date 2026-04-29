@@ -26,6 +26,7 @@ export default function TraderMain() {
         }
         else {
             navigate("/trader/register", { replace: true });
+            return;
         }
     }, []);
 

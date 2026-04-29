@@ -1,10 +1,20 @@
 import "../styles.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import {useEffect} from "react";
 
 export default function CustomerScanResults() {
-    const location = useLocation();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const STORAGE_KEY = "customerData";
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) {
+            navigate("/customer/register", { replace: true });
+            return;
+        }
+    }, []);
+
+    const location = useLocation();
     const data = location.state;
 
     if (!data) {
@@ -34,7 +44,12 @@ export default function CustomerScanResults() {
                     </div>
                 </>
             ) : (
-                <h1 className="title">TRANSACTION FAILED</h1>
+                <>
+                    <h1 className="title">TRANSACTION FAILED</h1>
+                    {data.duplicate && (
+                        <h1 className="title">DUPLICATE DETECTED</h1>
+                    )}
+                </>
             )}
 
             <div className="buttonContainer">
