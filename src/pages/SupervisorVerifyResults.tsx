@@ -25,11 +25,11 @@ export default function SupervisorVerifyResults() {
             {data.success ? (
                 <>
                     <h1 className="title">VERIFIED TOKEN</h1>
-                    <h2 className="subtitle">{data.message.name}</h2>
+                    <h2 className="subtitle">{data.customerData}</h2>
 
                     <div className="pointsContainer">
                         <div className="circle">
-                            <span className="pointsValue">{data.message.transactionPoints}</span>
+                            <span className="pointsValue">{data.transactionPoints}</span>
                         </div>
                         <h2 className="pointsLabel">POINTS</h2>
                     </div>

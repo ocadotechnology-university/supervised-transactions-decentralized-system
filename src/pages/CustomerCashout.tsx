@@ -2,6 +2,12 @@ import "../styles.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+type CustomerEntry = {
+    name: string;
+    uuid: string;
+    timestamp: number;
+}
+
 type Transaction = {
     name: string;
     points: number;
@@ -14,11 +20,16 @@ export default function CustomerCashout() {
     const TRANSACTIONS_KEY = "customerTransactions";
     const navigate = useNavigate();
     const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [customerName, setName] = useState("");
 
     useEffect(() => {
         const STORAGE_KEY = "customerData";
         const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) {
+        if (stored) {
+            const customerData: CustomerEntry = JSON.parse(stored);
+            setName(`${customerData.name}#${customerData.uuid}`);
+        }
+        else {
             navigate("/customer/register", { replace: true });
             return;
         }
@@ -31,6 +42,7 @@ export default function CustomerCashout() {
 
     function handleCashout(transaction: Transaction) {
         const payload = {
+            customerData: customerName,
             message: {
                 name: transaction.name,
                 points: transaction.points,

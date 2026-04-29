@@ -48,6 +48,7 @@ export default function SupervisorVerify(){
                 const data = JSON.parse(decodedString);
 
                 const isValid =
+                    typeof data.customerData === "string" &&
                     typeof data.message.name === "string" &&
                     typeof data.message.points === "number" &&
                     typeof data.message.uuid === "string" &&
@@ -73,14 +74,14 @@ export default function SupervisorVerify(){
                 
                 if(localStorage.getItem(scanedTransaction)) {
                     // token is used
-                    navigate("/supervisor/verifyTransaction/results", { state: { success: false } })
+                    navigate("/supervisor/verify/results", { state: { success: false } })
                 }
                 else {
                     // token isn't used
                     if(checkPool(transactionData.points, transactionData.name)) {
                         // trader is real and has pool
-                        localStorage.setItem(transactionData.signature, JSON.stringify(transactionData))
-                        navigate("/supervisor/verify/results", { state: { success: true } })
+                        localStorage.setItem(transactionData.signature, JSON.stringify(data))
+                        navigate("/supervisor/verify/results", { state: { success: true, transactionPoints: transactionData.points, customerData: data.customerData } })
                     }
                     else {
                         navigate("/supervisor/verify/results", { state: { success: false } })
