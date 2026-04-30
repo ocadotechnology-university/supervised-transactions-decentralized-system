@@ -1,154 +1,120 @@
-import "../styles.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { generateEd25519KeyPair, exportKey} from "../utils/cryptoutils";
+import { generateEd25519KeyPair, exportKey } from "../utils/crypto.ts";
+import type { TraderEntry } from "../utils/types.ts";
+import { Screen, Title, ButtonContainer, Button, Input, ErrorText } from "../styles.ts";
 
-type TraderEntry = {
-    name: string;
-    points: number,
-    publicKey: JsonWebKey;
-    timestamp: number;
-};
+const TRADERS_KEY = "traders";
+const MAX_NAME_LENGTH = 20;
 
-// equals to 24 hours
-const DAY_MS = 24 * 60 * 60 * 1000;
+export default function SupervisorRegister() {
+    const navigate = useNavigate();
 
-function getValidEntries(stored: TraderEntry[]): TraderEntry[] {
-    const now = Date.now();
-    return stored.filter((entry) => now - entry.timestamp < DAY_MS);
-}
-
-export default function RegisterTrader() {
     const [name, setName] = useState("");
     const [points, setPoints] = useState("");
-
     const [nameError, setNameError] = useState("");
     const [pointsError, setPointsError] = useState("");
 
-    const navigate = useNavigate();
 
-    function validate(): boolean {
-        let valid = true;
-
-        setNameError("");
-        setPointsError("");
-
-        const trimmedName = name.trim();
-
+    function validate(trimmedName: string, trimmedPoints: string): boolean {
         if (!trimmedName) {
             setNameError("Trader name is required");
-            valid = false;
-        } else if (trimmedName.length > 20) {
-            setNameError("Max 20 characters");
-            valid = false;
+            return false;
         }
-
-        if (!points.trim()) {
+        if (trimmedName.length > MAX_NAME_LENGTH) {
+            setNameError(`Max ${MAX_NAME_LENGTH} characters`);
+            return false;
+        }
+        if (!trimmedPoints) {
             setPointsError("Point pool is required");
-            valid = false;
-        } else if (!/^[0-9]+$/.test(points)) {
-            setPointsError("Must be a number");
-            valid = false;
+            return false;
         }
-
-        if (valid) {
-            const STORAGE_KEY = "traders";
-
-            const stored: TraderEntry[] = JSON.parse(
-                localStorage.getItem(STORAGE_KEY) || "[]"
-            );
-
-            const validEntries = getValidEntries(stored);
-
-            const exists = validEntries.some(
-                (entry) =>
-                    entry.name.toLowerCase() === trimmedName.toLowerCase()
-            );
-
-            if (exists) {
-                setNameError("Trader with this name already exists");
-                valid = false;
-            }
+        if (!trimmedPoints || !/^[0-9]+$/.test(trimmedPoints)) {
+            setPointsError("Must be a positive number");
+            return false;
         }
-
-        return valid;
+        setNameError("");
+        setPointsError("");
+        return true;
     }
 
     async function handleGenerate() {
-        if (!validate()) return;
+        const trimmedName = name.trim();
+        const trimmedPoints = points.trim();
+        if (!validate(trimmedName, trimmedPoints)){
+            return;
+        }
+
+        let allTraders: TraderEntry[] = [];
+
+        const storedTraders = localStorage.getItem(TRADERS_KEY)
+        if (storedTraders) {
+            allTraders = JSON.parse(storedTraders)
+            if (allTraders.some((trader) => trader.name === trimmedName)) {
+                setNameError("Trader with this name already exists");
+                return;
+            }
+        }
 
         try {
             const keys = await generateEd25519KeyPair();
-
             const privJwk = await exportKey(keys.privateKey);
             const pubJwk = await exportKey(keys.publicKey);
 
-            const STORAGE_KEY = "traders";
-
-            const stored: TraderEntry[] = JSON.parse(
-                localStorage.getItem(STORAGE_KEY) || "[]"
-            );
-
-            const validEntries = getValidEntries(stored);
             const now = Date.now();
+            const parsedPoints = Number(trimmedPoints);
 
-            validEntries.push({
-                name: name.trim(),
-                points: Number(points),
+            allTraders.push({
+                name: trimmedName,
+                points: parsedPoints,
                 publicKey: pubJwk,
                 timestamp: now,
             });
 
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(validEntries));
+            localStorage.setItem(TRADERS_KEY, JSON.stringify(allTraders));
 
-            const payload = {
+            const qrPayload = {
                 name: name.trim(),
-                points: Number(points),
+                points: parsedPoints,
                 privateKey: privJwk,
                 timestamp: now,
             };
 
-            navigate("/supervisor/registerTrader/qr", { state: payload});
+            navigate("/supervisor/register/qr", { state: qrPayload, replace: true });
 
         } catch (error) {
             console.error(error);
-            alert("Failed to generate QR");
+            setNameError("Failed to generate cryptographic keys");
         }
     }
 
     return (
-        <div className="screen">
-            <h1 className="title">ENTER TRADER DETAILS</h1>
+        <Screen>
+            <Title>ENTER TRADER DETAILS</Title>
 
-            <input
-                className="input"
+            <Input
                 placeholder="TRADER NAME"
                 value={name}
-                maxLength={20}
                 onChange={(e) => setName(e.target.value)}
             />
-            {nameError && <p className="error">{nameError}</p>}
+            {nameError && <ErrorText>{nameError}</ErrorText>}
 
-            <input
-                className="input"
+            <Input
                 placeholder="POINT POOL"
                 value={points}
                 onChange={(e) => setPoints(e.target.value)}
             />
-            {pointsError && <p className="error">{pointsError}</p>}
+            {pointsError && <ErrorText>{pointsError}</ErrorText>}
 
-            <div className="buttonContainer">
-                <button className="button" onClick={handleGenerate} >
+            <ButtonContainer>
+                <Button onClick={handleGenerate}>
                     OK
-                </button>
+                </Button>
 
-                <button
-                    className="button"
-                    onClick={() => navigate("/supervisor", { replace: true })}
-                >
+                <Button onClick={() => navigate("/supervisor")}>
                     BACK
-                </button>
-            </div>
-        </div>
+                </Button>
+            </ButtonContainer>
+        </Screen>
     );
 }

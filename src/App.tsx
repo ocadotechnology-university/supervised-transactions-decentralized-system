@@ -1,8 +1,9 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { GlobalStyle } from "./styles.ts";
 import Home from "./pages/Home";
 import SupervisorMain from "./pages/SupervisorMain";
-import RegisterTrader from "./pages/SupervisorRegister";
-import SupervisorTraderQR from "./pages/SupervisorTraderQR.tsx";
+import SupervisorRegister from "./pages/SupervisorRegister";
+import SupervisorRegisterQr from "./pages/SupervisorRegisterQr.tsx";
 import CustomerRegistration from "./pages/CustomerRegistration.tsx";
 import CustomerMain from "./pages/CustomerMain.tsx";
 import CustomerScan from "./pages/CustomerScan.tsx";
@@ -20,6 +21,7 @@ import { SupervisorRanking } from "./pages/SupervisorRanking.tsx";
 export default function App() {
   return (
       <Router>
+          <GlobalStyle />
           <Routes>
               <Route path="/" element={<Home />} />
 
@@ -41,8 +43,8 @@ export default function App() {
 
               <Route path="/supervisor">
                   <Route index element={<SupervisorMain />} />
-                  <Route path="registerTrader" element={<RegisterTrader />} />
-                  <Route path="registerTrader/qr" element={<SupervisorTraderQR />} />
+                  <Route path="register" element={<SupervisorRegister />} />
+                  <Route path="register/qr" element={<SupervisorRegisterQr />} />
                   <Route path="verify" element={<SupervisorVerify />} />
                   <Route path="verify/results" element={<SupervisorVerifyResults />} />
                   <Route path="ranking" element={<SupervisorRanking />} />

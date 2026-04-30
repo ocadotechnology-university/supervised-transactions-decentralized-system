@@ -1,14 +1,16 @@
-import "../styles.css";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {generateID} from "../utils/cryptoutils.ts";
+import {generateId} from "../utils/crypto.ts";
+import { Screen, Title, ButtonContainer, Button, Input, ErrorText } from "../styles.ts";
+
+const CUSTOMER_KEY = "customerData";
+const MAX_NAME_LENGTH = 20;
 
 export default function CustomerRegistration() {
-    const STORAGE_KEY = "customerData";
     const navigate = useNavigate();
 
     useEffect(() => {
-        const customerData = localStorage.getItem(STORAGE_KEY);
+        const customerData = localStorage.getItem(CUSTOMER_KEY);
         if (customerData) {
             navigate("/customer", { replace: true });
         }
@@ -18,63 +20,55 @@ export default function CustomerRegistration() {
     const [nameError, setNameError] = useState("");
 
 
-    function validate(): boolean {
-
-        setNameError("");
-
-        const trimmedName = name.trim();
-
+    function validate(trimmedName: string): boolean {
         if (!trimmedName) {
             setNameError("Customer name is required");
             return false;
-        } else if (trimmedName.length > 20) {
-            setNameError("Max 20 characters");
+        }
+        if (trimmedName.length > MAX_NAME_LENGTH) {
+            setNameError(`Max ${MAX_NAME_LENGTH} characters`);
             return false;
         }
-
+        setNameError("");
         return true;
     }
 
-    async function handleRegister() {
-        if (!validate()) return;
-
-        try {
-            const payload = {
-                name: name.trim().toUpperCase(),
-                uuid: generateID(),
-                timestamp: Date.now(),
-            };
-
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-            navigate("/customer", { replace: true });
-        } catch (error) {
-            console.error(error);
-            alert("Failed to register");
+    function handleRegister() {
+        const trimmedName = name.trim();
+        if (!validate(trimmedName)) {
+            return;
         }
+
+        const payload = {
+            name: trimmedName.toUpperCase(),
+            id: generateId(),
+            timestamp: Date.now(),
+        };
+
+        localStorage.setItem(CUSTOMER_KEY, JSON.stringify(payload));
+        navigate("/customer", { replace: true });
     }
 
     return (
-        <div className="screen">
-            <h1 className="title">CUSTOMER REGISTRATION</h1>
+        <Screen>
+            <Title>CUSTOMER REGISTRATION</Title>
 
-            <input
-                className="input"
+            <Input
                 placeholder="ENTER YOUR NAME"
                 value={name}
-                maxLength={20}
                 onChange={(e) => setName(e.target.value)}
             />
-            {nameError && <p className="error">{nameError}</p>}
+            {nameError && <ErrorText>{nameError}</ErrorText>}
 
-            <div className="buttonContainer">
-                <button className="button" onClick={handleRegister}>
+            <ButtonContainer>
+                <Button onClick={handleRegister}>
                     OK
-                </button>
+                </Button>
 
-                <button className="button" onClick={() => navigate("/", { replace: true })}>
+                <Button onClick={() => navigate("/", { replace: true })}>
                     BACK
-                </button>
-            </div>
-        </div>
+                </Button>
+            </ButtonContainer>
+        </Screen>
     );
 }

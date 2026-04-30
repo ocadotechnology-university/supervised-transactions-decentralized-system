@@ -1,26 +1,24 @@
 import { useNavigate } from "react-router-dom";
-import "../styles.css";
+import { Screen, Title, ButtonContainer, Button } from "../styles.ts";
 
 export default function Home() {
     const navigate = useNavigate();
 
     return (
-        <div className="screen">
-            <h1 className="title">WHO ARE YOU</h1>
+        <Screen>
+            <Title>WHO ARE YOU</Title>
 
-            <div className="buttonContainer">
-                <button className="button" onClick={() => navigate("/customer")}>
+            <ButtonContainer>
+                <Button onClick={() => navigate("/customer")}>
                     CUSTOMER
-                </button>
-
-                <button className="button" onClick={() => navigate("/trader")}>
+                </Button>
+                <Button>
                     TRADER
-                </button>
-
-                <button className="button" onClick={() => navigate("/supervisor")}>
+                </Button>
+                <Button onClick={() => navigate("/supervisor")}>
                     SUPERVISOR
-                </button>
-            </div>
-        </div>
+                </Button>
+            </ButtonContainer>
+        </Screen>
     );
 }
