@@ -6,7 +6,7 @@ import {
     signData,
     encodeData,
     bufferToBase64,
-    generateUUID
+    generateID
 } from "../utils/cryptoutils";
 
 type TraderEntry = {
@@ -49,7 +49,7 @@ export default function TraderPoints() {
             const message = {
                 name: trader.name,
                 points: amount,
-                uuid: generateUUID(),
+                uuid: generateID(),
                 timestamp: Date.now(),
             };
 

@@ -1,7 +1,7 @@
 import "../styles.css";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {generateUUID} from "../utils/cryptoutils.ts";
+import {generateID} from "../utils/cryptoutils.ts";
 
 export default function CustomerRegistration() {
     const STORAGE_KEY = "customerData";
@@ -41,7 +41,7 @@ export default function CustomerRegistration() {
         try {
             const payload = {
                 name: name.trim().toUpperCase(),
-                uuid: generateUUID().slice(-6),
+                uuid: generateID(),
                 timestamp: Date.now(),
             };
 

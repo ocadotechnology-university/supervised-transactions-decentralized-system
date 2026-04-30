@@ -140,22 +140,12 @@ export function base64ToBuffer(data: string) {
     }
 }
 
-export function generateUUID() {
-    try {
-        return crypto.randomUUID();
-    } catch (error) {
-        console.error("generateUUID failed:", error);
-        throw error;
+export function generateID(length: number = 6): string {
+    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += charset.charAt(Math.floor(Math.random() * charset.length));
     }
+    return result;
 }
 
-export async function passHash(data: string) {
-    try {
-        const encoded = encodeData(data);
-        const hashBuffer = await digestData(encoded);
-        return bufferToBase64(hashBuffer);
-    } catch (error) {
-        console.error("Failed to hash text:", error);
-        return null;
-    }
-}
