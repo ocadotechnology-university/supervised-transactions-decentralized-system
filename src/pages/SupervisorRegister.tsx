@@ -16,7 +16,7 @@ export default function SupervisorRegister() {
     const [pointsError, setPointsError] = useState("");
 
 
-    function validate(trimmedName: string, trimmedPoints: string): boolean {
+    function validateName(trimmedName: string): boolean {
         if (!trimmedName) {
             setNameError("Trader name is required");
             return false;
@@ -25,6 +25,11 @@ export default function SupervisorRegister() {
             setNameError(`Max ${MAX_NAME_LENGTH} characters`);
             return false;
         }
+        setNameError("");
+        return true;
+    }
+
+    function validatePoints(trimmedPoints: string): boolean {
         if (!trimmedPoints) {
             setPointsError("Point pool is required");
             return false;
@@ -33,7 +38,6 @@ export default function SupervisorRegister() {
             setPointsError("Must be a positive number");
             return false;
         }
-        setNameError("");
         setPointsError("");
         return true;
     }
@@ -41,7 +45,11 @@ export default function SupervisorRegister() {
     async function handleGenerate() {
         const trimmedName = name.trim();
         const trimmedPoints = points.trim();
-        if (!validate(trimmedName, trimmedPoints)){
+
+        const isNameValid = validateName(trimmedName);
+        const isPointsValid = validatePoints(trimmedPoints);
+
+        if (!isNameValid || !isPointsValid) {
             return;
         }
 
@@ -74,7 +82,7 @@ export default function SupervisorRegister() {
             localStorage.setItem(TRADERS_KEY, JSON.stringify(allTraders));
 
             const qrPayload = {
-                name: name.trim(),
+                name: trimmedName,
                 points: parsedPoints,
                 privateKey: privJwk,
                 timestamp: now,
