@@ -1,60 +1,62 @@
-import "../styles.css";
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import type { Transaction, CustomerEntry } from "../utils/types.ts";
+import { Screen, Title, ButtonContainer, Button, PointsContainer, Circle, PointsValue, PointsLabel } from "../styles.ts";
 
-type CustomerEntry = {
-    name: string;
-    uuid: string;
-    timestamp: number;
-}
+const CUSTOMER_KEY = "customerData";
+const POINTS_KEY = "customerTransactions";
 
 export default function CustomerMain() {
-    const CUSTOMER_KEY = "customerName";
-    const POINTS_KEY = "customerTransactions";
     const navigate = useNavigate();
 
-    const [name, setName] = useState("CUSTOMER#000000");
-    const [points, setPoints] = useState("0");
+    const [name, setName] = useState("");
+    const [points, setPoints] = useState(0);
 
     useEffect(() => {
         const storedCustomerData = localStorage.getItem(CUSTOMER_KEY);
         if (storedCustomerData) {
             const customerData: CustomerEntry = JSON.parse(storedCustomerData);
-            setName(`${customerData.name.toUpperCase()}#${customerData.uuid}`);
+            setName(`${customerData.name}#${customerData.id}`);
         }
         else {
             navigate("/customer/register", { replace: true });
+            return;
         }
 
         const storedCustomerPoints = localStorage.getItem(POINTS_KEY);
         if (storedCustomerPoints) {
-            // WIP - need to make transactions
-            const customerPoints = JSON.parse(storedCustomerPoints);
-            setPoints(customerPoints.points)
+            const storedTransactions: Transaction[] = JSON.parse(storedCustomerPoints);
+            const customerPoints = storedTransactions.reduce((accumulator, transaction) => {
+                return accumulator + transaction.points;
+            }, 0);
+            setPoints(customerPoints);
         }
     }, []);
 
+    if (!name) {
+        return null;
+    }
+
     return (
-        <div className="screen">
-            <h1 className="title">{name}</h1>
+        <Screen>
+            <Title>{name}</Title>
 
-            <div className="pointsContainer">
-                <div className="circle">
-                    <span className="pointsValue">{points}</span>
-                </div>
-                <h2 className="pointsLabel">POINTS</h2>
-            </div>
+            <PointsContainer>
+                <Circle>
+                    <PointsValue>{points}</PointsValue>
+                </Circle>
+                <PointsLabel>POINTS</PointsLabel>
+            </PointsContainer>
 
-            <div className="buttonContainer">
-                <button className="button">
+            <ButtonContainer>
+                <Button>
                     SCAN TRANSACTION
-                </button>
+                </Button>
 
-                <button className="button">
+                <Button>
                     CASHOUT POINTS
-                </button>
-            </div>
-        </div>
+                </Button>
+            </ButtonContainer>
+        </Screen>
     );
 }
-

@@ -1,6 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&display=swap');
+import styled, { createGlobalStyle } from "styled-components";
 
-.screen {
+export const GlobalStyle = createGlobalStyle`
+    html, body, #root {
+        height: 100%;
+        margin: 0;
+    }
+`;
+
+export const Screen = styled.div`
     min-height: 100vh;
     width: 100%;
     background-color: #eaeaea;
@@ -11,24 +18,24 @@
     font-family: 'Balsamiq Sans', cursive;
     padding: 20px;
     box-sizing: border-box;
-}
+`;
 
-.title {
+export const Title = styled.h1`
     width: 100%;
     text-align: center;
     word-wrap: break-word;
     overflow-wrap: break-word;
-}
+`;
 
-.buttonContainer {
+export const ButtonContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 25px;
     width: 100%;
     max-width: 320px;
-}
+`;
 
-.button {
+export const Button = styled.button`
     background-color: #111;
     color: white;
     padding: 18px;
@@ -37,9 +44,10 @@
     font-size: 16px;
     letter-spacing: 1px;
     font-family: 'Balsamiq Sans', cursive;
-}
+    cursor: pointer;
+`;
 
-.input {
+export const Input = styled.input`
     width: 100%;
     max-width: 320px;
     padding: 16px;
@@ -50,24 +58,24 @@
     font-size: 16px;
     font-family: 'Balsamiq Sans', cursive;
     background: transparent;
-}
+`;
 
-.error {
+export const ErrorText = styled.p`
     color: red;
     font-size: 14px;
     margin-top: -10px;
     margin-bottom: 10px;
     text-align: center;
-}
+`;
 
-.pointsContainer {
+export const PointsContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 60px;
-}
+`;
 
-.circle {
+export const Circle = styled.div`
     width: 180px;
     height: 180px;
     background-color: #b3b3b3;
@@ -76,18 +84,24 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 15px;
-}
+`;
 
-.pointsValue {
+export const PointsValue = styled.span`
     font-size: 64px;
     font-weight: bold;
     color: white;
-}
+`;
 
-.pointsLabel {
+export const PointsLabel = styled.h2`
     font-size: 32px;
     font-weight: bold;
     color: #111;
     margin: 0;
     letter-spacing: 2px;
-}
+`;
+
+export const QRContainer = styled.div`
+    width: 100%;
+    max-width: 300px;
+    margin: 20px auto;
+`;
