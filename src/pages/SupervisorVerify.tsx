@@ -65,12 +65,13 @@ export default function SupervisorVerify(){
                     return;
                 }
 
-                const transactionData: Transaction = {
+                const transactionData = {
                     name: data.message.name,
                     points: data.message.points,
                     id: data.message.id,
                     timestamp: data.message.timestamp,
-                    signature: data.signature
+                    signature: data.signature,
+                    customerData: data.customerData
                 };
                 
                 if(localStorage.getItem(transactionData.signature)) {
@@ -84,7 +85,7 @@ export default function SupervisorVerify(){
 
                 if(verifyResult) {
                     // trader is real and has pool
-                    localStorage.setItem(transactionData.signature, JSON.stringify(data))
+                    localStorage.setItem(transactionData.signature, JSON.stringify(transactionData))
                     setIsScanning(false);
                     navigate("/supervisor/verify/results", { state: { success: true, transactionPoints: transactionData.points, customerData: data.customerData } })
                 }
