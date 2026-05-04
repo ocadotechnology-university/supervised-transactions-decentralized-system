@@ -1,13 +1,14 @@
 import { useEffect, useState  } from "react";
 import { useNavigate } from "react-router-dom";
+import { Screen, Title, Button} from "../styles.ts";
 
-type Transaction = {
+type TransactionEntry = {
     name: string;
     points: number;
     uuid: string;
     timestamp: number;
     signature: string;
-    customerData: string;
+    customerData: string
 }
 
 type LeaderboardEntry = {
@@ -30,8 +31,8 @@ function getSortedScores(customerScores: Record<string, number>) {
     return sortedLeaderboard;
 }
 
-function getUsedTransactions(): Transaction[] {
-    const transactions: Transaction[] = [];
+function getUsedTransactions(): TransactionEntry[] {
+    const transactions: TransactionEntry[] = [];
 
     const allKeys = Object.keys(localStorage);
 
@@ -44,7 +45,7 @@ function getUsedTransactions(): Transaction[] {
 
         if (rawValue) {
             try {
-                const parsedData: Transaction = JSON.parse(rawValue);
+                const parsedData: TransactionEntry = JSON.parse(rawValue);
                 transactions.push(parsedData);
             } catch (error) {
                 console.error(`Error of parsing JSON key: ${key}`, error);
@@ -60,6 +61,9 @@ function calulateScore(){
     const customerScores: Record<string, number> = {};
 
     for (const token of usedTransactions) {
+
+        if (!token.customerData) continue;
+
         if(customerScores[token.customerData]) {
             customerScores[token.customerData] += token.points;
         }
@@ -68,6 +72,9 @@ function calulateScore(){
         }
         
     }
+
+    console.log(usedTransactions)
+
     return getSortedScores(customerScores);
 }
 
@@ -84,18 +91,18 @@ export function SupervisorRanking() {
     }, []);
 
     return (
-        <div className="screen">
-            <h1 className="title">TOP 5 CUSTOMERS</h1>
+        <Screen>
+            <Title>TOP 5 CUSTOMERS</Title>
 
             <div className="leaderboardContainer">
                 {topCustomers.length === 0 ? (
-                    <p>Brak danych do wyświetlenia rankingu.</p>
+                    <p>There is no data available to display the ranking.</p>
                 ) : (
                     <ol>
-                        {topCustomers.map((customer, index) => (
+                        {topCustomers.map((customer) => (
                             <li key={customer.customerData} style={{ margin: "10px 0", fontSize: "1.2rem" }}>
                                 <strong></strong> {customer.customerData} 
-                                <span style={{ marginLeft: "15px", color: "gold" }}>
+                                <span style={{ marginLeft: "15px", color: "black" }}>
                                     {customer.points} pkt
                                 </span>
                             </li>
@@ -103,9 +110,9 @@ export function SupervisorRanking() {
                     </ol>
                 )}
             </div>
-            <button className="button" onClick={() => navigate("/supervisor")}>
+            <Button className="button" onClick={() => navigate("/supervisor")}>
                     BACK
-                </button>
-        </div>
+            </Button>
+        </Screen>
     );
 }
