@@ -15,53 +15,48 @@ export default function SupervisorRegister() {
     const [nameError, setNameError] = useState("");
     const [pointsError, setPointsError] = useState("");
 
-
-    function validateName(trimmedName: string): boolean {
+    const checkNameValidationError = (trimmedName: string): string | null => {
         if (!trimmedName) {
-            setNameError("Trader name is required");
-            return false;
+            return "Trader name is required";
         }
         if (trimmedName.length > MAX_NAME_LENGTH) {
-            setNameError(`Max ${MAX_NAME_LENGTH} characters`);
-            return false;
+            return `Max ${MAX_NAME_LENGTH} characters`;
         }
-        setNameError("");
-        return true;
+        return null;
     }
 
-    function validatePoints(trimmedPoints: string): boolean {
+    const checkPointsValidationError = (trimmedPoints: string): string | null => {
         if (!trimmedPoints) {
-            setPointsError("Point pool is required");
-            return false;
+            return "Point pool is required";
         }
         if (!trimmedPoints || !/^[0-9]+$/.test(trimmedPoints)) {
-            setPointsError("Must be a positive number");
-            return false;
+            return "Must be a positive number";
         }
-        setPointsError("");
-        return true;
+        return null;
     }
 
     async function handleGenerate() {
         const trimmedName = name.trim();
         const trimmedPoints = points.trim();
 
-        const isNameValid = validateName(trimmedName);
-        const isPointsValid = validatePoints(trimmedPoints);
+        const nameValidationError = checkNameValidationError(trimmedName);
+        const pointsValidationError = checkPointsValidationError(trimmedPoints);
 
-        if (!isNameValid || !isPointsValid) {
+        if (nameValidationError || pointsValidationError) {
+            setNameError(nameValidationError || "");
+            setPointsError(pointsValidationError || "");
             return;
         }
 
-        let allTraders: TraderEntry[] = [];
+        setNameError("");
+        setPointsError("");
 
         const storedTraders = localStorage.getItem(TRADERS_KEY)
-        if (storedTraders) {
-            allTraders = JSON.parse(storedTraders)
-            if (allTraders.some((trader) => trader.name === trimmedName)) {
-                setNameError("Trader with this name already exists");
-                return;
-            }
+        const allTraders: TraderEntry[] = storedTraders ? JSON.parse(storedTraders) : [];
+
+        if (allTraders.some((trader) => trader.name === trimmedName)) {
+            setNameError("Trader with this name already exists");
+            return;
         }
 
         try {
@@ -72,14 +67,15 @@ export default function SupervisorRegister() {
             const now = Date.now();
             const parsedPoints = Number(trimmedPoints);
 
-            allTraders.push({
+            const newTrader: TraderEntry = {
                 name: trimmedName,
                 points: parsedPoints,
                 publicKey: pubJwk,
                 timestamp: now,
-            });
+            };
 
-            localStorage.setItem(TRADERS_KEY, JSON.stringify(allTraders));
+            const updatedTraders = [...allTraders, newTrader];
+            localStorage.setItem(TRADERS_KEY, JSON.stringify(updatedTraders));
 
             const qrPayload = {
                 name: trimmedName,
