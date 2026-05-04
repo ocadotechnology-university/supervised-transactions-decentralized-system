@@ -1,6 +1,6 @@
-import "../styles.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import GenerateQR from "../components/GenerateQR";
+import { Screen, Button, ButtonContainer, Title } from "../styles.ts";
 
 export default function CustomerCashoutQR() {
     const location = useLocation();
@@ -9,41 +9,38 @@ export default function CustomerCashoutQR() {
 
     if (!data) {
         return (
-            <div className="screen">
-                <h1 className="title">NO DATA</h1>
-                <div className="buttonContainer">
-                    <button
-                        className="button"
+            <Screen>
+                <Title>NO DATA</Title>
+                <ButtonContainer>
+                    <Button
                         onClick={() => navigate("/customer", { replace: true })}
                     >
                         BACK
-                    </button>
-                </div>
-            </div>
+                    </Button>
+                </ButtonContainer>
+            </Screen>
         );
     }
 
     return (
-        <div className="screen">
-            <h1 className="title">SHOW QR TO SUPERVISOR</h1>
+        <Screen>
+            <Title>SHOW QR TO SUPERVISOR</Title>
 
             <GenerateQR data={data} />
 
-            <div className="buttonContainer">
-                <button
-                    className="button"
+            <ButtonContainer>
+                <Button
                     onClick={() => navigate("/customer/cashout", { replace: true })}
                 >
                     CASHOUT AGAIN
-                </button>
+                </Button>
 
-                <button
-                    className="button"
+                <Button
                     onClick={() => navigate("/customer", { replace: true })}
                 >
                     DONE
-                </button>
-            </div>
-        </div>
+                </Button>
+            </ButtonContainer>
+        </Screen>
     );
 }

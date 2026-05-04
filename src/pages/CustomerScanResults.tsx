@@ -1,6 +1,6 @@
-import "../styles.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import {useEffect} from "react";
+import { ButtonContainer, PointsContainer, PointsLabel, PointsValue, Screen, Title, Button, Circle } from "../styles.ts";
 
 export default function CustomerScanResults() {
     const navigate = useNavigate();
@@ -19,49 +19,49 @@ export default function CustomerScanResults() {
 
     if (!data) {
         return (
-            <div className="screen">
-                <h1 className="title">NO DATA</h1>
-                <div className="buttonContainer">
-                    <button className="button" onClick={() => navigate("/customer", { replace: true })}>
+            <Screen>
+                <Title>NO DATA</Title>
+                <ButtonContainer>
+                    <Button onClick={() => navigate("/customer", { replace: true })}>
                         BACK
-                    </button>
-                </div>
-            </div>
+                    </Button>
+                </ButtonContainer>
+            </Screen>
         );
     }
 
     return (
-        <div className="screen">
+        <Screen>
             {data.success ? (
                 <>
-                    <h1 className="title">YOU GOT</h1>
+                    <Title>YOU GOT</Title>
 
-                    <div className="pointsContainer">
-                        <div className="circle">
-                            <span className="pointsValue">{data.transactionPoints}</span>
-                        </div>
-                        <h2 className="pointsLabel">POINTS</h2>
-                    </div>
+                    <PointsContainer>
+                        <Circle>
+                            <PointsValue>{data.transactionPoints}</PointsValue>
+                        </Circle>
+                        <PointsLabel>POINTS</PointsLabel>
+                    </PointsContainer>
                 </>
             ) : (
                 <>
-                    <h1 className="title">TRANSACTION FAILED</h1>
+                    <Title>TRANSACTION FAILED</Title>
                     {data.duplicate && (
-                        <h1 className="title">DUPLICATE DETECTED</h1>
+                        <Title>DUPLICATE DETECTED</Title>
                     )}
                 </>
             )}
 
-            <div className="buttonContainer">
-                <button className="button" onClick={() => navigate("/customer/scan", { replace: true })}>
+            <ButtonContainer>
+                <Button onClick={() => navigate("/customer/scan", { replace: true })}>
                     SCAN AGAIN
-                </button>
+                </Button>
 
-                <button className="button" onClick={() => navigate("/customer", { replace: true })}>
+                <Button onClick={() => navigate("/customer", { replace: true })}>
                     DONE
-                </button>
-            </div>
-        </div>
+                </Button>
+            </ButtonContainer>
+        </Screen>
     );
 }
 

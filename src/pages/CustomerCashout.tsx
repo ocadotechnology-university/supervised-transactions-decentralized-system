@@ -1,20 +1,7 @@
-import "../styles.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-type CustomerEntry = {
-    name: string;
-    uuid: string;
-    timestamp: number;
-}
-
-type Transaction = {
-    name: string;
-    points: number;
-    uuid: string;
-    timestamp: number;
-    signature: string;
-}
+import type { Transaction, CustomerEntry } from "../utils/types.ts";
+import { Screen, Title, PointsGrid, Button, ButtonContainer } from "../styles.ts";
 
 export default function CustomerCashout() {
     const TRANSACTIONS_KEY = "customerTransactions";
@@ -27,7 +14,7 @@ export default function CustomerCashout() {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
             const customerData: CustomerEntry = JSON.parse(stored);
-            setName(`${customerData.name}#${customerData.uuid}`);
+            setName(`${customerData.name}#${customerData.id}`);
         }
         else {
             navigate("/customer/register", { replace: true });
@@ -46,49 +33,47 @@ export default function CustomerCashout() {
             message: {
                 name: transaction.name,
                 points: transaction.points,
-                uuid: transaction.uuid,
+                id: transaction.id,
                 timestamp: transaction.timestamp
             },
             signature: transaction.signature
         };
 
         //maybe should delete transaction after qr code is shown?
-        const transactionRemaining = transactions.filter(cashed => cashed.uuid !== transaction.uuid);
+        const transactionRemaining = transactions.filter(cashed => cashed.id !== transaction.id);
         localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(transactionRemaining));
 
         navigate("/customer/cashout/qr", { state: payload });
     }
 
     return (
-        <div className="screen">
-            <h1 className="title">SELECT TRANSACTION</h1>
+        <Screen>
+            <Title>SELECT TRANSACTION</Title>
 
             {transactions.length > 0 ? (
-                <div className="pointsGrid">
+                <PointsGrid>
                     {transactions.map((transaction) => (
-                        <button
-                            key={transaction.uuid}
-                            className="button"
+                        <Button
+                            key={transaction.id}
                             onClick={() => handleCashout(transaction)}
                         >
                             {transaction.points}
-                        </button>
+                        </Button>
                     ))}
-                </div>
+                </PointsGrid>
             ) : (
 
-                <h2 className="title">NO TRANSACTIONS</h2>
+                <Title>NO TRANSACTIONS</Title>
             )}
 
-            <div className="buttonContainer" style={{ marginTop: "40px" }}>
-                <button
-                    className="button"
+            <ButtonContainer style={{ marginTop: "40px" }}>
+                <Button
                     onClick={() => navigate("/customer", {replace: true})}
                 >
                     BACK
-                </button>
-            </div>
-        </div>
+                </Button>
+            </ButtonContainer>
+        </Screen>
     );
 
 }

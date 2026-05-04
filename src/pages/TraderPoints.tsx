@@ -1,20 +1,8 @@
-import "../styles.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {
-    importPrivateKey,
-    signData,
-    encodeData,
-    bufferToBase64,
-    generateID
-} from "../utils/cryptoutils";
-
-type TraderEntry = {
-    name: string;
-    points: number;
-    privateKey: JsonWebKey;
-    timestamp: number;
-};
+import type { TraderEntry } from "../utils/types.ts";
+import { Button, ButtonContainer, ErrorText, PointsGrid, Screen, Title } from "../styles.ts";
+import { importPrivateKey, signData, encodeData, bufferToBase64, generateID } from "../utils/cryptoutils";
 
 export default function TraderPoints() {
     const TRADER_KEY = "traderData";
@@ -44,12 +32,12 @@ export default function TraderPoints() {
         }
 
         try {
-            const privKey = await importPrivateKey(trader.privateKey);
+            const privKey = await importPrivateKey(trader.key);
 
             const message = {
                 name: trader.name,
                 points: amount,
-                uuid: generateID(),
+                id: generateID(),
                 timestamp: Date.now(),
             };
 
@@ -79,30 +67,28 @@ export default function TraderPoints() {
     if (!trader) return null;
 
     return (
-        <div className="screen">
-            <h1 className="title">SELECT POINT AMOUNT</h1>
+        <Screen>
+            <Title>SELECT POINT AMOUNT</Title>
 
-            <div className="pointsGrid">
+            <PointsGrid>
                 {[10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map((val) => (
-                    <button
+                    <Button
                         key={val}
-                        className="button"
                         onClick={() => handleTransfer(val)}
                     >
                         {val}
-                    </button>
+                    </Button>
                 ))}
-            </div>
+            </PointsGrid>
 
-            <div className="buttonContainer" style={{ marginTop: "40px" }}>
-                {error && <p className="error">{error}</p>}
-                <button
-                    className="button"
+            <ButtonContainer style={{ marginTop: "40px" }}>
+                {error && <ErrorText>{error}</ErrorText>}
+                <Button
                     onClick={() => navigate("/trader", {replace: true})}
                 >
                     BACK
-                </button>
-            </div>
-        </div>
+                </Button>
+            </ButtonContainer>
+        </Screen>
     );
 }

@@ -1,28 +1,9 @@
 import ScanQR from "../components/ScanQR";
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles.css";
-import {
-    importPublicKey,
-    verifyData,
-    encodeData,
-    base64ToBuffer
-} from "../utils/cryptoutils";
-
-type Transaction = {
-    name: string;
-    points: number;
-    uuid: string;
-    timestamp: number;
-    signature: string;
-}
-
-type TraderEntry = {
-    name: string;
-    points: number,
-    publicKey: JsonWebKey;
-    timestamp: number;
-};
+import { Button, ButtonContainer, ScannerWrapper, Screen, Title } from "../styles.ts";
+import type { Transaction, TraderEntry } from "../utils/types.ts";
+import { importPublicKey, verifyData, encodeData, base64ToBuffer } from "../utils/cryptoutils";
 
 async function verifyTransaction(transactionData: Transaction, message: object){
     const STORAGE_KEY = "traders";
@@ -40,7 +21,7 @@ async function verifyTransaction(transactionData: Transaction, message: object){
         const messageString = JSON.stringify(message);
         const messageEncoded = encodeData(messageString);
         const signatureBuffer = base64ToBuffer(transactionData.signature);
-        const pubKey = await importPublicKey(foundTrader.publicKey)
+        const pubKey = await importPublicKey(foundTrader.key)
         const isVerified = await verifyData(pubKey, signatureBuffer, messageEncoded);
 
         if (!isVerified) {
@@ -51,7 +32,7 @@ async function verifyTransaction(transactionData: Transaction, message: object){
         return false;
     }
     
-    if(foundTrader.points >= transactionData.points){
+    if (foundTrader.points >= transactionData.points) {
         foundTrader.points -= transactionData.points;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(stored))
         return true;
@@ -73,7 +54,7 @@ export default function SupervisorVerify(){
                     typeof data.customerData === "string" &&
                     typeof data.message.name === "string" &&
                     typeof data.message.points === "number" &&
-                    typeof data.message.uuid === "string" &&
+                    typeof data.message.id === "string" &&
                     typeof data.message.timestamp === "number" &&
                     typeof data.signature === "string";
 
@@ -87,7 +68,7 @@ export default function SupervisorVerify(){
                 const transactionData: Transaction = {
                     name: data.message.name,
                     points: data.message.points,
-                    uuid: data.message.uuid,
+                    id: data.message.id,
                     timestamp: data.message.timestamp,
                     signature: data.signature
                 };
@@ -121,38 +102,37 @@ export default function SupervisorVerify(){
     );
 
     return (
-        <div className="screen">
-            <h1 className="title">SCAN CASHOUT</h1>
+        <Screen>
+            <Title>SCAN CASHOUT</Title>
 
             {!isScanning ? (
-                <div className="buttonContainer">
-                    <button className="button" onClick={() => setIsScanning(true)}>
+                <ButtonContainer>
+                    <Button onClick={() => setIsScanning(true)}>
                         SCAN
-                    </button>
+                    </Button>
 
-                    <button className="button" onClick={() => navigate("/supervisor", { replace: true })}>
+                    <Button onClick={() => navigate("/supervisor", { replace: true })}>
                         BACK
-                    </button>
-                </div>
+                    </Button>
+                </ButtonContainer>
             ) : (
                 <>
-                    <div className="scannerWrapper">
+                    <ScannerWrapper>
                         <ScanQR scanSuccess={handleScanSuccess} />
-                    </div>
+                    </ScannerWrapper>
 
-                    <div className="buttonContainer">
-                        <button
-                            className="button"
+                    <ButtonContainer>
+                        <Button
                             onClick={() => {
                                 setIsScanning(false);
                                 navigate("/supervisor", { replace: true });
                             }}
                         >
                             BACK
-                        </button>
-                    </div>
+                        </Button>
+                    </ButtonContainer>
                 </>
             )}
-        </div>
+        </Screen>
     );
 }

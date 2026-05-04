@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import ScanQR from "../components/ScanQR";
-import "../styles.css";
+import { Button, ButtonContainer, ScannerWrapper, Screen, Title } from "../styles.ts";
+
 
 export default function TraderRegistration() {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function TraderRegistration() {
                     typeof data.name === "string" &&
                     typeof data.points === "number" &&
                     typeof data.timestamp === "number" &&
-                    !!data.privateKey;
+                    !!data.key;
 
                 if (!isValid) {
                     console.error("Invalid data structure");
@@ -35,41 +36,37 @@ export default function TraderRegistration() {
     );
 
     return (
-        <div className="screen">
-            <h1 className="title">SCAN SUPERVISOR CODE</h1>
+        <Screen>
+            <Title>SCAN SUPERVISOR CODE</Title>
 
             {!isScanning ? (
-                <div className="buttonContainer">
-                    <button className="button" onClick={() => setIsScanning(true)}>
+                <ButtonContainer>
+                    <Button onClick={() => setIsScanning(true)}>
                         SCAN
-                    </button>
+                    </Button>
 
-                    <button
-                        className="button"
-                        onClick={() => navigate("/", { replace: true })}
-                    >
+                    <Button onClick={() => navigate("/", { replace: true })}>
                         BACK
-                    </button>
-                </div>
+                    </Button>
+                </ButtonContainer>
             ) : (
                 <>
-                    <div className="scannerWrapper">
+                    <ScannerWrapper>
                         <ScanQR scanSuccess={handleScanSuccess} />
-                    </div>
+                    </ScannerWrapper>
 
-                    <div className="buttonContainer">
-                        <button
-                            className="button"
+                    <ButtonContainer>
+                        <Button
                             onClick={() => {
                                 setIsScanning(false);
                                 navigate("/", { replace: true });
                             }}
                         >
                             BACK
-                        </button>
-                    </div>
+                        </Button>
+                    </ButtonContainer>
                 </>
             )}
-        </div>
+        </Screen>
     );
 }

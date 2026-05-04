@@ -62,7 +62,7 @@ export function verifyData(publicKey: CryptoKey, signature: ArrayBuffer, encoded
     );
 }
 
-export function encodeData(data: string): Uint8Array {
+export function encodeData(data: string): BufferSource {
     return encoder.encode(data);
 }
 

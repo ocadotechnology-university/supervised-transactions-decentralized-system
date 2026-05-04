@@ -1,15 +1,8 @@
 import {useState, useCallback, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import ScanQR from "../components/ScanQR";
-import "../styles.css";
-
-type Transaction = {
-    name: string;
-    points: number;
-    uuid: string;
-    timestamp: number;
-    signature: string;
-}
+import type { Transaction } from "../utils/types.ts";
+import { Screen, Title, Button, ButtonContainer, ScannerWrapper } from "../styles.ts";
 
 function addToStorage(transactionData: Transaction) {
     const STORAGE_KEY = "customerTransactions";
@@ -19,7 +12,7 @@ function addToStorage(transactionData: Transaction) {
     if (transactionStored) {
         transactionAll = JSON.parse(transactionStored)
         //check for duplicates
-        if (transactionAll.some((transaction) => transaction.uuid === transactionData.uuid)) {
+        if (transactionAll.some((transaction) => transaction.id === transactionData.id)) {
             return false;
         }
     }
@@ -51,7 +44,7 @@ export default function CustomerScan() {
                 const isValid =
                     typeof data.message.name === "string" &&
                     typeof data.message.points === "number" &&
-                    typeof data.message.uuid === "string" &&
+                    typeof data.message.id === "string" &&
                     typeof data.message.timestamp === "number" &&
                     typeof data.signature === "string";
 
@@ -65,7 +58,7 @@ export default function CustomerScan() {
                 const transactionData: Transaction = {
                     name: data.message.name,
                     points: data.message.points,
-                    uuid: data.message.uuid,
+                    id: data.message.id,
                     timestamp: data.message.timestamp,
                     signature: data.signature
                 };
@@ -87,38 +80,37 @@ export default function CustomerScan() {
     );
 
     return (
-        <div className="screen">
-            <h1 className="title">SCAN TRANSACTION</h1>
+        <Screen>
+            <Title>SCAN TRANSACTION</Title>
 
             {!isScanning ? (
-                <div className="buttonContainer">
-                    <button className="button" onClick={() => setIsScanning(true)}>
+                <ButtonContainer>
+                    <Button onClick={() => setIsScanning(true)}>
                         SCAN
-                    </button>
+                    </Button>
 
-                    <button className="button" onClick={() => navigate("/customer", { replace: true })}>
+                    <Button onClick={() => navigate("/customer", { replace: true })}>
                         BACK
-                    </button>
-                </div>
+                    </Button>
+                </ButtonContainer>
             ) : (
                 <>
-                    <div className="scannerWrapper">
+                    <ScannerWrapper>
                         <ScanQR scanSuccess={handleScanSuccess} />
-                    </div>
+                    </ScannerWrapper>
 
-                    <div className="buttonContainer">
-                        <button
-                            className="button"
+                    <ButtonContainer>
+                        <Button
                             onClick={() => {
                                 setIsScanning(false);
                                 navigate("/customer", { replace: true });
                             }}
                         >
                             BACK
-                        </button>
-                    </div>
+                        </Button>
+                    </ButtonContainer>
                 </>
             )}
-        </div>
+        </Screen>
     );
 }

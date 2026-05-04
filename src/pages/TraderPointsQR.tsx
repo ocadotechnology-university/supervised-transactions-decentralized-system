@@ -1,6 +1,6 @@
-import "../styles.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import GenerateQR from "../components/GenerateQR";
+import { Button, ButtonContainer, Screen, Title } from "../styles.ts";
 
 export default function TraderPointsQR() {
     const location = useLocation();
@@ -9,34 +9,32 @@ export default function TraderPointsQR() {
 
     if (!data) {
         return (
-            <div className="screen">
-                <h1 className="title">NO DATA</h1>
-                <div className="buttonContainer">
-                    <button
-                        className="button"
+            <Screen>
+                <Title>NO DATA</Title>
+                <ButtonContainer>
+                    <Button
                         onClick={() => navigate("/trader", { replace: true })}
                     >
                         BACK
-                    </button>
-                </div>
-            </div>
+                    </Button>
+                </ButtonContainer>
+            </Screen>
         );
     }
 
     return (
-        <div className="screen">
-            <h1 className="title">SHOW QR TO CUSTOMER</h1>
+        <Screen>
+            <Title>SHOW QR TO CUSTOMER</Title>
 
             <GenerateQR data={data} />
 
-            <div className="buttonContainer">
-                <button
-                    className="button"
+            <ButtonContainer>
+                <Button
                     onClick={() => navigate("/trader", { replace: true })}
                 >
                     DONE
-                </button>
-            </div>
-        </div>
+                </Button>
+            </ButtonContainer>
+        </Screen>
     );
 }

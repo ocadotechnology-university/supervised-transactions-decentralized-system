@@ -1,20 +1,13 @@
-import "../styles.css";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-
-type TraderEntry = {
-    name: string;
-    uuid: string;
-    points: number;
-    privateKey: JsonWebKey;
-    timestamp: number;
-};
+import type { TraderEntry } from "../utils/types.ts";
+import { Button, ButtonContainer, Circle, PointsContainer, PointsLabel, PointsValue, Screen, Title } from "../styles.ts";
 
 export default function TraderMain() {
     const TRADER_KEY = "traderData";
     const navigate = useNavigate();
 
-    const [name, setName] = useState("TRADER");
+    const [name, setName] = useState("");
     const [points, setPoints] = useState(0);
 
     useEffect(() => {
@@ -30,25 +23,26 @@ export default function TraderMain() {
         }
     }, []);
 
+    if (!name) {
+        return null;
+    }
+
     return (
-        <div className="screen">
-            <h1 className="title">{name}</h1>
+        <Screen>
+            <Title>{name}</Title>
 
-            <div className="pointsContainer">
-                <div className="circle">
-                    <span className="pointsValue">{points}</span>
-                </div>
-                <h2 className="pointsLabel">POINTS</h2>
-            </div>
+            <PointsContainer>
+                <Circle>
+                    <PointsValue>{points}</PointsValue>
+                </Circle>
+                <PointsLabel>POINTS</PointsLabel>
+            </PointsContainer>
 
-            <div className="buttonContainer">
-                <button
-                    className="button"
-                    onClick={() => navigate("/trader/points")}
-                >
+            <ButtonContainer>
+                <Button onClick={() => navigate("/trader/points")}>
                     TRANSFER POINTS
-                </button>
-            </div>
-        </div>
+                </Button>
+            </ButtonContainer>
+        </Screen>
     );
 }
