@@ -13,6 +13,7 @@ export default function CustomerRegistration() {
         const customerData = localStorage.getItem(CUSTOMER_KEY);
         if (customerData) {
             navigate("/customer", { replace: true });
+            return;
         }
     }, []);
 
@@ -20,24 +21,26 @@ export default function CustomerRegistration() {
     const [nameError, setNameError] = useState("");
 
 
-    function validate(trimmedName: string): boolean {
+    const checkNameValidationError = (trimmedName: string): string | null => {
         if (!trimmedName) {
-            setNameError("Customer name is required");
-            return false;
+            return "Customer name is required";
         }
         if (trimmedName.length > MAX_NAME_LENGTH) {
-            setNameError(`Max ${MAX_NAME_LENGTH} characters`);
-            return false;
+            return `Max ${MAX_NAME_LENGTH} characters`;
         }
-        setNameError("");
-        return true;
+        return null;
     }
 
     function handleRegister() {
         const trimmedName = name.trim();
-        if (!validate(trimmedName)) {
+        const nameValidationError = checkNameValidationError(trimmedName);
+
+        if (nameValidationError) {
+            setNameError(nameValidationError);
             return;
         }
+
+        setNameError("");
 
         const payload = {
             name: trimmedName.toUpperCase(),
