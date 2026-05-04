@@ -49,11 +49,11 @@ export default function CustomerMain() {
             </PointsContainer>
 
             <ButtonContainer>
-                <Button>
+                <Button onClick={() => navigate("/customer/scan")}>
                     SCAN TRANSACTION
                 </Button>
 
-                <Button>
+                <Button onClick={() => navigate("/customer/cashout")}>
                     CASHOUT POINTS
                 </Button>
             </ButtonContainer>

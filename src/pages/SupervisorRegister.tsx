@@ -70,7 +70,7 @@ export default function SupervisorRegister() {
             const newTrader: TraderEntry = {
                 name: trimmedName,
                 points: parsedPoints,
-                publicKey: pubJwk,
+                key: pubJwk,
                 timestamp: now,
             };
 
@@ -80,7 +80,7 @@ export default function SupervisorRegister() {
             const qrPayload = {
                 name: trimmedName,
                 points: parsedPoints,
-                privateKey: privJwk,
+                key: privJwk,
                 timestamp: now,
             };
 
