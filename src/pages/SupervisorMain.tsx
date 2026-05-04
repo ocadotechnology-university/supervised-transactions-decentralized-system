@@ -9,8 +9,15 @@ export default function SupervisorMain() {
             <Title>CHOOSE ACTION</Title>
 
             <ButtonContainer>
-                <Button onClick={() => navigate("/supervisor/register")}>REGISTER A TRADER</Button>
-                <Button>VERIFY POINTS</Button>
+                <Button onClick={() => navigate("/supervisor/register")}>
+                    REGISTER A TRADER
+                </Button>
+                <Button onClick={() => navigate("/supervisor/verify")}>
+                    VERIFY POINTS
+                </Button>
+                <Button onClick={() => navigate("/supervisor/ranking")}>
+                    RANKING
+                </Button>
             </ButtonContainer>
         </Screen>
     );
