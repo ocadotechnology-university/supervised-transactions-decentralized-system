@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { generateEd25519KeyPair, exportKey } from "../utils/crypto.ts";
 import type { TraderEntry } from "../utils/types.ts";
-import { Screen, Title, ButtonContainer, Button, Input, ErrorText } from "../styles.ts";
+import { Screen, Title, ButtonContainer, Button, Input, ErrorText } from "../styles/common.styles.ts";
 
 const TRADERS_KEY = "traders";
 const MAX_NAME_LENGTH = 20;

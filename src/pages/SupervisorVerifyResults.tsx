@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, ButtonContainer, Circle, PointsContainer, PointsLabel, PointsValue, Screen, Title } from "../styles.ts";
+import { Button, ButtonContainer, Circle, PointsContainer, PointsLabel, PointsValue, Screen, Title } from "../styles/common.styles.ts";
 
 export default function SupervisorVerifyResults() {
     const location = useLocation();

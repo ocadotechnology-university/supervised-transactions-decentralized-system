@@ -1,5 +1,5 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import { GlobalStyle } from "./styles.ts";
+import { GlobalStyle } from "./styles/common.styles.ts";
 import Home from "./pages/Home";
 import SupervisorMain from "./pages/SupervisorMain";
 import SupervisorRegister from "./pages/SupervisorRegister";

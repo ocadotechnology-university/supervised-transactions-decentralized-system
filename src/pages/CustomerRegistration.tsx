@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {generateId} from "../utils/crypto.ts";
-import { Screen, Title, ButtonContainer, Button, Input, ErrorText } from "../styles.ts";
+import { Screen, Title, ButtonContainer, Button, Input, ErrorText } from "../styles/common.styles.ts";
 
 const CUSTOMER_KEY = "customerData";
 const MAX_NAME_LENGTH = 20;
