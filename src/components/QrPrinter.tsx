@@ -1,27 +1,28 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { generateQrSvg } from "../utils/generateQr.ts";
-import { Screen, Title, Button, QRContainer } from "../styles.ts";
+import { generateQrSvg} from "../utils/generateQr.ts";
+import { Button, ErrorText, Paragraph, Screen, Title } from "../styles.ts";
+import { QrContainer, QrSvgWrapper } from "../styles/QrPrinter.styles.ts";
 
 const QR_VERSION = 14;
 const QR_CORRECTION = "L";
 
-export default function SupervisorRegisterQr() {
+export default function QrPrinter() {
     const location = useLocation();
     const navigate = useNavigate();
 
     const [qrSvg, setQrSvg] = useState<string | null>(null);
     const [qrError, setQrError] = useState<string | null>(null);
 
-    const data = location.state;
+    const qrPayload = location.state;
 
     useEffect(() => {
-        if (!data) {
+        if (!qrPayload) {
             return;
         }
 
         generateQrSvg({
-            data: JSON.stringify(data),
+            data: JSON.stringify(qrPayload.qrData),
             qrVersion: QR_VERSION,
             errorCorrectionLevel: QR_CORRECTION,
         })
@@ -30,13 +31,13 @@ export default function SupervisorRegisterQr() {
                 console.error("QR generation failed:", error);
                 setQrError("Failed to generate QR code");
             });
-    }, [data]);
+    }, [qrPayload]);
 
-    if (!data) {
+    if (!qrPayload) {
         return (
             <Screen>
                 <Title>NO DATA</Title>
-                <Button onClick={() => navigate("/supervisor/register")}>
+                <Button onClick={() => navigate(-1)}>
                     BACK
                 </Button>
             </Screen>
@@ -45,19 +46,19 @@ export default function SupervisorRegisterQr() {
 
     return (
         <Screen>
-            <Title>SHOW CODE TO TRADER</Title>
+            <Title>{ qrPayload.title }</Title>
 
-            <QRContainer>
+            <QrContainer>
                 {qrError ? (
-                    <p>{qrError}</p>
+                    <ErrorText>{ qrError }</ErrorText>
                 ) : qrSvg ? (
-                    <div dangerouslySetInnerHTML={{ __html: qrSvg }} />
+                    <QrSvgWrapper dangerouslySetInnerHTML={{ __html: qrSvg }} />
                 ) : (
-                    <p>Generating...</p>
+                    <Paragraph>Generating...</Paragraph>
                 )}
-            </QRContainer>
+            </QrContainer>
 
-            <Button onClick={() => navigate("/supervisor/register", { replace: true })}>
+            <Button onClick={() => navigate(-1)}>
                 DONE
             </Button>
         </Screen>

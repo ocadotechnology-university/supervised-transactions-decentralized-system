@@ -68,6 +68,13 @@ export const ErrorText = styled.p`
     text-align: center;
 `;
 
+export const Paragraph = styled.p`
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    text-align: center;
+`
+
 export const PointsContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -98,20 +105,6 @@ export const PointsLabel = styled.h2`
     color: #111;
     margin: 0;
     letter-spacing: 2px;
-`;
-
-export const QRContainer = styled.div`
-    width: 100%;
-    max-width: 300px;
-    margin: 20px auto;
-`;
-
-export const ScannerWrapper = styled.div`
-    width: 100%;
-    max-width: 320px;
-    margin-bottom: 60px;
-    display: flex;
-    justify-content: center;
 `;
 
 export const PointsGrid = styled.div`

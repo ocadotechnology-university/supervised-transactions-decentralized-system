@@ -46,8 +46,11 @@ export default function TraderPoints() {
             const signature = bufferToBase64(signatureBuffer);
 
             const payload = {
-                message,
-                signature
+                title: "SHOW CODE TO CUSTOMER",
+                qrData: {
+                    message,
+                    signature
+                }
             };
 
             const updatedTrader = {
