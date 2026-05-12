@@ -1,6 +1,6 @@
 import { useEffect, useState  } from "react";
 import { useNavigate } from "react-router-dom";
-import { Screen, Title, Button} from "../styles.ts";
+import { Screen, Title, Button} from "../styles/common.styles.ts";
 
 type TransactionEntry = {
     name: string;

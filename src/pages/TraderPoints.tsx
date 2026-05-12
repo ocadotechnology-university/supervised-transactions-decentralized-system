@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { TraderEntry } from "../utils/types.ts";
-import { Button, ButtonContainer, ErrorText, PointsGrid, Screen, Title } from "../styles.ts";
+import { Button, ButtonContainer, ErrorText, PointsGrid, Screen, Title } from "../styles/common.styles.ts";
 import { importPrivateKey, signData, encodeData, bufferToBase64, generateID } from "../utils/cryptoutils";
 
 export default function TraderPoints() {

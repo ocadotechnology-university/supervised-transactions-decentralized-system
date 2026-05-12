@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Transaction, CustomerEntry } from "../utils/types.ts";
-import { Screen, Title, ButtonContainer, Button, PointsContainer, Circle, PointsValue, PointsLabel } from "../styles.ts";
+import { Screen, Title, ButtonContainer, Button, PointsContainer, Circle, PointsValue, PointsLabel } from "../styles/common.styles.ts";
 
 const CUSTOMER_KEY = "customerData";
 const POINTS_KEY = "customerTransactions";

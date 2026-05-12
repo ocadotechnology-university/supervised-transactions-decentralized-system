@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import {useEffect} from "react";
-import { ButtonContainer, PointsContainer, PointsLabel, PointsValue, Screen, Title, Button, Circle } from "../styles.ts";
+import { ButtonContainer, PointsContainer, PointsLabel, PointsValue, Screen, Title, Button, Circle } from "../styles/common.styles.ts";
 
 export default function CustomerScanResults() {
     const navigate = useNavigate();
