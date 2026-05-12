@@ -16,10 +16,7 @@ export default function CustomerCashout() {
             const customerData: CustomerEntry = JSON.parse(stored);
             setName(`${customerData.name}#${customerData.id}`);
         }
-        else {
-            navigate("/customer/register", { replace: true });
-            return;
-        }
+
         const transactionStored = localStorage.getItem(TRANSACTIONS_KEY)
         if (transactionStored) {
             const transactionParsed: Transaction[] = JSON.parse(transactionStored);

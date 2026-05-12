@@ -13,12 +13,9 @@ export default function TraderPoints() {
 
     useEffect(() => {
         const stored = localStorage.getItem(TRADER_KEY);
-        if (!stored) {
-            navigate("/trader/register", { replace: true });
-            return;
+        if (stored) {
+            setTrader(JSON.parse(stored));
         }
-
-        setTrader(JSON.parse(stored));
     }, []);
 
     async function handleTransfer(amount: number) {

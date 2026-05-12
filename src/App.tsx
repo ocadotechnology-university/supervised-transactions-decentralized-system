@@ -1,6 +1,7 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { GlobalStyle } from "./styles/common.styles.ts";
 import Home from "./pages/Home";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import QrPrinter from "./components/QrPrinter";
 import SupervisorMain from "./pages/SupervisorMain";
 import SupervisorRegister from "./pages/SupervisorRegister";
@@ -23,20 +24,24 @@ export default function App() {
           <Routes>
               <Route path="/" element={<Home />} />
 
-              <Route path="/customer">
-                  <Route index element={<CustomerMain />} />
-                  <Route path="register" element={<CustomerRegistration />} />
-                  <Route path="scan" element={<CustomerScan />} />
-                  <Route path="scan/results" element={<CustomerScanResults />} />
-                  <Route path="cashout" element={<CustomerCashout />} />
-                  <Route path="cashout/qr" element={<QrPrinter />} />
+              <Route element={<ProtectedRoute storageKey="customerData" path="/customer" requireData={false} />}>
+                  <Route path="/customer/register" element={<CustomerRegistration />} />
+              </Route>
+              <Route element={<ProtectedRoute storageKey="customerData" path="/customer/register" requireData={true} />}>
+                  <Route path="/customer" element={<CustomerMain />} />
+                  <Route path="/customer/scan" element={<CustomerScan />} />
+                  <Route path="/customer/scan/results" element={<CustomerScanResults />} />
+                  <Route path="/customer/cashout" element={<CustomerCashout />} />
+                  <Route path="/customer/cashout/qr" element={<QrPrinter />} />
               </Route>
 
-              <Route path="/trader">
-                  <Route index element={<TraderMain />} />
-                  <Route path="register" element={<TraderRegistration />} />
-                  <Route path="points" element={<TraderPoints />} />
-                  <Route path="points/qr" element={<QrPrinter />} />
+              <Route element={<ProtectedRoute storageKey="traderData" path="/trader" requireData={false} />}>
+                  <Route path="/trader/register" element={<TraderRegistration />} />
+              </Route>
+              <Route element={<ProtectedRoute storageKey="traderData" path="/trader/register" requireData={true} />}>
+                  <Route path="/trader" element={<TraderMain />} />
+                  <Route path="/trader/points" element={<TraderPoints />} />
+                  <Route path="/trader/points/qr" element={<QrPrinter />} />
               </Route>
 
               <Route path="/supervisor">

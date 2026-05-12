@@ -17,10 +17,6 @@ export default function TraderMain() {
             setName(traderData.name.toUpperCase());
             setPoints(traderData.points)
         }
-        else {
-            navigate("/trader/register", { replace: true });
-            return;
-        }
     }, []);
 
     if (!name) {
