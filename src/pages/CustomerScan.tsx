@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import QrScanHandler from "../components/QrScanHandler";
 import type { Transaction } from "../utils/types.ts";
@@ -23,15 +23,6 @@ function addToStorage(transactionData: Transaction) {
 
 export default function CustomerScan() {
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const STORAGE_KEY = "customerData";
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) {
-            navigate("/customer/register", { replace: true });
-            return;
-        }
-    }, []);
 
     const handleScanSuccess = useCallback(
         (result: string) => {

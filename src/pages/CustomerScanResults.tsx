@@ -1,18 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import {useEffect} from "react";
 import { ButtonContainer, PointsContainer, PointsLabel, PointsValue, Screen, Title, Button, Circle } from "../styles/common.styles.ts";
 
 export default function CustomerScanResults() {
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const STORAGE_KEY = "customerData";
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) {
-            navigate("/customer/register", { replace: true });
-            return;
-        }
-    }, []);
 
     const location = useLocation();
     const data = location.state;

@@ -18,10 +18,6 @@ export default function CustomerMain() {
             const customerData: CustomerEntry = JSON.parse(storedCustomerData);
             setName(`${customerData.name}#${customerData.id}`);
         }
-        else {
-            navigate("/customer/register", { replace: true });
-            return;
-        }
 
         const storedCustomerPoints = localStorage.getItem(POINTS_KEY);
         if (storedCustomerPoints) {
