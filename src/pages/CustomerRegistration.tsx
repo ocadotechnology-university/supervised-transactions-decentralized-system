@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {generateId} from "../utils/crypto.ts";
 import { Screen, Title, ButtonContainer, Button, Input, ErrorText } from "../styles/common.styles.ts";
@@ -9,17 +9,8 @@ const MAX_NAME_LENGTH = 20;
 export default function CustomerRegistration() {
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const customerData = localStorage.getItem(CUSTOMER_KEY);
-        if (customerData) {
-            navigate("/customer", { replace: true });
-            return;
-        }
-    }, []);
-
     const [name, setName] = useState("");
     const [nameError, setNameError] = useState("");
-
 
     const checkNameValidationError = (trimmedName: string): string | null => {
         if (!trimmedName) {
@@ -31,7 +22,7 @@ export default function CustomerRegistration() {
         return null;
     }
 
-    function handleRegister() {
+    const handleRegister = (): void => {
         const trimmedName = name.trim();
         const nameValidationError = checkNameValidationError(trimmedName);
 

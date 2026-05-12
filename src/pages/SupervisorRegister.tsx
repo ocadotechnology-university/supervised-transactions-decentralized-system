@@ -35,7 +35,7 @@ export default function SupervisorRegister() {
         return null;
     }
 
-    async function handleGenerate() {
+    const handleGenerate = async (): Promise<void> => {
         const trimmedName = name.trim();
         const trimmedPoints = points.trim();
 
