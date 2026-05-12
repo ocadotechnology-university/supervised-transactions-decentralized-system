@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { Transaction, CustomerEntry } from "../utils/types.ts";
-import { Screen, Title, PointsGrid, Button, ButtonContainer } from "../styles.ts";
+import { Screen, Title, PointsGrid, Button, ButtonContainer } from "../styles/common.styles.ts";
 
 export default function CustomerCashout() {
     const TRANSACTIONS_KEY = "customerTransactions";

@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import QrScanner from 'qr-scanner';
-import { Button, ButtonContainer, ErrorText, Screen, Title } from "../styles.ts";
+import { Button, ButtonContainer, ErrorText, Screen, Title } from "../styles/common.styles.ts";
 import { Video, VideoContainer, ScannerWrapper } from "../styles/QrScanHandler.styles.ts";
 
 const QrScan = ({ scanSuccess }: { scanSuccess: (result: string) => void })=> {
