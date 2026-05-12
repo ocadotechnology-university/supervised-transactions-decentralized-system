@@ -25,22 +25,25 @@ export default function CustomerCashout() {
     }, []);
 
     function handleCashout(transaction: Transaction) {
-        const payload = {
-            customerData: customerName,
-            message: {
-                name: transaction.name,
-                points: transaction.points,
-                id: transaction.id,
-                timestamp: transaction.timestamp
-            },
-            signature: transaction.signature
+        const qrPayload = {
+            title: "SHOW CODE TO SUPERVISOR",
+            qrData: {
+                customerData: customerName,
+                message: {
+                    name: transaction.name,
+                    points: transaction.points,
+                    id: transaction.id,
+                    timestamp: transaction.timestamp
+                },
+                signature: transaction.signature
+            }
         };
 
         //maybe should delete transaction after qr code is shown?
         const transactionRemaining = transactions.filter(cashed => cashed.id !== transaction.id);
         localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(transactionRemaining));
 
-        navigate("/customer/cashout/qr", { state: payload });
+        navigate("/customer/cashout/qr", { state: qrPayload });
     }
 
     return (
