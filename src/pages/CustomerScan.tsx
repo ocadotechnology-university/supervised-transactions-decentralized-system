@@ -1,8 +1,7 @@
-import {useState, useCallback, useEffect} from "react";
+import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ScanQR from "../components/ScanQR";
+import QrScanHandler from "../components/QrScanHandler";
 import type { Transaction } from "../utils/types.ts";
-import { Screen, Title, Button, ButtonContainer, ScannerWrapper } from "../styles.ts";
 
 function addToStorage(transactionData: Transaction) {
     const STORAGE_KEY = "customerTransactions";
@@ -34,12 +33,10 @@ export default function CustomerScan() {
         }
     }, []);
 
-    const [isScanning, setIsScanning] = useState<boolean>(false);
-
     const handleScanSuccess = useCallback(
-        (decodedString: string) => {
+        (result: string) => {
             try {
-                const data = JSON.parse(decodedString);
+                const data = JSON.parse(result);
 
                 const isValid =
                     typeof data.message.name === "string" &&
@@ -50,7 +47,6 @@ export default function CustomerScan() {
 
                 if (!isValid) {
                     console.error("Invalid data structure");
-                    setIsScanning(false);
                     navigate("/customer/scan/results", { state: { success: false } });
                     return;
                 }
@@ -64,15 +60,12 @@ export default function CustomerScan() {
                 };
 
                 if(addToStorage(transactionData)) {
-                    setIsScanning(false);
                     navigate("/customer/scan/results", { state: { success: true, transactionPoints: transactionData.points} });
                 } else {
-                    setIsScanning(false);
                     navigate("/customer/scan/results", { state: { success: false, duplicate: true} });
                 }
-            } catch (e) {
-                console.error("Invalid QR payload", e);
-                setIsScanning(false);
+            } catch (error) {
+                console.error("Invalid QR payload", error);
                 navigate("/customer/scan/results", { state: { success: false } });
             }
         },
@@ -80,37 +73,9 @@ export default function CustomerScan() {
     );
 
     return (
-        <Screen>
-            <Title>SCAN TRANSACTION</Title>
-
-            {!isScanning ? (
-                <ButtonContainer>
-                    <Button onClick={() => setIsScanning(true)}>
-                        SCAN
-                    </Button>
-
-                    <Button onClick={() => navigate("/customer", { replace: true })}>
-                        BACK
-                    </Button>
-                </ButtonContainer>
-            ) : (
-                <>
-                    <ScannerWrapper>
-                        <ScanQR scanSuccess={handleScanSuccess} />
-                    </ScannerWrapper>
-
-                    <ButtonContainer>
-                        <Button
-                            onClick={() => {
-                                setIsScanning(false);
-                                navigate("/customer", { replace: true });
-                            }}
-                        >
-                            BACK
-                        </Button>
-                    </ButtonContainer>
-                </>
-            )}
-        </Screen>
+        <QrScanHandler
+            title="SCAN TRANSACTION"
+            scanSuccessHandler = { handleScanSuccess }
+        />
     );
 }

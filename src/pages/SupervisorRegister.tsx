@@ -78,10 +78,13 @@ export default function SupervisorRegister() {
             localStorage.setItem(TRADERS_KEY, JSON.stringify(updatedTraders));
 
             const qrPayload = {
-                name: trimmedName,
-                points: parsedPoints,
-                key: privJwk,
-                timestamp: now,
+                title: "SHOW CODE TO TRADER",
+                qrData: {
+                    name: trimmedName,
+                    points: parsedPoints,
+                    key: privJwk,
+                    timestamp: now,
+                }
             };
 
             navigate("/supervisor/register/qr", { state: qrPayload, replace: true });

@@ -1,12 +1,10 @@
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import ScanQR from "../components/ScanQR";
-import { Button, ButtonContainer, ScannerWrapper, Screen, Title } from "../styles.ts";
+import QrScanHandler from "../components/QrScanHandler";
 
 
 export default function TraderRegistration() {
     const navigate = useNavigate();
-    const [isScanning, setIsScanning] = useState<boolean>(false);
 
     const handleScanSuccess = useCallback(
         (decodedString: string) => {
@@ -26,7 +24,6 @@ export default function TraderRegistration() {
 
                 localStorage.setItem("traderData", decodedString);
 
-                setIsScanning(false);
                 navigate("/trader", { replace: true });
             } catch (e) {
                 console.error("Invalid QR payload", e);
@@ -36,37 +33,9 @@ export default function TraderRegistration() {
     );
 
     return (
-        <Screen>
-            <Title>SCAN SUPERVISOR CODE</Title>
-
-            {!isScanning ? (
-                <ButtonContainer>
-                    <Button onClick={() => setIsScanning(true)}>
-                        SCAN
-                    </Button>
-
-                    <Button onClick={() => navigate("/", { replace: true })}>
-                        BACK
-                    </Button>
-                </ButtonContainer>
-            ) : (
-                <>
-                    <ScannerWrapper>
-                        <ScanQR scanSuccess={handleScanSuccess} />
-                    </ScannerWrapper>
-
-                    <ButtonContainer>
-                        <Button
-                            onClick={() => {
-                                setIsScanning(false);
-                                navigate("/", { replace: true });
-                            }}
-                        >
-                            BACK
-                        </Button>
-                    </ButtonContainer>
-                </>
-            )}
-        </Screen>
+        <QrScanHandler
+            title="SCAN SUPERVISOR CODE"
+            scanSuccessHandler = { handleScanSuccess }
+        />
     );
 }

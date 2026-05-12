@@ -1,19 +1,17 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { GlobalStyle } from "./styles.ts";
 import Home from "./pages/Home";
+import QrPrinter from "./components/QrPrinter";
 import SupervisorMain from "./pages/SupervisorMain";
 import SupervisorRegister from "./pages/SupervisorRegister";
-import SupervisorRegisterQr from "./pages/SupervisorRegisterQr.tsx";
 import CustomerRegistration from "./pages/CustomerRegistration.tsx";
 import CustomerMain from "./pages/CustomerMain.tsx";
 import CustomerScan from "./pages/CustomerScan.tsx";
 import TraderRegistration from "./pages/TraderRegistration.tsx";
 import TraderMain from "./pages/TraderMain.tsx";
 import TraderPoints from "./pages/TraderPoints";
-import TraderPointsQR from "./pages/TraderPointsQR";
 import CustomerScanResults from "./pages/CustomerScanResults.tsx";
 import CustomerCashout from "./pages/CustomerCashout.tsx";
-import CustomerCashoutQR from "./pages/CustomerCashoutQR.tsx";
 import SupervisorVerify from "./pages/SupervisorVerify.tsx";
 import SupervisorVerifyResults from "./pages/SupervisorVerifyResults.tsx";
 import { SupervisorRanking } from "./pages/SupervisorRanking.tsx";
@@ -31,20 +29,20 @@ export default function App() {
                   <Route path="scan" element={<CustomerScan />} />
                   <Route path="scan/results" element={<CustomerScanResults />} />
                   <Route path="cashout" element={<CustomerCashout />} />
-                  <Route path="cashout/qr" element={<CustomerCashoutQR />} />
+                  <Route path="cashout/qr" element={<QrPrinter />} />
               </Route>
 
               <Route path="/trader">
                   <Route index element={<TraderMain />} />
                   <Route path="register" element={<TraderRegistration />} />
                   <Route path="points" element={<TraderPoints />} />
-                  <Route path="points/qr" element={<TraderPointsQR />} />
+                  <Route path="points/qr" element={<QrPrinter />} />
               </Route>
 
               <Route path="/supervisor">
                   <Route index element={<SupervisorMain />} />
                   <Route path="register" element={<SupervisorRegister />} />
-                  <Route path="register/qr" element={<SupervisorRegisterQr />} />
+                  <Route path="register/qr" element={<QrPrinter />} />
                   <Route path="verify" element={<SupervisorVerify />} />
                   <Route path="verify/results" element={<SupervisorVerifyResults />} />
                   <Route path="ranking" element={<SupervisorRanking />} />
