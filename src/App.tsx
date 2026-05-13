@@ -12,9 +12,6 @@ import CustomerScan from "./pages/CustomerScan.tsx";
 import TraderRegistration from "./pages/TraderRegistration.tsx";
 import TraderMain from "./pages/TraderMain.tsx";
 import TraderPoints from "./pages/TraderPoints";
-import CustomerCashout from "./pages/CustomerCashout.tsx";
-import SupervisorVerify from "./pages/SupervisorVerify.tsx";
-import { SupervisorRanking } from "./pages/SupervisorRanking.tsx";
 
 export default function App() {
   return (
@@ -30,8 +27,6 @@ export default function App() {
                   <Route path="/customer" element={<CustomerMain />} />
                   <Route path="/customer/scan" element={<CustomerScan />} />
                   <Route path="/customer/scan/results" element={<ScanResults />} />
-                  <Route path="/customer/cashout" element={<CustomerCashout />} />
-                  <Route path="/customer/cashout/qr" element={<QrPrinter />} />
               </Route>
 
               <Route element={<ProtectedRoute storageKey="traderData" path="/trader" requireData={false} />}>
@@ -48,9 +43,6 @@ export default function App() {
                   <Route index element={<SupervisorMain />} />
                   <Route path="register" element={<SupervisorRegister />} />
                   <Route path="register/qr" element={<QrPrinter />} />
-                  <Route path="verify" element={<SupervisorVerify />} />
-                  <Route path="verify/results" element={<ScanResults />} />
-                  <Route path="ranking" element={<SupervisorRanking />} />
               </Route>
           </Routes>
       </Router>
