@@ -58,7 +58,11 @@ export default function SupervisorVerify(){
 
                 if (!isValid) {
                     console.error("Invalid data structure");
-                    navigate("/supervisor/verify/results", { state: { success: false } });
+                    navigate("/supervisor/verify/results", {
+                        state: {
+                            title: "INVALID QR CODE",
+                            path: "/supervisor"
+                        } });
                     return;
                 }
 
@@ -73,7 +77,12 @@ export default function SupervisorVerify(){
                 
                 if(localStorage.getItem(transactionData.signature)) {
                     // token is used
-                    navigate("/supervisor/verify/results", { state: { success: false } })
+                    navigate("/supervisor/verify/results", {
+                        state: {
+                            title: "INVALID TRANSACTION",
+                            subtitle: "DUPLICATE TRANSACTION",
+                            path: "/supervisor"
+                        } });
                     return;
                 }
 
@@ -82,14 +91,28 @@ export default function SupervisorVerify(){
                 if(verifyResult) {
                     // trader is real and has pool
                     localStorage.setItem(transactionData.signature, JSON.stringify(transactionData))
-                    navigate("/supervisor/verify/results", { state: { success: true, transactionPoints: transactionData.points, customerData: data.customerData } })
+                    navigate("/supervisor/verify/results", {
+                        state: {
+                            title: "VERIFICATION SUCCESSFUL",
+                            subtitle: data.customerData,
+                            points: transactionData.points,
+                            path: "/supervisor"
+                        } });
                 }
                 else {
-                    navigate("/supervisor/verify/results", { state: { success: false } })
+                    navigate("/supervisor/verify/results", {
+                        state: {
+                            title: "VERIFICATION FAILED",
+                            path: "/supervisor"
+                        } });
                 }
-            } catch (e) {
-                console.error("Invalid QR payload", e);
-                navigate("/supervisor/verify/results", { state: { success: false } });
+            } catch (error) {
+                console.error("Invalid QR payload", error);
+                navigate("/supervisor/verify/results", {
+                    state: {
+                        title: "VERIFICATION FAILED",
+                        path: "/supervisor"
+                    } });
             }
         },
         []

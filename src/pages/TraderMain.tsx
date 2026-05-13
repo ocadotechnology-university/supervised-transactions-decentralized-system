@@ -3,8 +3,9 @@ import {useEffect, useState} from "react";
 import type { TraderEntry } from "../utils/types.ts";
 import { Button, ButtonContainer, Circle, PointsContainer, PointsLabel, PointsValue, Screen, Title } from "../styles/common.styles.ts";
 
+const TRADER_KEY = "traderData";
+
 export default function TraderMain() {
-    const TRADER_KEY = "traderData";
     const navigate = useNavigate();
 
     const [name, setName] = useState("");
