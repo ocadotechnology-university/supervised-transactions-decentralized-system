@@ -15,6 +15,6 @@ export type CustomerEntry = {
 export type TraderEntry = {
     name: string;
     points: number,
-    publicKey: JsonWebKey;
+    key: JsonWebKey;
     timestamp: number;
 };
