@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { generateQrSvg} from "../utils/generateQr.ts";
-import { Button, ErrorText, Paragraph, Screen, Title } from "../styles.ts";
+import { Button, ErrorText, Paragraph, Screen, Title} from "../styles/common.styles.ts";
 import { QrContainer, QrSvgWrapper } from "../styles/QrPrinter.styles.ts";
 
 const QR_VERSION = 14;
