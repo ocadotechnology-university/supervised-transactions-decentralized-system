@@ -37,8 +37,11 @@ export default function CustomerScan() {
                     typeof data.signature === "string";
 
                 if (!isValid) {
-                    console.error("Invalid data structure");
-                    navigate("/customer/scan/results", { state: { success: false } });
+                    navigate("/customer/scan/results", {
+                        state: {
+                            title: "INVALID QR CODE",
+                            path: "/customer"
+                        } });
                     return;
                 }
 
@@ -51,13 +54,30 @@ export default function CustomerScan() {
                 };
 
                 if(addToStorage(transactionData)) {
-                    navigate("/customer/scan/results", { state: { success: true, transactionPoints: transactionData.points} });
+                    navigate("/customer/scan/results", {
+                        state: {
+                            title: "YOU GOT",
+                            points: transactionData.points,
+                            path: "/customer"
+                        } });
+                    return;
                 } else {
-                    navigate("/customer/scan/results", { state: { success: false, duplicate: true} });
+                    navigate("/customer/scan/results", {
+                        state: {
+                            title: "TRANSACTION FAILED",
+                            subtitle: "DUPLICATE TRANSACTION",
+                            path: "/customer"
+                        } });
+                    return;
                 }
             } catch (error) {
                 console.error("Invalid QR payload", error);
-                navigate("/customer/scan/results", { state: { success: false } });
+                navigate("/customer/scan/results", {
+                    state: {
+                        title: "TRANSACTION FAILED",
+                        path: "/customer"
+                    } });
+                return;
             }
         },
         []
