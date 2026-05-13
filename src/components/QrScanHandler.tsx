@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import QrScanner from 'qr-scanner';
-import { Button, ButtonContainer, ErrorText, Screen, Title } from "../styles/common.styles.ts";
+import {Button, ButtonContainer, ErrorText, Input, Screen, Title} from "../styles/common.styles.ts";
 import { Video, VideoContainer, ScannerWrapper } from "../styles/QrScanHandler.styles.ts";
 
 const QrScan = ({ scanSuccess }: { scanSuccess: (result: string) => void })=> {
@@ -61,32 +61,60 @@ type QrScanProps = {
     scanSuccessHandler: (result: string) => void;
 }
 
+type InputMode = "menu" | "camera" | "manual";
+
 export default function QrScanHandler({ title, scanSuccessHandler }: QrScanProps) {
     const navigate = useNavigate();
-    const [isScanning, setIsScanning] = useState<boolean>(false);
+
+    const [mode, setMode] = useState<InputMode>("menu");
+    const [manualInput, setManualInput] = useState("");
 
     return (
         <Screen>
             <Title>{ title }</Title>
 
-            {!isScanning ? (
+            {mode === "menu" && (
                 <ButtonContainer>
-                    <Button onClick={() => setIsScanning(true)}>
+                    <Button onClick={() => setMode("camera")}>
                         SCAN
+                    </Button>
+                    <Button onClick={() => setMode("manual")}>
+                        MANUAL
                     </Button>
                     <Button onClick={() => navigate(-1)}>
                         BACK
                     </Button>
                 </ButtonContainer>
-            ) : (
+            )}
+
+            {mode === "camera" && (
                 <>
                     <ScannerWrapper>
                         <QrScan scanSuccess={ scanSuccessHandler } />
                     </ScannerWrapper>
 
                     <ButtonContainer>
-                        <Button onClick={() => {navigate(-1);}}>
-                            BACK
+                        <Button onClick={() => setMode("menu")}>
+                            CANCEL
+                        </Button>
+                    </ButtonContainer>
+                </>
+            )}
+
+            {mode === "manual" && (
+                <>
+                    <Input
+                        placeholder="RAW QR DATA"
+                        value={manualInput}
+                        onChange={(e) => setManualInput(e.target.value)}
+                    />
+
+                    <ButtonContainer>
+                        <Button onClick={() => scanSuccessHandler(manualInput)}>
+                            OK
+                        </Button>
+                        <Button onClick={() => setMode("menu")}>
+                            CANCEL
                         </Button>
                     </ButtonContainer>
                 </>

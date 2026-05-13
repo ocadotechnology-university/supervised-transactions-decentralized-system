@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { generateQrSvg} from "../utils/generateQr.ts";
-import { Button, ErrorText, Paragraph, Screen, Title } from "../styles/common.styles.ts";
+import {Button, ButtonContainer, ErrorText, Paragraph, Screen, Title} from "../styles/common.styles.ts";
 import { QrContainer, QrSvgWrapper } from "../styles/QrPrinter.styles.ts";
 
 const QR_VERSION = 14;
@@ -13,6 +13,8 @@ export default function QrPrinter() {
 
     const [qrSvg, setQrSvg] = useState<string | null>(null);
     const [qrError, setQrError] = useState<string | null>(null);
+
+    const [showRawData, setShowRawData] = useState<boolean>(false);
 
     const qrPayload = location.state;
 
@@ -44,12 +46,18 @@ export default function QrPrinter() {
         );
     }
 
+    const rawDataString = JSON.stringify(qrPayload.qrData);
+
     return (
         <Screen>
             <Title>{ qrPayload.title }</Title>
 
             <QrContainer>
-                {qrError ? (
+                {showRawData ? (
+                        <Paragraph style={{ wordBreak: "break-all", userSelect: "all" }}>
+                            {rawDataString}
+                        </Paragraph>
+                ) : qrError ? (
                     <ErrorText>{ qrError }</ErrorText>
                 ) : qrSvg ? (
                     <QrSvgWrapper dangerouslySetInnerHTML={{ __html: qrSvg }} />
@@ -58,9 +66,15 @@ export default function QrPrinter() {
                 )}
             </QrContainer>
 
-            <Button onClick={() => navigate(-1)}>
-                DONE
-            </Button>
+            <ButtonContainer>
+                <Button onClick={() => setShowRawData(!showRawData)}>
+                    {showRawData ? "SHOW QR CODE" : "SHOW RAW DATA"}
+                </Button>
+
+                <Button onClick={() => navigate(-1)}>
+                    DONE
+                </Button>
+            </ButtonContainer>
         </Screen>
     );
 }
