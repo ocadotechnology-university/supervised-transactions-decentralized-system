@@ -4,7 +4,11 @@ import QrScanner from 'qr-scanner';
 import {Button, ButtonContainer, ErrorText, Input, Screen, Title} from "../styles/common.styles.ts";
 import { Video, VideoContainer, ScannerWrapper } from "../styles/QrScanHandler.styles.ts";
 
-const QrScan = ({ scanSuccess }: { scanSuccess: (result: string) => void })=> {
+type QrScanProps = {
+    scanSuccess: (result: string) => void;
+}
+
+const QrScan = ({ scanSuccess }: QrScanProps)=> {
     const scannerRef = useRef<QrScanner | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const [qrError, setQrError] = useState("");
@@ -56,14 +60,14 @@ const QrScan = ({ scanSuccess }: { scanSuccess: (result: string) => void })=> {
     );
 }
 
-type QrScanProps = {
+type QrScanHandlerProps = {
     title: string;
     scanSuccessHandler: (result: string) => void;
 }
 
 type InputMode = "menu" | "camera" | "manual";
 
-export default function QrScanHandler({ title, scanSuccessHandler }: QrScanProps) {
+export default function QrScanHandler({ title, scanSuccessHandler }: QrScanHandlerProps) {
     const navigate = useNavigate();
 
     const [mode, setMode] = useState<InputMode>("menu");
