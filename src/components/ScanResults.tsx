@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, ButtonContainer, Paragraph, Screen, Title, PointsContainer, Circle, PointsValue, PointsLabel } from "../styles/common.styles.ts";
+import { Button, ButtonContainer, Paragraph, Screen, Title } from "../styles/common.styles.ts";
+import { PointsContainer, Circle, PointsValue, PointsLabel } from "../styles/points.styles.ts";
 
 type ScanResultsProps = {
     title: string;

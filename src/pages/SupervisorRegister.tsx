@@ -70,7 +70,7 @@ export default function SupervisorRegister() {
             const newTrader: TraderEntry = {
                 name: trimmedName,
                 points: parsedPoints,
-                publicKey: pubJwk,
+                key: pubJwk,
                 timestamp: now,
             };
 
