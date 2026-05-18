@@ -79,12 +79,12 @@ export default function SupervisorRegister() {
 
             const qrPayload = {
                 title: "SHOW CODE TO TRADER",
-                qrData: {
+                qrData: [{
                     name: trimmedName,
                     points: parsedPoints,
                     key: privJwk,
                     timestamp: now,
-                }
+                }]
             };
 
             navigate("/supervisor/register/qr", { state: qrPayload, replace: true });
