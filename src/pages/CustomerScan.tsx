@@ -3,7 +3,29 @@ import { useNavigate } from "react-router-dom";
 import QrScanHandler from "../components/QrScanHandler";
 import type { Transaction} from "../utils/types.ts";
 
+type ScannedTransaction = {
+    message: {
+        name: string;
+        points: number;
+        id: string;
+        timestamp: number;
+    };
+    signature: string;
+};
+
 const TRANSACTIONS_KEY = "customerTransactions";
+
+const validateQrData = (data: any): data is ScannedTransaction => {
+    return !!(
+        data &&
+        data.message &&
+        typeof data.message.name === "string" &&
+        typeof data.message.points === "number" &&
+        typeof data.message.id === "string" &&
+        typeof data.message.timestamp === "number" &&
+        typeof data.signature === "string"
+    );
+};
 
 export default function CustomerScan() {
     const navigate = useNavigate();
@@ -13,14 +35,7 @@ export default function CustomerScan() {
             try {
                 const parsedResults = JSON.parse(scanResults);
 
-                const isValid =
-                    typeof parsedResults.message.name === "string" &&
-                    typeof parsedResults.message.points === "number" &&
-                    typeof parsedResults.message.id === "string" &&
-                    typeof parsedResults.message.timestamp === "number" &&
-                    typeof parsedResults.signature === "string";
-
-                if (!isValid) {
+                if (!validateQrData(parsedResults)) {
                     navigate("/customer/scan/results", {
                         state: {
                             title: "INVALID QR CODE",
