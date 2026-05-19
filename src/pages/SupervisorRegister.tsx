@@ -23,7 +23,7 @@ export default function SupervisorRegister() {
             return `Max ${MAX_NAME_LENGTH} characters`;
         }
         return null;
-    }
+    };
 
     const checkPointsValidationError = (trimmedPoints: string): string | null => {
         if (!trimmedPoints) {
@@ -33,7 +33,7 @@ export default function SupervisorRegister() {
             return "Must be a positive number";
         }
         return null;
-    }
+    };
 
     const handleGenerate = async (): Promise<void> => {
         const trimmedName = name.trim();
@@ -93,7 +93,7 @@ export default function SupervisorRegister() {
             console.error(error);
             setNameError("Failed to generate cryptographic keys");
         }
-    }
+    };
 
     return (
         <Screen>

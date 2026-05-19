@@ -66,7 +66,7 @@ export default function QrPrinter() {
             return <QrSvgWrapper dangerouslySetInnerHTML={{ __html: qrSvg }} />;
         }
         return <Paragraph>Generating...</Paragraph>;
-    }
+    };
 
     return (
         <Screen>

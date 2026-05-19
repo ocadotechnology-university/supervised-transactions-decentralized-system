@@ -5,7 +5,7 @@ type ProtectedRouteProps = {
     storageKey: string;
     path: string;
     requireData: boolean;
-}
+};
 
 export default function ProtectedRoute({ storageKey, path, requireData }: ProtectedRouteProps) {
     const storedData = useReadLocalStorage(storageKey);

@@ -4,13 +4,13 @@ export type Transaction = {
     id: string;
     timestamp: number;
     signature: string;
-}
+};
 
 export type CustomerEntry = {
     name: string;
     id: string;
     timestamp: number;
-}
+};
 
 export type TraderEntry = {
     name: string;
