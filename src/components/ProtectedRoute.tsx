@@ -1,4 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useReadLocalStorage } from "usehooks-ts"
 
 type ProtectedRouteProps = {
     storageKey: string;
@@ -7,7 +8,7 @@ type ProtectedRouteProps = {
 }
 
 export default function ProtectedRoute({ storageKey, path, requireData }: ProtectedRouteProps) {
-    const storedData = Boolean(localStorage.getItem(storageKey));
+    const storedData = useReadLocalStorage(storageKey);
 
     if (requireData && !storedData) {
         return <Navigate to={path} replace />;

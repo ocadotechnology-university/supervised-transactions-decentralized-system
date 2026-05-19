@@ -1,6 +1,8 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import { useLocalStorage } from "usehooks-ts";
 import {generateId} from "../utils/crypto.ts";
+import type { CustomerEntry } from "../utils/types.ts";
 import { Screen, Title, ButtonContainer, Button, Input, ErrorText } from "../styles/common.styles.ts";
 
 const CUSTOMER_KEY = "customerData";
@@ -11,6 +13,7 @@ export default function CustomerRegistration() {
 
     const [name, setName] = useState("");
     const [nameError, setNameError] = useState("");
+    const [, setCustomerData] = useLocalStorage<CustomerEntry | null>(CUSTOMER_KEY, null);
 
     const checkNameValidationError = (trimmedName: string): string | null => {
         if (!trimmedName) {
@@ -33,14 +36,13 @@ export default function CustomerRegistration() {
 
         setNameError("");
 
-        const payload = {
+        const payload: CustomerEntry = {
             name: trimmedName.toUpperCase(),
             id: generateId(),
             timestamp: Date.now(),
         };
 
-        localStorage.setItem(CUSTOMER_KEY, JSON.stringify(payload));
-        navigate("/customer", { replace: true });
+        setCustomerData(payload);
     }
 
     return (
