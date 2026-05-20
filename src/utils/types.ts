@@ -40,3 +40,8 @@ export type TraderEntry = {
     key: JsonWebKey;
     timestamp: number;
 };
+
+export type LeaderboardEntry = {
+    customerData: string;
+    points: number;
+}
