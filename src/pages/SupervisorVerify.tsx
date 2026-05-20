@@ -1,17 +1,42 @@
 import QrScanHandler from "../components/QrScanHandler";
-import { useCallback } from "react";
+import {useCallback, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import type { Transaction, TraderEntry } from "../utils/types.ts";
 import { importPublicKey, verifyData, encodeData, base64ToBuffer } from "../utils/cryptoutils";
 
-async function verifyTransaction(transactionData: Transaction, message: object){
-    const STORAGE_KEY = "traders";
-    
-    let stored: TraderEntry[] = JSON.parse(
-        localStorage.getItem(STORAGE_KEY) || "[]"
-    );
+type ScannedCashout = {
+    sequence: number;
+    customerData: string;
+    message: {
+        name: string;
+        points: number;
+        id: string;
+        timestamp: number;
+    };
+    signature: string;
+};
 
-    const foundTrader = stored.find(trader => trader.name === transactionData.name);
+const TRADERS_KEY = "traders";
+
+const validateQrData = (data: any): data is ScannedCashout => {
+    return !!(
+        data &&
+        data.message &&
+        typeof data.sequence === "number" &&
+        typeof data.customerData === "string" &&
+        typeof data.message.name === "string" &&
+        typeof data.message.points === "number" &&
+        typeof data.message.id === "string" &&
+        typeof data.message.timestamp === "number" &&
+        typeof data.signature === "string"
+    );
+}
+
+const verifyTransaction = async (transactionData: Transaction, message: object): Promise<boolean> => {
+    const storedTraders = localStorage.getItem(TRADERS_KEY)
+    const allTraders: TraderEntry[] = storedTraders ? JSON.parse(storedTraders) : [];
+
+    const foundTrader = allTraders.find(trader => trader.name === transactionData.name);
     if (!foundTrader) {
         return false;
     }
@@ -32,8 +57,11 @@ async function verifyTransaction(transactionData: Transaction, message: object){
     }
     
     if (foundTrader.points >= transactionData.points) {
-        foundTrader.points -= transactionData.points;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored))
+        const updatedPoints = foundTrader.points - transactionData.points;
+
+        const updatedTraders = allTraders.map(trader => trader.name === transactionData.name ? { ...trader, points: updatedPoints } : trader);
+
+        localStorage.setItem(TRADERS_KEY, JSON.stringify(updatedTraders))
         return true;
     }
     
@@ -42,21 +70,15 @@ async function verifyTransaction(transactionData: Transaction, message: object){
 
 export default function SupervisorVerify(){
     const navigate = useNavigate();
+    const [scannedQrCount, setScannedQrCount] = useState<number>(0);
+    const [expectedQrCount, setExpectedQrCount] = useState<number>(0);
 
     const handleScanSuccess = useCallback(
-        async (decodedString: string) => {
+        async (scanResults: string) => {
             try {
-                const data = JSON.parse(decodedString);
+                const parsedResults = JSON.parse(scanResults);
 
-                const isValid =
-                    typeof data.customerData === "string" &&
-                    typeof data.message.name === "string" &&
-                    typeof data.message.points === "number" &&
-                    typeof data.message.id === "string" &&
-                    typeof data.message.timestamp === "number" &&
-                    typeof data.signature === "string";
-
-                if (!isValid) {
+                if (!validateQrData(parsedResults)) {
                     console.error("Invalid data structure");
                     navigate("/supervisor/verify/results", {
                         state: {
@@ -66,13 +88,13 @@ export default function SupervisorVerify(){
                     return;
                 }
 
-                const transactionData = {
-                    name: data.message.name,
-                    points: data.message.points,
-                    id: data.message.id,
-                    timestamp: data.message.timestamp,
-                    signature: data.signature,
-                    customerData: data.customerData
+                const transactionData: Transaction = {
+                    name: parsedResults.message.name,
+                    points: parsedResults.message.points,
+                    id: parsedResults.message.id,
+                    timestamp: parsedResults.message.timestamp,
+                    signature: parsedResults.signature,
+                    customerData: parsedResults.customerData
                 };
                 
                 if(localStorage.getItem(transactionData.signature)) {
@@ -86,7 +108,7 @@ export default function SupervisorVerify(){
                     return;
                 }
 
-                const verifyResult = await verifyTransaction(transactionData, data.message);
+                const verifyResult = await verifyTransaction(transactionData, parsedResults.message);
 
                 if(verifyResult) {
                     // trader is real and has pool
@@ -94,7 +116,7 @@ export default function SupervisorVerify(){
                     navigate("/supervisor/verify/results", {
                         state: {
                             title: "VERIFICATION SUCCESSFUL",
-                            subtitle: data.customerData,
+                            subtitle: parsedResults.customerData,
                             points: transactionData.points,
                             path: "/supervisor"
                         } });
