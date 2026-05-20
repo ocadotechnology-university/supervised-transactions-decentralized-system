@@ -4,7 +4,7 @@ export type Transaction = {
     id: string;
     timestamp: number;
     signature: string;
-    customerData?: string;
+    customerData: string;
 };
 
 export type CustomerEntry = {
@@ -15,7 +15,12 @@ export type CustomerEntry = {
 
 export type TraderEntry = {
     name: string;
-    points: number,
+    points: number;
     key: JsonWebKey;
     timestamp: number;
 };
+
+export type LeaderboardEntry = {
+    customerData: string;
+    points: number;
+}
