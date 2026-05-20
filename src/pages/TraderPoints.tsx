@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { TraderEntry } from "../utils/types.ts";
-import { Button, ButtonContainer, ErrorText, PointsGrid, Screen, Title } from "../styles/common.styles.ts";
+import { Button, ButtonContainer, ErrorText, Screen, Title } from "../styles/common.styles.ts";
+import { PointsGrid } from "../styles/points.styles.ts";
 import { importKey, signData, encodeData, bufferToBase64, generateId } from "../utils/crypto.ts";
 
 const TRADER_KEY = "traderData";
