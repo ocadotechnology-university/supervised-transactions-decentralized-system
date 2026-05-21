@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Transaction, CustomerEntry } from "../utils/types.ts";
-import { Screen, Title, ButtonContainer, Button, PointsContainer, Circle, PointsValue, PointsLabel } from "../styles.ts";
+import { Screen, Title, ButtonContainer, Button } from "../styles/common.styles.ts";
+import { PointsContainer, Circle, PointsValue, PointsLabel } from "../styles/points.styles.ts";
 
 const CUSTOMER_KEY = "customerData";
 const POINTS_KEY = "customerTransactions";
@@ -17,10 +18,6 @@ export default function CustomerMain() {
         if (storedCustomerData) {
             const customerData: CustomerEntry = JSON.parse(storedCustomerData);
             setName(`${customerData.name}#${customerData.id}`);
-        }
-        else {
-            navigate("/customer/register", { replace: true });
-            return;
         }
 
         const storedCustomerPoints = localStorage.getItem(POINTS_KEY);
@@ -49,7 +46,7 @@ export default function CustomerMain() {
             </PointsContainer>
 
             <ButtonContainer>
-                <Button>
+                <Button onClick={() => navigate("/customer/scan")}>
                     SCAN TRANSACTION
                 </Button>
 

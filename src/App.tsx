@@ -1,11 +1,17 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import { GlobalStyle } from "./styles.ts";
+import { GlobalStyle } from "./styles/common.styles.ts";
 import Home from "./pages/Home";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import QrPrinter from "./components/QrPrinter";
+import ScanResults from "./components/ScanResults";
 import SupervisorMain from "./pages/SupervisorMain";
 import SupervisorRegister from "./pages/SupervisorRegister";
-import SupervisorRegisterQr from "./pages/SupervisorRegisterQr.tsx";
 import CustomerRegistration from "./pages/CustomerRegistration.tsx";
 import CustomerMain from "./pages/CustomerMain.tsx";
+import CustomerScan from "./pages/CustomerScan.tsx";
+import TraderMain from "./pages/TraderMain.tsx";
+import TraderRegistration from "./pages/TraderRegistration.tsx";
+import TraderPoints from "./pages/TraderPoints.tsx";
 
 export default function App() {
   return (
@@ -14,15 +20,29 @@ export default function App() {
           <Routes>
               <Route path="/" element={<Home />} />
 
-              <Route path="/customer">
-                  <Route index element={<CustomerMain />} />
-                  <Route path="register" element={<CustomerRegistration />} />
+              <Route element={<ProtectedRoute storageKey="customerData" path="/customer" requireData={false} />}>
+                  <Route path="/customer/register" element={<CustomerRegistration />} />
+              </Route>
+              <Route element={<ProtectedRoute storageKey="customerData" path="/customer/register" requireData={true} />}>
+                  <Route path="/customer" element={<CustomerMain />} />
+                  <Route path="/customer/scan" element={<CustomerScan />} />
+                  <Route path="/customer/scan/results" element={<ScanResults />} />
+              </Route>
+
+              <Route element={<ProtectedRoute storageKey="traderData" path="/trader" requireData={false} />}>
+                  <Route path="/trader/register" element={<TraderRegistration />} />
+                  <Route path="/trader/register/results" element={<ScanResults />} />
+              </Route>
+              <Route element={<ProtectedRoute storageKey="traderData" path="/trader/register" requireData={true} />}>
+                  <Route path="/trader" element={<TraderMain />} />
+                  <Route path="/trader/points" element={<TraderPoints />} />
+                  <Route path="/trader/points/qr" element={<QrPrinter />} />
               </Route>
 
               <Route path="/supervisor">
                   <Route index element={<SupervisorMain />} />
                   <Route path="register" element={<SupervisorRegister />} />
-                  <Route path="register/qr" element={<SupervisorRegisterQr />} />
+                  <Route path="register/qr" element={<QrPrinter />} />
               </Route>
           </Routes>
       </Router>

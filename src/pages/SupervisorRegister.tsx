@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { generateEd25519KeyPair, exportKey } from "../utils/crypto.ts";
 import type { TraderEntry } from "../utils/types.ts";
-import { Screen, Title, ButtonContainer, Button, Input, ErrorText } from "../styles.ts";
+import { Screen, Title, ButtonContainer, Button, Input, ErrorText } from "../styles/common.styles.ts";
 
 const TRADERS_KEY = "traders";
 const MAX_NAME_LENGTH = 20;
@@ -23,7 +23,7 @@ export default function SupervisorRegister() {
             return `Max ${MAX_NAME_LENGTH} characters`;
         }
         return null;
-    }
+    };
 
     const checkPointsValidationError = (trimmedPoints: string): string | null => {
         if (!trimmedPoints) {
@@ -33,9 +33,9 @@ export default function SupervisorRegister() {
             return "Must be a positive number";
         }
         return null;
-    }
+    };
 
-    async function handleGenerate() {
+    const handleGenerate = async (): Promise<void> => {
         const trimmedName = name.trim();
         const trimmedPoints = points.trim();
 
@@ -78,10 +78,13 @@ export default function SupervisorRegister() {
             localStorage.setItem(TRADERS_KEY, JSON.stringify(updatedTraders));
 
             const qrPayload = {
-                name: trimmedName,
-                points: parsedPoints,
-                privateKey: privJwk,
-                timestamp: now,
+                title: "SHOW CODE TO TRADER",
+                qrData: {
+                    name: trimmedName,
+                    points: parsedPoints,
+                    key: privJwk,
+                    timestamp: now,
+                }
             };
 
             navigate("/supervisor/register/qr", { state: qrPayload, replace: true });
@@ -90,7 +93,7 @@ export default function SupervisorRegister() {
             console.error(error);
             setNameError("Failed to generate cryptographic keys");
         }
-    }
+    };
 
     return (
         <Screen>
