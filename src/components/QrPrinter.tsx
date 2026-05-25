@@ -6,7 +6,7 @@ import { QrContainer, QrSvgWrapper } from "../styles/QrPrinter.styles.ts";
 
 type QrPrinterProps = {
     title: string;
-    qrData: unknown;
+    qrData: unknown[];
 };
 
 const QR_VERSION = 14;
@@ -23,7 +23,7 @@ export default function QrPrinter() {
     const [showRawData, setShowRawData] = useState<boolean>(false);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-    const qrPayload: QrPrinterProps = location.state;
+    const qrPayload = location.state as QrPrinterProps | null;
     const qrData = qrPayload?.qrData || [];
 
     useEffect(() => {
@@ -62,9 +62,12 @@ export default function QrPrinter() {
         return (
             <Screen>
                 <Title>NO DATA</Title>
-                <Button onClick={() => navigate(-1)}>
-                    BACK
-                </Button>
+
+                <ButtonContainer>
+                    <Button onClick={() => navigate(-1)}>
+                        BACK
+                    </Button>
+                </ButtonContainer>
             </Screen>
         );
     }
@@ -74,7 +77,7 @@ export default function QrPrinter() {
     const renderQrContent = () => {
         if (showRawData) {
             return <Paragraph style={{ wordBreak: "break-all", userSelect: "all" }}>
-                {rawDataString}
+                {currentRawDataString}
             </Paragraph>;
         }
         if (qrError) {
