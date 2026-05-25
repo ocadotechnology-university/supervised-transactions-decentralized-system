@@ -1,8 +1,9 @@
 import { useEffect, useState  } from "react";
 import { useNavigate } from "react-router-dom";
-import { Screen, Title, Button} from "../styles/common.styles.ts";
 import { calculateScore } from "../utils/leaderboard.ts";
 import type { LeaderboardEntry } from "../utils/types.ts";
+import {Screen, Title, Button, Paragraph, ButtonContainer} from "../styles/common.styles.ts";
+import {LeaderboardContainer, LeaderboardList, LeaderboardItem, LeaderboardPoints} from "../styles/SupervisorRanking.styles.ts";
 
 
 export function SupervisorRanking() {
@@ -21,25 +22,28 @@ export function SupervisorRanking() {
         <Screen>
             <Title>TOP 5 CUSTOMERS</Title>
 
-            <div className="leaderboardContainer">
+            <LeaderboardContainer>
                 {topCustomers.length === 0 ? (
-                    <p>There is no data available to display the ranking.</p>
+                    <Paragraph>There is no data available to display the ranking.</Paragraph>
                 ) : (
-                    <ol>
+                    <LeaderboardList>
                         {topCustomers.map((customer) => (
-                            <li key={customer.customerData} style={{ margin: "10px 0", fontSize: "1.2rem" }}>
-                                {customer.customerData} 
-                                <span style={{ marginLeft: "15px", color: "black" }}>
+                            <LeaderboardItem key={customer.customerData}>
+                                {customer.customerData}
+                                <LeaderboardPoints>
                                     {customer.points} pkt
-                                </span>
-                            </li>
+                                </LeaderboardPoints>
+                            </LeaderboardItem>
                         ))}
-                    </ol>
+                    </LeaderboardList>
                 )}
-            </div>
-            <Button className="button" onClick={() => navigate("/supervisor")}>
-                    BACK
-            </Button>
+            </LeaderboardContainer>
+
+            <ButtonContainer>
+                <Button className="button" onClick={() => navigate("/supervisor")}>
+                        BACK
+                </Button>
+            </ButtonContainer>
         </Screen>
     );
 }
