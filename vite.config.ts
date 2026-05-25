@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     basicSsl()
   ],
-  base: 'supervised-transactions-decentralized-system',
+  base: '/supervised-transactions-decentralized-system/',
   server: {
     host: true
   }
