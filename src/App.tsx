@@ -6,6 +6,7 @@ import QrPrinter from "./components/QrPrinter";
 import ScanResults from "./components/ScanResults";
 import SupervisorMain from "./pages/SupervisorMain";
 import SupervisorRegister from "./pages/SupervisorRegister";
+import SupervisorRanking from "./pages/SupervisorRanking.tsx";
 import CustomerRegistration from "./pages/CustomerRegistration.tsx";
 import CustomerMain from "./pages/CustomerMain.tsx";
 import CustomerScan from "./pages/CustomerScan.tsx";
@@ -43,6 +44,7 @@ export default function App() {
                   <Route index element={<SupervisorMain />} />
                   <Route path="register" element={<SupervisorRegister />} />
                   <Route path="register/qr" element={<QrPrinter />} />
+                  <Route path="ranking" element={<SupervisorRanking />} />
               </Route>
           </Routes>
       </Router>
