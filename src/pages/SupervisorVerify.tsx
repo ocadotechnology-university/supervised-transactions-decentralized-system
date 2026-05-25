@@ -2,7 +2,7 @@ import QrScanHandler from "../components/QrScanHandler";
 import { useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Transaction, TraderEntry } from "../utils/types.ts";
-import { importPublicKey, verifyData, encodeData, base64ToBuffer } from "../utils/cryptoutils";
+import { importKey, verifyData, encodeData, base64ToBuffer } from "../utils/crypto";
 import {Button, ButtonContainer} from "../styles/common.styles.ts";
 import {AdditionalButtonWrapper, SequenceScannerWrapper} from "../styles/SupervisorVerify.styles.ts";
 
@@ -44,7 +44,7 @@ const verifyTransactionCrypto = async (transactionData: Transaction, message: ob
         const messageString = JSON.stringify(message);
         const messageEncoded = encodeData(messageString);
         const signatureBuffer = base64ToBuffer(transactionData.signature);
-        const pubKey = await importPublicKey(foundTrader.key);
+        const pubKey = await importKey(foundTrader.key, "verify");
 
         return await verifyData(pubKey, signatureBuffer, messageEncoded);
     }
