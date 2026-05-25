@@ -6,7 +6,7 @@ import {Screen, Title, Button, Paragraph, ButtonContainer} from "../styles/commo
 import {LeaderboardContainer, LeaderboardList, LeaderboardItem, LeaderboardPoints} from "../styles/SupervisorRanking.styles.ts";
 
 
-export function SupervisorRanking() {
+export default function SupervisorRanking() {
     const navigate = useNavigate();
     const [topCustomers, setTopCustomers] = useState<LeaderboardEntry[]>([]);
 
@@ -40,7 +40,7 @@ export function SupervisorRanking() {
             </LeaderboardContainer>
 
             <ButtonContainer>
-                <Button className="button" onClick={() => navigate("/supervisor")}>
+                <Button className="button" onClick={() => navigate(-1)}>
                         BACK
                 </Button>
             </ButtonContainer>
