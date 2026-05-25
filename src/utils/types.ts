@@ -4,7 +4,7 @@ export type Transaction = {
     id: string;
     timestamp: number;
     signature: string;
-    customerData: string;
+    customerData?: string;
 };
 
 export type CustomerEntry = {
