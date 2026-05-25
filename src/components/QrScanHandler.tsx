@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import QrScanner from 'qr-scanner';
-import {Button, ButtonContainer, ErrorText, Input, Screen, Title} from "../styles/common.styles.ts";
+import {Button, ButtonContainer, ErrorText, Input, Paragraph, Screen, Title} from "../styles/common.styles.ts";
 import { Video, VideoContainer, ScannerWrapper } from "../styles/QrScanHandler.styles.ts";
 
 type QrScanProps = {
@@ -62,12 +62,13 @@ const QrScan = ({ scanSuccess }: QrScanProps)=> {
 
 type QrScanHandlerProps = {
     title: string;
+    subtitle?: string;
     scanSuccessHandler: (result: string) => void;
 }
 
 type InputMode = "menu" | "camera" | "manual";
 
-export default function QrScanHandler({ title, scanSuccessHandler }: QrScanHandlerProps) {
+export default function QrScanHandler({ title, subtitle, scanSuccessHandler }: QrScanHandlerProps) {
     const navigate = useNavigate();
 
     const [mode, setMode] = useState<InputMode>("menu");
@@ -76,6 +77,10 @@ export default function QrScanHandler({ title, scanSuccessHandler }: QrScanHandl
     return (
         <Screen>
             <Title>{ title }</Title>
+
+            {subtitle && (
+                <Paragraph>{subtitle}</Paragraph>
+            )}
 
             {mode === "menu" && (
                 <ButtonContainer>

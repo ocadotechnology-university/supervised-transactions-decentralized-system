@@ -11,7 +11,7 @@ type QrPrinterProps = {
 
 const QR_VERSION = 14;
 const QR_CORRECTION = "L";
-const DELAY_TIME = 1000;
+const DELAY_TIME = 500;
 
 export default function QrPrinter() {
     const location = useLocation();
