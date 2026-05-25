@@ -15,7 +15,7 @@ export default function SupervisorMain() {
                 <Button>
                     VERIFY POINTS
                 </Button>
-                <Button>
+                <Button onClick={() => navigate("/supervisor/ranking")}>
                     RANKING
                 </Button>
             </ButtonContainer>
