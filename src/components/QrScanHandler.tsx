@@ -81,10 +81,10 @@ export default function QrScanHandler({ title, subtitle, scanSuccessHandler }: Q
             {mode === "menu" && (
                 <ButtonContainer>
                     <Button onClick={() => setMode("camera")}>
-                        SCAN
+                        SCAN QR CODE
                     </Button>
                     <Button onClick={() => setMode("manual")}>
-                        MANUAL
+                        ENTER DATA MANUALLY
                     </Button>
                     <Button onClick={() => navigate(-1)}>
                         BACK
