@@ -2,7 +2,7 @@ import QrScanHandler from "../components/QrScanHandler";
 import { useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Transaction, TraderEntry } from "../utils/types.ts";
-import { importKey, verifyData, encodeData, base64ToBuffer } from "../utils/crypto";
+import {importKey, verifyData, encodeData, base64ToBuffer, generateId} from "../utils/crypto";
 import {Button, ButtonContainer} from "../styles/common.styles.ts";
 import {AdditionalButtonWrapper, SequenceScannerWrapper} from "../styles/SupervisorVerify.styles.ts";
 
@@ -34,12 +34,7 @@ const validateQrData = (data: any): data is ScannedCashout => {
     );
 }
 
-const verifyTransactionCrypto = async (transactionData: Transaction, message: object, allTraders: TraderEntry[]): Promise<boolean> => {
-    const foundTrader = allTraders.find(trader => trader.name === transactionData.name);
-    if (!foundTrader) {
-        return false;
-    }
-
+const verifyTransactionCrypto = async (transactionData: Transaction, message: object, foundTrader: TraderEntry): Promise<boolean> => {
     try {
         const messageString = JSON.stringify(message);
         const messageEncoded = encodeData(messageString);
@@ -59,12 +54,16 @@ export default function SupervisorVerify() {
     const [expectedQrCount, setExpectedQrCount] = useState<number | null>(null);
     const [pendingQrCount, setPendingQrCount] = useState<number>(0);
 
+    const expectedQrCountRef = useRef<number | null>(null);
+    const currentCustomerRef = useRef<string | null>(null);
+    const seenRawQrRef = useRef<Set<string>>(new Set());
     const seenSignaturesRef = useRef<Set<string>>(new Set());
     const pendingVerificationsRef = useRef<Set<string>>(new Set());
 
     const successfulTransactionsRef = useRef<Transaction[]>([]);
     const pointsDeductionMapRef = useRef<Map<string, number>>(new Map());
     const totalPointsRef = useRef<number>(0);
+    const errorsRef = useRef<string[]>([]);
 
     const isFinalizingRef = useRef<boolean>(false);
 
@@ -98,8 +97,9 @@ export default function SupervisorVerify() {
             navigate("/supervisor/verify/results", {
                 state: {
                     title: title,
-                    subtitle: `Verified ${successfulTransactions.length} of ${totalExpected} transactions`,
+                    subtitle: `Verified ${successfulTransactions.length} of ${totalExpected} transactions for customer ${currentCustomerRef.current}`,
                     points: totalPointsRef.current,
+                    errors: errorsRef.current,
                     path: "/supervisor"
                 }
             });
@@ -107,7 +107,8 @@ export default function SupervisorVerify() {
             navigate("/supervisor/verify/results", {
                 state: {
                     title: "VERIFICATION FAILED",
-                    subtitle: `Verified 0 of ${totalExpected} transactions`,
+                    subtitle: `Verified 0 of ${totalExpected} transactions for customer ${currentCustomerRef.current}`,
+                    errors: errorsRef.current,
                     path: "/supervisor"
                 }
             });
@@ -119,9 +120,53 @@ export default function SupervisorVerify() {
                 return;
             }
 
+            if (seenRawQrRef.current.has(scanResults)) {
+                return;
+            }
+            seenRawQrRef.current.add(scanResults);
+
             try {
-                const parsedResults= JSON.parse(scanResults);
+                const parsedResults = JSON.parse(scanResults);
+
                 if (!validateQrData(parsedResults)) {
+                    if (expectedQrCountRef.current === null) {
+                        navigate("/supervisor/verify/results", {
+                            state: {
+                                title: "VERIFICATION FAILED",
+                                subtitle: "Could not establish sequence.",
+                                errors: ["The first scanned QR code has invalid data format."],
+                                path: "/supervisor"
+                            }
+                        });
+                        return;
+                    }
+
+                    errorsRef.current.push("Invalid QR data format.");
+
+                    const invalidId = generateId()
+                    seenSignaturesRef.current.add(invalidId)
+                    setScannedQrCount(seenSignaturesRef.current.size);
+
+                    if (seenSignaturesRef.current.size >= expectedQrCountRef.current && pendingVerificationsRef.current.size === 0) {
+                        finalizeSequence(expectedQrCountRef.current);
+                    }
+
+                    return;
+                }
+
+                if (currentCustomerRef.current === null) {
+                    currentCustomerRef.current = parsedResults.customerData;
+                }
+                if (currentCustomerRef.current !== parsedResults.customerData) {
+                    errorsRef.current.push(`Transaction belongs to a different customer (${parsedResults.customerData}, current is ${currentCustomerRef.current}).`);
+
+                    const invalidId = generateId();
+                    seenSignaturesRef.current.add(invalidId);
+                    setScannedQrCount(seenSignaturesRef.current.size);
+
+                    if (expectedQrCountRef.current !== null && seenSignaturesRef.current.size >= expectedQrCountRef.current && pendingVerificationsRef.current.size === 0) {
+                        finalizeSequence(expectedQrCountRef.current);
+                    }
                     return;
                 }
 
@@ -132,8 +177,9 @@ export default function SupervisorVerify() {
 
                 const sequenceCount = parsedResults.sequence;
 
-                if (expectedQrCount === null) {
+                if (expectedQrCountRef.current === null) {
                     setExpectedQrCount(sequenceCount);
+                    expectedQrCountRef.current = sequenceCount;
                 }
 
                 setScannedQrCount(seenSignaturesRef.current.size);
@@ -142,49 +188,83 @@ export default function SupervisorVerify() {
                 setPendingQrCount(pendingVerificationsRef.current.size);
 
                 (async () => {
-                    const transactionData: Transaction = {
-                        name: parsedResults.message.name,
-                        points: parsedResults.message.points,
-                        id: parsedResults.message.id,
-                        timestamp: parsedResults.message.timestamp,
-                        signature: parsedResults.signature,
-                        customerData: parsedResults.customerData
-                    };
-                    const storedTraders = localStorage.getItem(TRADERS_KEY);
-                    const allTraders: TraderEntry[] = storedTraders ? JSON.parse(storedTraders) : [];
+                    try {
+                        const transactionData: Transaction = {
+                            name: parsedResults.message.name,
+                            points: parsedResults.message.points,
+                            id: parsedResults.message.id,
+                            timestamp: parsedResults.message.timestamp,
+                            signature: parsedResults.signature,
+                            customerData: parsedResults.customerData
+                        };
 
-                    const isDuplicate = !!localStorage.getItem(transactionData.signature);
-                    const isVerified = !isDuplicate && await verifyTransactionCrypto(transactionData, parsedResults.message, allTraders);
+                        const isDuplicate = localStorage.getItem(transactionData.signature);
 
-                    if (isVerified) {
+                        if (isDuplicate) {
+                            const originalTransaction: Transaction = JSON.parse(isDuplicate);
+                            errorsRef.current.push(`Duplicate transaction (already scanned by customer ${originalTransaction.customerData}).`);
+                            return;
+                        }
+
+                        const storedTraders = localStorage.getItem(TRADERS_KEY);
+                        const allTraders: TraderEntry[] = storedTraders ? JSON.parse(storedTraders) : [];
                         const foundTrader = allTraders.find(trader => trader.name === transactionData.name);
 
-                        const currentDeduction = pointsDeductionMapRef.current.get(transactionData.name) || 0;
-
-                        if (foundTrader && (foundTrader.points - currentDeduction) >= transactionData.points) {
-                            pointsDeductionMapRef.current.set(transactionData.name, currentDeduction + transactionData.points);
-                            totalPointsRef.current += transactionData.points;
-                            successfulTransactionsRef.current.push(transactionData);
+                        if (!foundTrader) {
+                            errorsRef.current.push(`Trader "${transactionData.name}" not found.`);
+                            return;
                         }
-                    }
 
-                    pendingVerificationsRef.current.delete(parsedResults.signature);
-                    setPendingQrCount(pendingVerificationsRef.current.size);
+                        const isVerified = await verifyTransactionCrypto(transactionData, parsedResults.message, foundTrader);
+                        if (!isVerified) {
+                            errorsRef.current.push("Signature verification failed.");
+                            return;
+                        }
 
-                    if (seenSignaturesRef.current.size >= sequenceCount && pendingVerificationsRef.current.size === 0) {
-                        finalizeSequence(sequenceCount);
+                        const currentDeduction = pointsDeductionMapRef.current.get(transactionData.name) || 0;
+                        if ((foundTrader.points - currentDeduction) < transactionData.points) {
+                            errorsRef.current.push(`Insufficient points for trader ${transactionData.name}. (Needs ${transactionData.points})`);
+                            return;
+                        }
+
+                        pointsDeductionMapRef.current.set(transactionData.name, currentDeduction + transactionData.points);
+                        totalPointsRef.current += transactionData.points;
+                        successfulTransactionsRef.current.push(transactionData);
+
+                    } finally {
+                        pendingVerificationsRef.current.delete(parsedResults.signature);
+                        setPendingQrCount(pendingVerificationsRef.current.size);
+
+                        if (seenSignaturesRef.current.size >= sequenceCount && pendingVerificationsRef.current.size === 0) {
+                            finalizeSequence(sequenceCount);
+                        }
                     }
                 })();
 
             } catch (error) {
-                console.warn("Qr data is not JSON", error);
-                navigate("/supervisor/verify/results", {
-                    state: {
-                        title: "ERROR",
-                        subtitle: "Qr data is not JSON",
-                        path: "/supervisor"
-                    }
-                });
+                if (expectedQrCountRef.current === null) {
+                    navigate("/supervisor/verify/results", {
+                        state: {
+                            title: "VERIFICATION FAILED",
+                            subtitle: "Could not establish sequence.",
+                            errors: ["The first scanned QR code is not a transaction (Not JSON)."],
+                            path: "/supervisor"
+                        }
+                    });
+                    return;
+                }
+
+                errorsRef.current.push("QR data is not JSON.");
+
+                const invalidId = generateId()
+                seenSignaturesRef.current.add(`invalid${invalidId}`)
+                setScannedQrCount(seenSignaturesRef.current.size);
+
+                if (seenSignaturesRef.current.size >= expectedQrCountRef.current && pendingVerificationsRef.current.size === 0) {
+                    finalizeSequence(expectedQrCountRef.current);
+                }
+
+                return;
             }
         },
         []
