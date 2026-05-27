@@ -50,8 +50,8 @@ export default function CustomerMain() {
                     SCAN TRANSACTION
                 </Button>
 
-                <Button>
-                    CASHOUT POINTS
+                <Button onClick={() => navigate("/customer/cashout")}>
+                    CASHOUT/SHARE POINTS
                 </Button>
             </ButtonContainer>
         </Screen>
