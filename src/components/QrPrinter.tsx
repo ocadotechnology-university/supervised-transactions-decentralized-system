@@ -6,11 +6,12 @@ import { QrContainer, QrSvgWrapper } from "../styles/QrPrinter.styles.ts";
 
 type QrPrinterProps = {
     title: string;
-    qrData: unknown;
+    qrData: unknown[];
 };
 
 const QR_VERSION = 14;
 const QR_CORRECTION = "L";
+const DELAY_TIME = 500;
 
 export default function QrPrinter() {
     const location = useLocation();
@@ -20,43 +21,63 @@ export default function QrPrinter() {
     const [qrError, setQrError] = useState<string | null>(null);
 
     const [showRawData, setShowRawData] = useState<boolean>(false);
+    const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-    const qrPayload: QrPrinterProps = location.state;
+    const qrPayload = location.state as QrPrinterProps | null;
+    const qrData = qrPayload?.qrData || [];
 
     useEffect(() => {
-        if (!qrPayload) {
+        if (qrData.length <= 1 || showRawData) {
             return;
         }
 
+        const timer = setInterval(() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % qrData.length);
+        }, DELAY_TIME);
+
+        return () => clearInterval(timer);
+    }, [qrData.length, showRawData]);
+
+    useEffect(() => {
+        if (!qrData || qrData.length === 0) return;
+
+        const currentData = qrData[currentIndex];
+
         generateQrSvg({
-            data: JSON.stringify(qrPayload.qrData),
+            data: JSON.stringify(currentData),
             qrVersion: QR_VERSION,
             errorCorrectionLevel: QR_CORRECTION,
         })
-            .then(setQrSvg)
+            .then((svg) => {
+                setQrSvg(svg);
+                setQrError(null);
+            })
             .catch((error) => {
                 console.error("QR generation failed:", error);
                 setQrError("Failed to generate QR code");
             });
-    }, [qrPayload]);
+    }, [qrData, currentIndex]);
 
-    if (!qrPayload) {
+    if (!qrPayload || qrData.length === 0) {
         return (
             <Screen>
                 <Title>NO DATA</Title>
-                <Button onClick={() => navigate(-1)}>
-                    BACK
-                </Button>
+
+                <ButtonContainer>
+                    <Button onClick={() => navigate(-1)}>
+                        BACK
+                    </Button>
+                </ButtonContainer>
             </Screen>
         );
     }
 
-    const rawDataString = JSON.stringify(qrPayload.qrData);
+    const currentRawDataString = JSON.stringify(qrData[currentIndex]);
 
     const renderQrContent = () => {
         if (showRawData) {
             return <Paragraph style={{ wordBreak: "break-all", userSelect: "all" }}>
-                {rawDataString}
+                {currentRawDataString}
             </Paragraph>;
         }
         if (qrError) {
@@ -71,6 +92,12 @@ export default function QrPrinter() {
     return (
         <Screen>
             <Title>{ qrPayload.title }</Title>
+
+            {qrData.length > 1 && (
+                <Paragraph>
+                    Code {currentIndex + 1} of {qrData.length}
+                </Paragraph>
+            )}
 
             <QrContainer>
                 { renderQrContent() }

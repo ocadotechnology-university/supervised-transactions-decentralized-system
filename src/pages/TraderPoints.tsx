@@ -49,10 +49,10 @@ export default function TraderPoints() {
 
             const qrPayload = {
                 title: "SHOW CODE TO CUSTOMER",
-                qrData: {
+                qrData: [{
                     message,
                     signature
-                }
+                }]
             };
 
             const updatedTrader = {
