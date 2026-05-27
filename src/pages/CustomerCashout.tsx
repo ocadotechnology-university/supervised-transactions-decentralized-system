@@ -57,7 +57,7 @@ export default function CustomerCashout() {
         }));
 
         const qrPayload = {
-            title: "SHOW CODES TO SUPERVISOR",
+            title: "SHOW CODES TO SUPERVISOR FOR VERIFICATION OR TO CUSTOMER TO SHARE",
             qrData: qrDataList
         };
 
@@ -92,7 +92,7 @@ export default function CustomerCashout() {
 
             <ButtonContainer style={{ marginTop: "40px"}}>
                 <Button onClick={handleCashoutSequence}>
-                    CASHOUT {selectedIds.size} SELECTED
+                    CASHOUT/SHARE {selectedIds.size} SELECTED
                 </Button>
 
                 <Button onClick={() => navigate(-1)}>
