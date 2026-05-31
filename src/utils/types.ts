@@ -7,6 +7,27 @@ export type Transaction = {
     customerData?: string;
 };
 
+export type BaseMessage = {
+    name: string;
+    points: number;
+    id: string;
+    timestamp: number;
+};
+
+export type ScannedTransaction = {
+    sequence?: number;
+    customerData?: string;
+    message: BaseMessage;
+    signature: string;
+};
+
+export type ScannedCashout = {
+    sequence: number;
+    customerData: string;
+    message: BaseMessage;
+    signature: string;
+};
+
 export type CustomerEntry = {
     name: string;
     id: string;
