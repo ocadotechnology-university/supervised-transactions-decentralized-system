@@ -1,220 +1,96 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import QrScanHandler from "../components/QrScanHandler";
-import type { Transaction } from "../utils/types.ts";
-import { Button, ButtonContainer } from "../styles/common.styles.ts";
-import { AdditionalButtonWrapper, SequenceScannerWrapper } from "../styles/SupervisorVerify.styles.ts";
-import {generateId} from "../utils/crypto.ts";
-
-type ScannedTransaction = {
-    sequence?: number;
-    customerData?: string;
-    message: {
-        name: string;
-        points: number;
-        id: string;
-        timestamp: number;
-    };
-    signature: string;
-};
+import type { Transaction, ScannedTransaction } from "../utils/types.ts";
+import { validateCustomerQrData } from "../utils/validateQr.ts";
+import { useSequenceScanner } from "../hooks/useSequenceScanner.ts";
+import type { SequenceSummary } from "../hooks/useSequenceScanner.ts";
+import SequenceScannerLayout from "../components/SequenceScannerLayout.tsx";
 
 const TRANSACTIONS_KEY = "customerTransactions";
 
-const validateQrData = (data: any): data is ScannedTransaction => {
-    return !!(
-        data &&
-        data.message &&
-        typeof data.message.name === "string" &&
-        typeof data.message.points === "number" &&
-        typeof data.message.id === "string" &&
-        typeof data.message.timestamp === "number" &&
-        typeof data.signature === "string" &&
-        (data.sequence === undefined || typeof data.sequence === "number") &&
-        (data.customerData === undefined || typeof data.customerData === "string")
-    );
-};
-
 export default function CustomerScan() {
     const navigate = useNavigate();
-    const [scannedQrCount, setScannedQrCount] = useState<number>(0);
-    const [expectedQrCount, setExpectedQrCount] = useState<number | null>(null);
 
-    const expectedQrCountRef = useRef<number | null>(null);
-    const seenRawQrRef = useRef<Set<string>>(new Set());
-    const seenSignaturesRef = useRef<Set<string>>(new Set());
+    const processTransaction = useCallback(async (parsedData: ScannedTransaction) => {
+        const newTransaction: Transaction = {
+            name: parsedData.message.name,
+            points: parsedData.message.points,
+            id: parsedData.message.id,
+            timestamp: parsedData.message.timestamp,
+            signature: parsedData.signature,
+            customerData: parsedData.customerData
+        };
 
-    const successfulTransactionsRef = useRef<Transaction[]>([]);
-    const totalPointsRef = useRef<number>(0);
-    const errorsRef = useRef<string[]>([]);
-    const isFinalizingRef = useRef<boolean>(false);
+        const allTransactions: Transaction[] = JSON.parse(localStorage.getItem(TRANSACTIONS_KEY) || "[]");
+        const isDuplicate = allTransactions.some(transaction => transaction.id === newTransaction.id);
 
-    const finalizeSequence = useCallback((totalExpected: number) => {
-        if (isFinalizingRef.current) return;
-        isFinalizingRef.current = true;
+        if (isDuplicate) {
+            return { error: `Duplicate transaction (already saved to storage).` };
+        }
+        return { transaction: newTransaction, points: newTransaction.points };
+    }, []);
 
-        const storedTransactions = localStorage.getItem(TRANSACTIONS_KEY);
-        const allTransactions: Transaction[] = storedTransactions ? JSON.parse(storedTransactions) : [];
-        const successfulTransactions = successfulTransactionsRef.current;
+    const onFinalize = useCallback((summary: SequenceSummary) => {
+        const allTransactions: Transaction[] = JSON.parse(localStorage.getItem(TRANSACTIONS_KEY) || "[]");
 
-        if (successfulTransactions.length > 0) {
-            const updatedTransactions = [...allTransactions, ...successfulTransactions];
-            localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(updatedTransactions));
+        if (summary.successfulTransactions.length > 0) {
+            localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify([...allTransactions, ...summary.successfulTransactions]));
 
-            const isSingle = totalExpected === 1;
-            const title = isSingle ? "YOU GOT" : successfulTransactions.length === totalExpected ? "SHARE SUCCESSFUL" : "PARTIAL SHARE";
-
-            const subtitle = isSingle ? undefined : `Received ${successfulTransactions.length} of ${totalExpected} transactions`;
+            const isSingle = summary.totalExpected === 1;
+            const title = isSingle ? "YOU GOT" : summary.successfulTransactions.length === summary.totalExpected ? "SHARE SUCCESSFUL" : "PARTIAL SHARE";
+            const subtitle = isSingle ? undefined : `Received ${summary.successfulTransactions.length} of ${summary.totalExpected} transactions`;
 
             navigate("/customer/scan/results", {
                 state: {
-                    title: title,
-                    subtitle: subtitle,
-                    points: totalPointsRef.current,
-                    errors: errorsRef.current,
+                    title,
+                    subtitle,
+                    points: summary.totalPoints,
+                    errors: summary.errors,
                     path: "/customer"
                 }
             });
         } else {
+            const subtitle = summary.totalExpected > 1 ? `Received 0 of ${summary.totalExpected} transactions` : undefined
+
             navigate("/customer/scan/results", {
                 state: {
                     title: "TRANSACTION FAILED",
-                    subtitle: totalExpected > 1 ? `Received 0 of ${totalExpected} transactions` : undefined,
-                    errors: errorsRef.current,
+                    subtitle,
+                    errors: summary.errors,
                     path: "/customer"
                 }
             });
         }
     }, []);
 
-    const handleScanSuccess = useCallback((scanResults: string) => {
-        if (isFinalizingRef.current) {
-            return;
-        }
-
-        if (seenRawQrRef.current.has(scanResults)) {
-            return;
-        }
-        seenRawQrRef.current.add(scanResults);
-
-        try {
-            const parsedResults = JSON.parse(scanResults);
-
-            if (!validateQrData(parsedResults)) {
-                if (expectedQrCountRef.current === null) {
-                    navigate("/customer/scan/results", {
-                        state: {
-                            title: "TRANSACTION FAILED",
-                            subtitle: "Could not establish sequence.",
-                            errors: ["The first scanned QR code has an invalid format."],
-                            path: "/customer"
-                        }
-                    });
-                    return;
-                }
-
-                errorsRef.current.push("Invalid QR data format.");
-
-                const invalidId = generateId()
-                seenSignaturesRef.current.add(invalidId)
-                setScannedQrCount(seenSignaturesRef.current.size);
-
-                if (seenSignaturesRef.current.size >= expectedQrCountRef.current) {
-                    finalizeSequence(expectedQrCountRef.current);
-                }
-
-                return;
+    const onFatalError = useCallback((errorMsg: string) => {
+        navigate("/customer/scan/results", {
+            state: {
+                title: "TRANSACTION FAILED",
+                subtitle: "Could not establish sequence.",
+                errors: [errorMsg],
+                path: "/customer"
             }
-
-            if (seenSignaturesRef.current.has(parsedResults.signature)) {
-                return;
-            }
-            seenSignaturesRef.current.add(parsedResults.signature);
-
-            const sequenceCount = parsedResults.sequence || 1;
-
-            if (expectedQrCountRef.current === null) {
-                setExpectedQrCount(sequenceCount);
-                expectedQrCountRef.current = sequenceCount;
-            }
-
-            setScannedQrCount(seenSignaturesRef.current.size);
-
-            const newTransaction: Transaction = {
-                name: parsedResults.message.name,
-                points: parsedResults.message.points,
-                id: parsedResults.message.id,
-                timestamp: parsedResults.message.timestamp,
-                signature: parsedResults.signature,
-                customerData: parsedResults.customerData
-            };
-
-            const storedTransactions = localStorage.getItem(TRANSACTIONS_KEY);
-            const allTransactions: Transaction[] = storedTransactions ? JSON.parse(storedTransactions) : [];
-            const isDuplicate = allTransactions.some((transaction) => transaction.id === newTransaction.id);
-
-            if (isDuplicate) {
-                errorsRef.current.push(`Duplicate transaction (already saved to storage).`);
-            } else {
-                successfulTransactionsRef.current.push(newTransaction);
-                totalPointsRef.current += newTransaction.points;
-            }
-
-            if (seenSignaturesRef.current.size >= sequenceCount) {
-                finalizeSequence(sequenceCount);
-            }
-
-        } catch (error) {
-            if (expectedQrCountRef.current === null) {
-                navigate("/customer/scan/results", {
-                    state: {
-                        title: "TRANSACTION FAILED",
-                        subtitle: "Could not establish sequence.",
-                        errors: ["QR payload is not valid JSON."],
-                        path: "/customer"
-                    }
-                });
-                return;
-            }
-
-            errorsRef.current.push("QR data is not JSON.");
-
-            const invalidId = generateId()
-            seenSignaturesRef.current.add(`invalid${invalidId}`)
-            setScannedQrCount(seenSignaturesRef.current.size);
-
-            if (seenSignaturesRef.current.size >= expectedQrCountRef.current) {
-                finalizeSequence(expectedQrCountRef.current);
-            }
-
-            return;
-        }
+        });
     }, []);
 
-
-    const sequenceSubtitle = expectedQrCount && expectedQrCount > 1 ? `SCANNED ${scannedQrCount} OF ${expectedQrCount}` : "";
+    const scanner = useSequenceScanner<ScannedTransaction>({
+        validateData: validateCustomerQrData,
+        getSequenceInfo: (data) => ({ sequence: data.sequence || 1, signature: data.signature }),
+        processTransaction,
+        onFinalize,
+        onFatalSequenceError: onFatalError
+    });
 
     return (
-        <SequenceScannerWrapper>
-            <QrScanHandler
-                title="SCAN TRANSACTION"
-                subtitle={sequenceSubtitle}
-                scanSuccessHandler={handleScanSuccess}
-            />
-
-            {scannedQrCount > 0 && expectedQrCount && scannedQrCount < expectedQrCount && (
-                <AdditionalButtonWrapper>
-                    <ButtonContainer>
-                        <Button
-                            onClick={() => finalizeSequence(expectedQrCount)}
-                            style={{
-                                backgroundColor: "#e55555",
-                            }}
-                        >
-                            FINISH EARLY ({successfulTransactionsRef.current.length} TRANSACTIONS)
-                        </Button>
-                    </ButtonContainer>
-                </AdditionalButtonWrapper>
-            )}
-        </SequenceScannerWrapper>
+        <SequenceScannerLayout
+            title="SCAN TRANSACTION"
+            expectedQrCount={scanner.expectedQrCount}
+            scannedQrCount={scanner.scannedQrCount}
+            pendingQrCount={scanner.pendingQrCount}
+            successfulCount={scanner.successfulCount}
+            onScanSuccess={scanner.handleScanSuccess}
+            onFinalizeEarly={scanner.finalizeEarly}
+        />
     );
 }
