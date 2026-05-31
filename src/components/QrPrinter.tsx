@@ -33,7 +33,9 @@ export default function QrPrinter() {
     }, [qrData.length, showRawData]);
 
     useEffect(() => {
-        if (!qrData || qrData.length === 0) return;
+        if (!qrData || qrData.length === 0) {
+            return;
+        }
 
         const currentData = qrData[currentIndex];
 
