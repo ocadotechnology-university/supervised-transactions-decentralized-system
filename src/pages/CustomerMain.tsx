@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Transaction, CustomerEntry } from "../utils/types.ts";
-import { Screen, Title, ButtonContainer, Button } from "../styles/common.styles.ts";
+import { Screen, Title, ButtonContainer, Button, GoHomeButton } from "../styles/common.styles.ts";
 import { PointsContainer, Circle, PointsValue, PointsLabel } from "../styles/points.styles.ts";
 import {STORAGE_KEYS} from "../utils/localStorageKeys.ts";
 
@@ -35,6 +35,10 @@ export default function CustomerMain() {
     return (
         <Screen>
             <Title>{name}</Title>
+
+            <GoHomeButton onClick={() => navigate("/", { replace: true })}>
+                {"<"}
+            </GoHomeButton>
 
             <PointsContainer>
                 <Circle>

@@ -1,5 +1,6 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { GlobalStyle } from "./styles/common.styles.ts";
+import RoleThemeProvider from "./components/RoleThemeProvider.tsx";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import QrPrinter from "./components/QrPrinter";
@@ -18,42 +19,44 @@ import TraderPoints from "./pages/TraderPoints.tsx";
 import { STORAGE_KEYS } from "./utils/localStorageKeys.ts";
 
 export default function App() {
-  return (
-      <Router>
-          <GlobalStyle />
-          <Routes>
-              <Route path="/" element={<Home />} />
+    return (
+        <Router>
+            <RoleThemeProvider>
+                <GlobalStyle />
+                <Routes>
+                    <Route path="/" element={<Home />} />
 
-              <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.CUSTOMER_DATA} path="/customer" requireData={false} />}>
-                  <Route path="/customer/register" element={<CustomerRegistration />} />
-              </Route>
-              <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.CUSTOMER_DATA} path="/customer/register" requireData={true} />}>
-                  <Route path="/customer" element={<CustomerMain />} />
-                  <Route path="/customer/scan" element={<CustomerScan />} />
-                  <Route path="/customer/scan/results" element={<ScanResults />} />
-                  <Route path="/customer/cashout" element={<CustomerCashout />} />
-                  <Route path="/customer/cashout/qr" element={<QrPrinter />} />
-              </Route>
+                    <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.CUSTOMER_DATA} path="/customer" requireData={false} />}>
+                        <Route path="/customer/register" element={<CustomerRegistration />} />
+                    </Route>
+                    <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.CUSTOMER_DATA} path="/customer/register" requireData={true} />}>
+                        <Route path="/customer" element={<CustomerMain />} />
+                        <Route path="/customer/scan" element={<CustomerScan />} />
+                        <Route path="/customer/scan/results" element={<ScanResults />} />
+                        <Route path="/customer/cashout" element={<CustomerCashout />} />
+                        <Route path="/customer/cashout/qr" element={<QrPrinter />} />
+                    </Route>
 
-              <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.TRADER_DATA} path="/trader" requireData={false} />}>
-                  <Route path="/trader/register" element={<TraderRegistration />} />
-                  <Route path="/trader/register/results" element={<ScanResults />} />
-              </Route>
-              <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.TRADER_DATA} path="/trader/register" requireData={true} />}>
-                  <Route path="/trader" element={<TraderMain />} />
-                  <Route path="/trader/points" element={<TraderPoints />} />
-                  <Route path="/trader/points/qr" element={<QrPrinter />} />
-              </Route>
+                    <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.TRADER_DATA} path="/trader" requireData={false} />}>
+                        <Route path="/trader/register" element={<TraderRegistration />} />
+                        <Route path="/trader/register/results" element={<ScanResults />} />
+                    </Route>
+                    <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.TRADER_DATA} path="/trader/register" requireData={true} />}>
+                        <Route path="/trader" element={<TraderMain />} />
+                        <Route path="/trader/points" element={<TraderPoints />} />
+                        <Route path="/trader/points/qr" element={<QrPrinter />} />
+                    </Route>
 
-              <Route path="/supervisor">
-                  <Route index element={<SupervisorMain />} />
-                  <Route path="register" element={<SupervisorRegister />} />
-                  <Route path="register/qr" element={<QrPrinter />} />
-                  <Route path="verify" element={<SupervisorVerify />} />
-                  <Route path="verify/results" element={<ScanResults />} />
-                  <Route path="ranking" element={<SupervisorRanking />} />
-              </Route>
-          </Routes>
-      </Router>
-  );
+                    <Route path="/supervisor">
+                        <Route index element={<SupervisorMain />} />
+                        <Route path="register" element={<SupervisorRegister />} />
+                        <Route path="register/qr" element={<QrPrinter />} />
+                        <Route path="verify" element={<SupervisorVerify />} />
+                        <Route path="verify/results" element={<ScanResults />} />
+                        <Route path="ranking" element={<SupervisorRanking />} />
+                    </Route>
+                </Routes>
+            </RoleThemeProvider>
+        </Router>
+    );
 }
