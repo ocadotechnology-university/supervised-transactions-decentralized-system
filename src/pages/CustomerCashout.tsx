@@ -27,13 +27,15 @@ export default function CustomerCashout() {
     }, []);
 
     const toggleSelect = (id: string): void => {
-        const newSelected = new Set(selectedIds);
-        if (newSelected.has(id)) {
-            newSelected.delete(id);
-        } else {
-            newSelected.add(id);
-        }
-        setSelectedIds(newSelected);
+        setSelectedIds((prevSelectedIds) => {
+            const newSelected = new Set(prevSelectedIds);
+            if (newSelected.has(id)) {
+                newSelected.delete(id);
+            } else {
+                newSelected.add(id);
+            }
+            return newSelected;
+        });
     }
 
     const handleCashoutSequence = (): void => {
@@ -41,10 +43,14 @@ export default function CustomerCashout() {
             return;
         }
 
-        const selectedTransactions = transactions.filter(transaction => selectedIds.has(transaction.id));
-        const remainingTransactions = transactions.filter(transaction => !selectedIds.has(transaction.id));
+        const grouped = Object.groupBy(transactions, (transaction) =>
+            selectedIds.has(transaction.id) ? "selected" : "remaining"
+        );
 
-        const qrDataList = selectedTransactions.map(transaction => ({
+        const selectedTransactions = grouped.selected || [];
+        const remainingTransactions = grouped.remaining || [];
+
+        const qrDataList = selectedTransactions.map((transaction) => ({
             sequence: selectedTransactions.length,
             customerData: customerName,
             message: {

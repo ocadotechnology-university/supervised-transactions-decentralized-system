@@ -1,6 +1,6 @@
 import QrScanHandler from "./QrScanHandler";
 import { Button, ButtonContainer } from "../styles/common.styles.ts";
-import { AdditionalButtonWrapper, SequenceScannerWrapper } from "../styles/SequenceScannerLayout.ts";
+import { AdditionalButtonWrapper, SequenceScannerWrapper } from "../styles/SequenceScannerLayout.styles.ts";
 
 type SequenceScannerLayoutProps = {
     title: string;
