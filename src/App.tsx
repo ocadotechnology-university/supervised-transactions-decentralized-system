@@ -10,6 +10,7 @@ import SupervisorVerify from "./pages/SupervisorVerify.tsx";
 import CustomerRegistration from "./pages/CustomerRegistration.tsx";
 import CustomerMain from "./pages/CustomerMain.tsx";
 import CustomerScan from "./pages/CustomerScan.tsx";
+import CustomerCashout from "./pages/CustomerCashout.tsx";
 import TraderMain from "./pages/TraderMain.tsx";
 import TraderRegistration from "./pages/TraderRegistration.tsx";
 import TraderPoints from "./pages/TraderPoints.tsx";
@@ -28,6 +29,8 @@ export default function App() {
                   <Route path="/customer" element={<CustomerMain />} />
                   <Route path="/customer/scan" element={<CustomerScan />} />
                   <Route path="/customer/scan/results" element={<ScanResults />} />
+                  <Route path="/customer/cashout" element={<CustomerCashout />} />
+                  <Route path="/customer/cashout/qr" element={<QrPrinter />} />
               </Route>
 
               <Route element={<ProtectedRoute storageKey="traderData" path="/trader" requireData={false} />}>

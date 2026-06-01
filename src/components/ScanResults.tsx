@@ -47,7 +47,7 @@ export default function ScanResults() {
                 </PointsContainer>
             )}
 
-            {resultsData.errors && (
+            {resultsData.errors && resultsData.errors.length > 0 && (
                 <ErrorLogContainer>
                     <ErrorLogTitle>Error Log</ErrorLogTitle>
                     <ErrorList>

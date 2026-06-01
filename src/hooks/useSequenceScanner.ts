@@ -56,7 +56,7 @@ export function useSequenceScanner<T>(props: UseSequenceScannerProps<T>) {
         }
     }, [triggerFinalize]);
 
-    const handleItemError = useCallback((errMsg: string, isFatal: boolean) => {
+    const handleTransactionError = useCallback((errMsg: string, isFatal: boolean) => {
         if (isFatal) {
             props.onFatalSequenceError(errMsg);
             return;
@@ -77,7 +77,7 @@ export function useSequenceScanner<T>(props: UseSequenceScannerProps<T>) {
             const parsedResults = JSON.parse(scanResults);
 
             if (!props.validateData(parsedResults)) {
-                handleItemError("Invalid QR data format.", expectedQrCountRef.current === null);
+                handleTransactionError("Invalid QR data format.", expectedQrCountRef.current === null);
                 return;
             }
 
@@ -116,9 +116,9 @@ export function useSequenceScanner<T>(props: UseSequenceScannerProps<T>) {
             })();
 
         } catch (error) {
-            handleItemError("Corrupted QR data.", expectedQrCountRef.current === null);
+            handleTransactionError("Corrupted QR data.", expectedQrCountRef.current === null);
         }
-    }, [props, handleItemError, checkAndFinalize]);
+    }, [props, handleTransactionError, checkAndFinalize]);
 
     return {
         scannedQrCount,
