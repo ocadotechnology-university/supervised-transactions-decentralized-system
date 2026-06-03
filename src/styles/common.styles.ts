@@ -81,12 +81,3 @@ export const Paragraph = styled.p`
     text-align: center;
     color: ${({ theme }) => theme.colors.text};
 `;
-
-
-export const GoHomeButton = styled(Button)`
-    position: absolute;
-    top: 70px;
-    left: 20px;
-    padding: 10px 20px;
-    font-size: 14px;
-`;
