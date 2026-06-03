@@ -29,7 +29,7 @@ export const BreadcrumbItem = styled.div`
 export const BreadcrumbLink = styled(Link)`
     color: ${({ theme }) => theme.colors.buttonBackground || theme.colors.text};
     text-decoration: none;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     transition: opacity 0.2s ease-in-out;
 

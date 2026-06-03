@@ -2,15 +2,14 @@ import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
     html, body, #root {
-        height: 100%;
         margin: 0;
-        padding: 0;
-        overflow: hidden;
+        scroll-padding-top: 70px;
+        scroll-behavior: smooth;
     }
 `;
 
 export const Screen = styled.div`
-    height: 100%;
+    min-height: 100vh;
     width: 100%;
     background-color: ${({ theme }) => theme.colors.background};
     display: flex;
@@ -20,7 +19,6 @@ export const Screen = styled.div`
     font-family: 'Balsamiq Sans', cursive;
     padding: 20px;
     box-sizing: border-box;
-    overflow: hidden;
 `;
 
 export const Title = styled.h1`
@@ -29,7 +27,6 @@ export const Title = styled.h1`
     word-wrap: break-word;
     overflow-wrap: break-word;
     color: ${({ theme }) => theme.colors.text};
-    margin-top: 0;
 `;
 
 export const ButtonContainer = styled.div`
