@@ -16,6 +16,7 @@ import CustomerCashout from "./pages/CustomerCashout.tsx";
 import TraderMain from "./pages/TraderMain.tsx";
 import TraderRegistration from "./pages/TraderRegistration.tsx";
 import TraderPoints from "./pages/TraderPoints.tsx";
+import Breadcrumbs from "./components/Breadcrumbs";
 import { STORAGE_KEYS } from "./utils/localStorageKeys.ts";
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
         <Router>
             <RoleThemeProvider>
                 <GlobalStyle />
+                <Breadcrumbs />
                 <Routes>
                     <Route path="/" element={<Home />} />
 

@@ -62,7 +62,7 @@ export default function CustomerCashout() {
         }));
 
         const qrPayload = {
-            title: "SHOW CODES TO SUPERVISOR FOR VERIFICATION OR TO CUSTOMER TO SHARE",
+            title: "SHOW CODES TO SUPERVISOR OR TO CUSTOMER",
             qrData: qrDataList
         };
 
@@ -81,7 +81,7 @@ export default function CustomerCashout() {
                         return (
                             <Button
                                 key={transaction.id}
-                                onClick={() => toggleSelect(transaction.id)}
+           better UX                     onClick={() => toggleSelect(transaction.id)}
                                 style={{
                                     opacity: isSelected ? 1 : 0.5,
                                 }}
