@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { Transaction, CustomerEntry } from "../utils/types.ts";
-import { Screen, Title, Button, ButtonContainer } from "../styles/common.styles.ts";
+import {Screen, Title, Button, ButtonContainer, Paragraph} from "../styles/common.styles.ts";
 import { PointsGrid } from "../styles/points.styles.ts";
 
 const CUSTOMER_KEY = "customerData";
@@ -75,6 +75,7 @@ export default function CustomerCashout() {
     return (
         <Screen>
             <Title>SELECT TRANSACTIONS</Title>
+            <Paragraph>Selected transactions will be removed from your account</Paragraph>
 
             {transactions.length > 0 ? (
                 <PointsGrid>

@@ -1,11 +1,5 @@
 import { useLocation } from "react-router-dom";
-import {
-    BreadcrumbWrapper,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbCurrent,
-    Separator,
-} from "../styles/breadcrumb.styles";
+import { BreadcrumbWrapper, BreadcrumbItem, BreadcrumbLink, BreadcrumbCurrent, Separator } from "../styles/breadcrumb.styles";
 
 const labels: Record<string, string> = {
     customer: "Customer",
@@ -24,13 +18,7 @@ const labels: Record<string, string> = {
 export default function Breadcrumbs() {
     const location = useLocation();
 
-    const pathnames = location.pathname
-        .split("/")
-        .filter(Boolean);
-
-    if (pathnames.length === 0) {
-        return null;
-    }
+    const pathnames = location.pathname.split("/").filter(Boolean);
 
     return (
         <BreadcrumbWrapper aria-label="Breadcrumb">
