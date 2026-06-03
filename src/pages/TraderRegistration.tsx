@@ -3,30 +3,20 @@ import { useNavigate } from "react-router-dom";
 import type { TraderEntry } from "../utils/types.ts";
 import QrScanHandler from "../components/QrScanHandler";
 import { useLocalStorage } from "usehooks-ts";
+import { validateTraderQrData } from "../utils/validateQr.ts";
 
 const TRADER_KEY = "traderData";
-
-const validateQrData = (data: any): data is TraderEntry => {
-    return !!(
-        data &&
-        typeof data.name === "string" &&
-        typeof data.points === "number" &&
-        typeof data.timestamp === "number" &&
-        !!data.key
-    );
-};
 
 export default function TraderRegistration() {
     const navigate = useNavigate();
     const [, setTraderData] = useLocalStorage<TraderEntry | null>(TRADER_KEY, null);
-
 
     const handleScanSuccess = useCallback(
         (scanResults: string) => {
             try {
                 const parsedResults: TraderEntry = JSON.parse(scanResults);
 
-                if (!validateQrData(parsedResults)) {
+                if (!validateTraderQrData(parsedResults)) {
                     navigate("/trader/register/results", {
                         state: {
                             title: "INVALID QR CODE",

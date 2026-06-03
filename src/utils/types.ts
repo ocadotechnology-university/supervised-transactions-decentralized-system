@@ -4,6 +4,28 @@ export type Transaction = {
     id: string;
     timestamp: number;
     signature: string;
+    customerData?: string;
+};
+
+export type BaseMessage = {
+    name: string;
+    points: number;
+    id: string;
+    timestamp: number;
+};
+
+export type ScannedTransaction = {
+    sequence?: number;
+    customerData?: string;
+    message: BaseMessage;
+    signature: string;
+};
+
+export type ScannedCashout = {
+    sequence: number;
+    customerData: string;
+    message: BaseMessage;
+    signature: string;
 };
 
 export type CustomerEntry = {
@@ -14,7 +36,7 @@ export type CustomerEntry = {
 
 export type TraderEntry = {
     name: string;
-    points: number,
+    points: number;
     key: JsonWebKey;
     timestamp: number;
 };

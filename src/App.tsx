@@ -6,9 +6,11 @@ import QrPrinter from "./components/QrPrinter";
 import ScanResults from "./components/ScanResults";
 import SupervisorMain from "./pages/SupervisorMain";
 import SupervisorRegister from "./pages/SupervisorRegister";
+import SupervisorVerify from "./pages/SupervisorVerify.tsx";
 import CustomerRegistration from "./pages/CustomerRegistration.tsx";
 import CustomerMain from "./pages/CustomerMain.tsx";
 import CustomerScan from "./pages/CustomerScan.tsx";
+import CustomerCashout from "./pages/CustomerCashout.tsx";
 import TraderMain from "./pages/TraderMain.tsx";
 import TraderRegistration from "./pages/TraderRegistration.tsx";
 import TraderPoints from "./pages/TraderPoints.tsx";
@@ -27,6 +29,8 @@ export default function App() {
                   <Route path="/customer" element={<CustomerMain />} />
                   <Route path="/customer/scan" element={<CustomerScan />} />
                   <Route path="/customer/scan/results" element={<ScanResults />} />
+                  <Route path="/customer/cashout" element={<CustomerCashout />} />
+                  <Route path="/customer/cashout/qr" element={<QrPrinter />} />
               </Route>
 
               <Route element={<ProtectedRoute storageKey="traderData" path="/trader" requireData={false} />}>
@@ -43,6 +47,8 @@ export default function App() {
                   <Route index element={<SupervisorMain />} />
                   <Route path="register" element={<SupervisorRegister />} />
                   <Route path="register/qr" element={<QrPrinter />} />
+                  <Route path="verify" element={<SupervisorVerify />} />
+                  <Route path="verify/results" element={<ScanResults />} />
               </Route>
           </Routes>
       </Router>

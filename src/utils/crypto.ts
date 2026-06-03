@@ -38,6 +38,17 @@ export function signData(privateKey: CryptoKey, encodedData: BufferSource): Prom
     );
 }
 
+export function verifyData(publicKey: CryptoKey, signature: ArrayBuffer, encodedData: BufferSource): Promise<boolean> {
+    return crypto.subtle.verify(
+        {
+            name: "Ed25519",
+        },
+        publicKey,
+        signature,
+        encodedData,
+    );
+}
+
 export function encodeData(data: string): BufferSource {
     return encoder.encode(data);
 }
@@ -46,6 +57,10 @@ export function encodeData(data: string): BufferSource {
 // See browser compatibility: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array#browser_compatibility
 export function bufferToBase64(data: ArrayBuffer): string {
     return new Uint8Array(data).toBase64();
+}
+
+export function base64ToBuffer(data: string): ArrayBuffer {
+    return Uint8Array.fromBase64(data).buffer;
 }
 
 export function generateId(length: number = 6): string {
