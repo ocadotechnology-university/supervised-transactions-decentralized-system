@@ -81,7 +81,7 @@ export default function CustomerCashout() {
                         return (
                             <Button
                                 key={transaction.id}
-           better UX                     onClick={() => toggleSelect(transaction.id)}
+                                onClick={() => toggleSelect(transaction.id)}
                                 style={{
                                     opacity: isSelected ? 1 : 0.5,
                                 }}
