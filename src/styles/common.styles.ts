@@ -4,11 +4,13 @@ export const GlobalStyle = createGlobalStyle`
     html, body, #root {
         height: 100%;
         margin: 0;
+        padding: 0;
+        overflow: hidden;
     }
 `;
 
 export const Screen = styled.div`
-    min-height: 100vh;
+    height: 100%;
     width: 100%;
     background-color: ${({ theme }) => theme.colors.background};
     display: flex;
@@ -18,6 +20,7 @@ export const Screen = styled.div`
     font-family: 'Balsamiq Sans', cursive;
     padding: 20px;
     box-sizing: border-box;
+    overflow: hidden;
 `;
 
 export const Title = styled.h1`
@@ -26,6 +29,7 @@ export const Title = styled.h1`
     word-wrap: break-word;
     overflow-wrap: break-word;
     color: ${({ theme }) => theme.colors.text};
+    margin-top: 0;
 `;
 
 export const ButtonContainer = styled.div`
@@ -78,9 +82,10 @@ export const Paragraph = styled.p`
     color: ${({ theme }) => theme.colors.text};
 `;
 
+
 export const GoHomeButton = styled(Button)`
     position: absolute;
-    top: 20px;
+    top: 70px;
     left: 20px;
     padding: 10px 20px;
     font-size: 14px;

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import {Screen, Title, ButtonContainer, Button, GoHomeButton} from "../styles/common.styles.ts";
+import {Screen, Title, ButtonContainer, Button} from "../styles/common.styles.ts";
 
 export default function SupervisorMain() {
     const navigate = useNavigate();
@@ -7,10 +7,6 @@ export default function SupervisorMain() {
     return (
         <Screen>
             <Title>CHOOSE ACTION</Title>
-
-            <GoHomeButton onClick={() => navigate("/", { replace: true })}>
-                {"<"}
-            </GoHomeButton>
 
             <ButtonContainer>
                 <Button onClick={() => navigate("/supervisor/register")}>
