@@ -44,4 +44,17 @@ export const PointsGrid = styled.div`
     width: 100%;
     max-width: 320px;
     margin-top: 40px;
+    max-height: 400px; 
+    overflow-y: auto;   
+    padding-right: 6px; 
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: ${({ theme }) => theme.colors.inputBorder || "rgba(0,0,0,0.2)"};
+        border-radius: 4px;
+    }
 `;
