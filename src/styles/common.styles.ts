@@ -16,6 +16,7 @@ export const AppLayout = styled.div`
     flex-direction: column;
     width: 100%;
     height: 100vh;
+    height: 100dvh;
 `;
 
 export const MainContent = styled.main`
@@ -23,6 +24,8 @@ export const MainContent = styled.main`
     width: 100%;
     overflow-y: hidden;
     position: relative;
+    display: flex;
+    flex-direction: column;
 `;
 
 export const Screen = styled.div`
@@ -64,6 +67,7 @@ export const Button = styled.button`
     letter-spacing: 1px;
     font-family: 'Balsamiq Sans', cursive;
     cursor: pointer;
+    box-shadow: 0 4px 12px ${({ theme }) => theme.colors.buttonBackground}40;
 `;
 
 export const Input = styled.input`
