@@ -3,13 +3,30 @@ import styled, { createGlobalStyle } from "styled-components";
 export const GlobalStyle = createGlobalStyle`
     html, body, #root {
         margin: 0;
-        scroll-padding-top: 70px;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden; 
         scroll-behavior: smooth;
     }
 `;
 
+export const AppLayout = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+`;
+
+export const MainContent = styled.main`
+    flex: 1;
+    width: 100%;
+    overflow-y: hidden;
+    position: relative;
+`;
+
 export const Screen = styled.div`
-    min-height: 100vh;
+    height: 100%; 
     width: 100%;
     background-color: ${({ theme }) => theme.colors.background};
     display: flex;
