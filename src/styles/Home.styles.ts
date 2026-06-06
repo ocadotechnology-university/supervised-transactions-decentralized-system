@@ -55,6 +55,7 @@ export const InfoButton = styled.button`
     position: absolute;
     top: 16px;
     right: 16px;
+    padding-top: 4px;
     background: transparent;
     border: 1px solid ${({ theme }) => theme.colors.text};
     color: ${({ theme }) => theme.colors.text};
