@@ -26,17 +26,16 @@ export const MainContent = styled.main`
 `;
 
 export const Screen = styled.div`
-    height: 100%; 
+    height: 100%;
     width: 100%;
     background-color: ${({ theme }) => theme.colors.background};
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     font-family: 'Balsamiq Sans', cursive;
-    padding: 24px 20px;
+    padding: 20px;
     box-sizing: border-box;
-    overflow: hidden; 
 `;
 
 export const Title = styled.h1`
