@@ -5,6 +5,26 @@ import type { LeaderboardEntry } from "../utils/types.ts";
 import {Screen, Title, Button, Paragraph, ButtonContainer} from "../styles/common.styles.ts";
 import {LeaderboardContainer, LeaderboardList, LeaderboardItem, LeaderboardPoints} from "../styles/SupervisorRanking.styles.ts";
 
+const EmptyStateMessage = () => (
+    <Paragraph>There is no data available to display the ranking</Paragraph>
+);
+
+interface LeaderboardProps {
+    customers: LeaderboardEntry[];
+}
+
+const LeaderboardDataList = ({ customers }: LeaderboardProps) => (
+    <LeaderboardList>
+        {customers.map(({ customerData, points}) =>
+            <LeaderboardItem key={customerData}>
+                {customerData}
+                <LeaderboardPoints>
+                    {points} points
+                </LeaderboardPoints>
+            </LeaderboardItem>
+        )}
+    </LeaderboardList>
+);
 
 export default function SupervisorRanking() {
     const navigate = useNavigate();
@@ -18,24 +38,17 @@ export default function SupervisorRanking() {
         setTopCustomers(top5Scores);
     }, []);
 
+    const hasData = topCustomers.length > 0;
+
     return (
         <Screen>
             <Title>TOP 5 CUSTOMERS</Title>
 
             <LeaderboardContainer>
-                {topCustomers.length === 0 ? (
-                    <Paragraph>There is no data available to display the ranking.</Paragraph>
+                {hasData ? (
+                    <LeaderboardDataList customers={topCustomers} />
                 ) : (
-                    <LeaderboardList>
-                        {topCustomers.map((customer) => (
-                            <LeaderboardItem key={customer.customerData}>
-                                {customer.customerData}
-                                <LeaderboardPoints>
-                                    {customer.points} pkt
-                                </LeaderboardPoints>
-                            </LeaderboardItem>
-                        ))}
-                    </LeaderboardList>
+                    <EmptyStateMessage />
                 )}
             </LeaderboardContainer>
 
