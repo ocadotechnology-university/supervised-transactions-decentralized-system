@@ -12,7 +12,11 @@ function isValidTransaction(data: any): data is Transaction {
 function getSortedScores(customerScores: Record<string, number>) {
     const entries = Object.entries(customerScores);
 
-    entries.sort((a, b) => b[1] - a[1]);
+    // .sort method transforms dict into array 
+    // [0] - object key
+    // [1] - object value
+    // .sort compares second entry with first to sort
+    entries.sort((first, second) => second[1] - first[1]);
 
     const sortedLeaderboard = entries.map(entry => {
         return {
