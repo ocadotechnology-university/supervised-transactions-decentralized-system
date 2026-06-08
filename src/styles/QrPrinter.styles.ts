@@ -2,9 +2,8 @@ import styled from "styled-components";
 
 export const QrContainer = styled.div`
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
     margin: 20px auto;
-    min-height: 250px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,6 +11,7 @@ export const QrContainer = styled.div`
     border-radius: 16px;
     padding: 5px;
     box-sizing: border-box;
+    aspect-ratio: 1 / 1;
 `;
 
 export const QrSvgWrapper = styled.div`

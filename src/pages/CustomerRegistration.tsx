@@ -6,7 +6,7 @@ import type { CustomerEntry } from "../utils/types.ts";
 import { Screen, Title, ButtonContainer, Button, Input, ErrorText } from "../styles/common.styles.ts";
 import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
 
-const MAX_NAME_LENGTH = 20;
+const MAX_NAME_LENGTH = 16;
 
 export default function CustomerRegistration() {
     const navigate = useNavigate();

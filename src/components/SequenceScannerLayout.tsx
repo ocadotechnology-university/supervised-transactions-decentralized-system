@@ -1,6 +1,5 @@
 import QrScanHandler from "./QrScanHandler";
-import { Button, ButtonContainer } from "../styles/common.styles.ts";
-import { AdditionalButtonWrapper, SequenceScannerWrapper } from "../styles/SequenceScannerLayout.styles.ts";
+import { Button } from "../styles/common.styles.ts";
 
 type SequenceScannerLayoutProps = {
     title: string;
@@ -17,27 +16,22 @@ export default function SequenceScannerLayout({ title, expectedQrCount, scannedQ
 
     const showEarlyFinish = scannedQrCount > 0 && expectedQrCount && scannedQrCount < expectedQrCount;
 
-    return (
-        <SequenceScannerWrapper>
-            <QrScanHandler
-                title={title}
-                subtitle={sequenceSubtitle}
-                scanSuccessHandler={onScanSuccess}
-            />
+    const earlyFinishButton = showEarlyFinish ? (
+        <Button
+            onClick={onFinalizeEarly}
+            disabled={pendingQrCount > 0}
+            style={{ backgroundColor: pendingQrCount > 0 ? "#918f8f" : "#e55555" }}
+        >
+            {pendingQrCount > 0 ? `VERIFYING ${pendingQrCount}...` : `FINISH EARLY (${successfulCount} VALID)`}
+        </Button>
+    ) : null;
 
-            {showEarlyFinish && (
-                <AdditionalButtonWrapper>
-                    <ButtonContainer>
-                        <Button
-                            onClick={onFinalizeEarly}
-                            disabled={pendingQrCount > 0}
-                            style={{ backgroundColor: pendingQrCount > 0 ? "#918f8f" : "#e55555" }}
-                        >
-                            {pendingQrCount > 0 ? `VERIFYING ${pendingQrCount}...` : `FINISH EARLY (${successfulCount} VALID)`}
-                        </Button>
-                    </ButtonContainer>
-                </AdditionalButtonWrapper>
-            )}
-        </SequenceScannerWrapper>
+    return (
+        <QrScanHandler
+            title={title}
+            subtitle={sequenceSubtitle}
+            scanSuccessHandler={onScanSuccess}
+            additionalButton={earlyFinishButton}
+        />
     );
 }

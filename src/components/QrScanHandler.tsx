@@ -1,7 +1,7 @@
-import {useEffect, useRef, useState} from 'react';
+import {type ReactNode, useEffect, useRef, useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import QrScanner from 'qr-scanner';
-import {Button, ButtonContainer, ErrorText, Input, Paragraph, Screen, Title} from "../styles/common.styles.ts";
+import { Button, ButtonContainer, ErrorText, Input, Paragraph, Screen, Title } from "../styles/common.styles.ts";
 import { Video, VideoContainer, ScannerWrapper } from "../styles/QrScanHandler.styles.ts";
 
 type QrScanProps = {
@@ -64,11 +64,12 @@ type QrScanHandlerProps = {
     title: string;
     subtitle?: string;
     scanSuccessHandler: (result: string) => void;
+    additionalButton?: ReactNode;
 }
 
 type InputMode = "menu" | "camera" | "manual";
 
-export default function QrScanHandler({ title, subtitle, scanSuccessHandler }: QrScanHandlerProps) {
+export default function QrScanHandler({ title, subtitle, scanSuccessHandler, additionalButton }: QrScanHandlerProps) {
     const navigate = useNavigate();
 
     const [mode, setMode] = useState<InputMode>("menu");
@@ -103,6 +104,7 @@ export default function QrScanHandler({ title, subtitle, scanSuccessHandler }: Q
                     </ScannerWrapper>
 
                     <ButtonContainer>
+                        {additionalButton}
                         <Button onClick={() => setMode("menu")}>
                             CANCEL
                         </Button>
@@ -122,6 +124,7 @@ export default function QrScanHandler({ title, subtitle, scanSuccessHandler }: Q
                         <Button onClick={() => scanSuccessHandler(manualInput)}>
                             OK
                         </Button>
+                        {additionalButton}
                         <Button onClick={() => setMode("menu")}>
                             CANCEL
                         </Button>
