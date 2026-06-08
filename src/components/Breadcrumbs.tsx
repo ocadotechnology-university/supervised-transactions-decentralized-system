@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { BreadcrumbWrapper, BreadcrumbItem, BreadcrumbLink, BreadcrumbCurrent, Separator } from "../styles/breadcrumb.styles";
+import { BreadcrumbWrapper, BreadcrumbItem, BreadcrumbLink, BreadcrumbCurrent, Separator } from "../styles/Breadcrumb.styles.ts";
 
 const labels: Record<string, string> = {
     customer: "Customer",
