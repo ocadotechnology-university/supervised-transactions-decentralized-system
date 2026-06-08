@@ -33,3 +33,8 @@ export const FooterLink = styled.a`
         outline-offset: 4px;
     }
 `;
+
+export const FooterText = styled.span`
+    font-size: 14px;
+    margin-right: 8px;
+`;
