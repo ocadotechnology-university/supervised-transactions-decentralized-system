@@ -10,6 +10,7 @@ export const BreadcrumbWrapper = styled.nav`
     align-items: center;
     flex-wrap: nowrap;
     gap: 10px;
+    flex-shrink: 0;
 
     background: ${({ theme }) => theme.colors.background};
     font-family: 'Balsamiq Sans', cursive;

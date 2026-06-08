@@ -6,7 +6,6 @@ export const GlobalStyle = createGlobalStyle`
         padding: 0;
         width: 100%;
         height: 100%;
-        overflow: hidden; 
         scroll-behavior: smooth;
     }
 `;
@@ -15,14 +14,12 @@ export const AppLayout = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100vh;
     height: 100dvh;
 `;
 
 export const MainContent = styled.main`
     flex: 1;
     width: 100%;
-    overflow-y: hidden;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -52,7 +49,7 @@ export const Title = styled.h1`
 export const ButtonContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 20px;
     width: 100%;
     max-width: 320px;
 `;

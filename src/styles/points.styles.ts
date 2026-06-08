@@ -4,7 +4,7 @@ export const PointsContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 60px;
+    margin-bottom: 20px;
 `;
 
 export const Circle = styled.div`
@@ -44,7 +44,7 @@ export const PointsGrid = styled.div`
     width: 100%;
     max-width: 320px;
     margin-top: 40px;
-    max-height: 400px; 
+    max-height: 250px; 
     overflow-y: auto;   
     padding-right: 6px; 
     &::-webkit-scrollbar {
