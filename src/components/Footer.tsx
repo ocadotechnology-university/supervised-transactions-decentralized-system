@@ -1,4 +1,4 @@
-import { FooterWrapper, FooterLink } from "../styles/footer.styles";
+import { FooterWrapper, FooterLink } from "../styles/Footer.styles.ts";
 
 export default function Footer() {
     return (

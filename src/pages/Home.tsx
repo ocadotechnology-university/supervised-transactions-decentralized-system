@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useRef} from "react";
 import { ThemeProvider } from "styled-components";
-import { Screen, Title, ErrorText, Button } from "../styles/common.styles.ts";
+import {Screen, Title, ErrorText, Button, Paragraph} from "../styles/common.styles.ts";
 import { HomeContent, CardCarouselContainer, ScrollTrack, RoleCard, InfoButton, EnterRoleButton, InfoDialog } from "../styles/Home.styles.ts";
 import { getThemeByRole } from "../styles/theme.ts";
 import type { UserRole } from "../styles/theme.ts";
@@ -125,7 +125,7 @@ export default function Home() {
                     <InfoDialog ref={dialogRef} onClick={closeInfo}>
                         <div onClick={(e) => e.stopPropagation()}>
                             <Title as="h3" style={{ fontSize: "20px", marginTop: 0 }}>Role Details</Title>
-                            <p style={{ lineHeight: "1.5", fontSize: "15px", marginBottom: "24px" }}>{infoText}</p>
+                            <Paragraph>{infoText}</Paragraph>
                             <Button onClick={closeInfo} style={{ padding: "10px 24px", width: "auto" }}>
                                 CLOSE
                             </Button>

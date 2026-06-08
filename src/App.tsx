@@ -17,7 +17,7 @@ import TraderMain from "./pages/TraderMain.tsx";
 import TraderRegistration from "./pages/TraderRegistration.tsx";
 import TraderPoints from "./pages/TraderPoints.tsx";
 import Breadcrumbs from "./components/Breadcrumbs";
-import Footer from "./components/footer.tsx";
+import Footer from "./components/Footer.tsx";
 import { STORAGE_KEYS } from "./utils/localStorageKeys.ts";
 
 export default function App() {
