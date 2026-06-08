@@ -8,7 +8,7 @@ export const BreadcrumbWrapper = styled.nav`
 
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 10px;
 
     background: ${({ theme }) => theme.colors.background};
@@ -17,6 +17,15 @@ export const BreadcrumbWrapper = styled.nav`
     position: sticky;
     top: 0;
     z-index: 100;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+    
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
     
 `;
 
@@ -24,6 +33,8 @@ export const BreadcrumbItem = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-shrink: 0;
+    white-space: nowrap;
 `;
 
 export const BreadcrumbLink = styled(Link)`
