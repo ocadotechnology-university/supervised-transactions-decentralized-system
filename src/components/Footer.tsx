@@ -1,9 +1,9 @@
-import { FooterWrapper, FooterLink } from "../styles/Footer.styles.ts";
+import {FooterWrapper, FooterLink, FooterText} from "../styles/Footer.styles.ts";
 
 export default function Footer() {
     return (
         <FooterWrapper>
-            <span>© {new Date().getFullYear()} GitHub</span>
+            <FooterText>© {new Date().getFullYear()} GitHub</FooterText>
             <FooterLink
                 href="https://github.com/ocadotechnology-university/supervised-transactions-decentralized-system"
                 target="_blank"

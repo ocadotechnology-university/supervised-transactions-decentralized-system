@@ -87,7 +87,7 @@ export default function Home() {
     return (
         <Screen>
             <HomeContent>
-                <Title>WHO ARE YOU</Title>
+                <Title>WHO ARE YOU?</Title>
 
                 {error && <ErrorText>{error}</ErrorText>}
 
