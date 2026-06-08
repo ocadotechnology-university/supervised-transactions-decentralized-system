@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 import type { Transaction, CustomerEntry } from "../utils/types.ts";
 import { Screen, Title, ButtonContainer, Button } from "../styles/common.styles.ts";
 import { PointsContainer, Circle, PointsValue, PointsLabel } from "../styles/points.styles.ts";
-
-const CUSTOMER_KEY = "customerData";
-const POINTS_KEY = "customerTransactions";
+import {STORAGE_KEYS} from "../utils/localStorageKeys.ts";
 
 export default function CustomerMain() {
     const navigate = useNavigate();
@@ -14,13 +12,13 @@ export default function CustomerMain() {
     const [points, setPoints] = useState(0);
 
     useEffect(() => {
-        const storedCustomerData = localStorage.getItem(CUSTOMER_KEY);
+        const storedCustomerData = localStorage.getItem(STORAGE_KEYS.CUSTOMER_DATA);
         if (storedCustomerData) {
             const customerData: CustomerEntry = JSON.parse(storedCustomerData);
             setName(`${customerData.name}#${customerData.id}`);
         }
 
-        const storedCustomerPoints = localStorage.getItem(POINTS_KEY);
+        const storedCustomerPoints = localStorage.getItem(STORAGE_KEYS.CUSTOMER_TRANSACTIONS);
         if (storedCustomerPoints) {
             const storedTransactions: Transaction[] = JSON.parse(storedCustomerPoints);
             const customerPoints = storedTransactions.reduce((accumulator, transaction) => {

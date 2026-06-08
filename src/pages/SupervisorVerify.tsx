@@ -6,8 +6,7 @@ import { validateSupervisorQrData } from "../utils/validateQr.ts";
 import { useSequenceScanner } from "../hooks/useSequenceScanner.ts";
 import type { SequenceSummary } from "../hooks/useSequenceScanner.ts";
 import SequenceScannerLayout from "../components/SequenceScannerLayout.tsx";
-
-const TRADERS_KEY = "traders";
+import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
 
 const verifyTransactionCrypto = async (transactionData: Transaction, message: object, foundTrader: TraderEntry): Promise<boolean> => {
     try {
@@ -30,7 +29,7 @@ export default function SupervisorVerify() {
     const allTradersRef = useRef<TraderEntry[]>([]);
 
     useEffect(() => {
-        allTradersRef.current = JSON.parse(localStorage.getItem(TRADERS_KEY) || "[]");
+        allTradersRef.current = JSON.parse(localStorage.getItem(STORAGE_KEYS.SUPERVISOR_TRADERS) || "[]");
     }, []);
 
     const processTransaction = useCallback(async (parsedData: ScannedCashout) => {
@@ -80,7 +79,7 @@ export default function SupervisorVerify() {
                 const deduction = pointsDeductionMapRef.current.get(trader.name);
                 return deduction ? { ...trader, points: trader.points - deduction } : trader;
             });
-            localStorage.setItem(TRADERS_KEY, JSON.stringify(updatedTraders));
+            localStorage.setItem(STORAGE_KEYS.SUPERVISOR_TRADERS, JSON.stringify(updatedTraders));
             summary.successfulTransactions.forEach(transaction => localStorage.setItem(transaction.signature, JSON.stringify(transaction)));
 
             const title = summary.successfulTransactions.length === summary.totalExpected ? "VERIFICATION SUCCESSFUL" : "PARTIAL VERIFICATION";

@@ -3,8 +3,7 @@ import {useEffect, useState} from "react";
 import type { TraderEntry } from "../utils/types.ts";
 import { Button, ButtonContainer, Screen, Title } from "../styles/common.styles.ts";
 import { Circle, PointsContainer, PointsLabel, PointsValue } from "../styles/points.styles.ts";
-
-const TRADER_KEY = "traderData";
+import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
 
 export default function TraderMain() {
     const navigate = useNavigate();
@@ -13,7 +12,7 @@ export default function TraderMain() {
     const [points, setPoints] = useState(0);
 
     useEffect(() => {
-        const storedTraderData = localStorage.getItem(TRADER_KEY);
+        const storedTraderData = localStorage.getItem(STORAGE_KEYS.TRADER_DATA);
         if (storedTraderData) {
             const traderData: TraderEntry = JSON.parse(storedTraderData);
             setName(traderData.name.toUpperCase());
