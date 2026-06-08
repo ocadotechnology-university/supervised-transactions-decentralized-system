@@ -50,8 +50,8 @@ export default function SupervisorVerify() {
         };
 
         if (localStorage.getItem(transactionData.signature)) {
-            const originalTransaction: Transaction = JSON.parse(localStorage.getItem(transactionData.signature)!);
-            return { error: `Duplicate transaction (already scanned by customer ${originalTransaction.customerData}).` };
+            const originalTransaction = JSON.parse(localStorage.getItem(transactionData.signature)!);
+            return { error: `Duplicate transaction (already scanned by customer ${originalTransaction}).` };
         }
 
         const foundTrader = allTradersRef.current.find(transaction => transaction.name === transactionData.name);
@@ -80,7 +80,14 @@ export default function SupervisorVerify() {
                 return deduction ? { ...trader, points: trader.points - deduction } : trader;
             });
             localStorage.setItem(STORAGE_KEYS.SUPERVISOR_TRADERS, JSON.stringify(updatedTraders));
-            summary.successfulTransactions.forEach(transaction => localStorage.setItem(transaction.signature, JSON.stringify(transaction)));
+            summary.successfulTransactions.forEach(transaction => localStorage.setItem(transaction.signature, JSON.stringify(transaction.customerData)));
+
+            const currentRanking = JSON.parse(localStorage.getItem(STORAGE_KEYS.SUPERVISOR_RANKING) || "{}");
+            const rankingPointsTotal = currentCustomerRef.current ? (currentRanking[currentCustomerRef.current] || 0) + summary.totalPoints : summary.totalPoints;
+            if (currentCustomerRef.current) {
+                const updatedRanking = { ...currentRanking, [currentCustomerRef.current]: rankingPointsTotal };
+                localStorage.setItem(STORAGE_KEYS.SUPERVISOR_RANKING, JSON.stringify(updatedRanking));
+            }
 
             const title = summary.successfulTransactions.length === summary.totalExpected ? "VERIFICATION SUCCESSFUL" : "PARTIAL VERIFICATION";
             navigate("/supervisor/verify/results", {
