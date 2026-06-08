@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { generateEd25519KeyPair, exportKey } from "../utils/crypto.ts";
 import type { TraderEntry } from "../utils/types.ts";
 import { Screen, Title, ButtonContainer, Button, Input, ErrorText } from "../styles/common.styles.ts";
+import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
 
-const TRADERS_KEY = "traders";
 const MAX_NAME_LENGTH = 20;
 
 export default function SupervisorRegister() {
@@ -51,7 +51,7 @@ export default function SupervisorRegister() {
         setNameError("");
         setPointsError("");
 
-        const storedTraders = localStorage.getItem(TRADERS_KEY)
+        const storedTraders = localStorage.getItem(STORAGE_KEYS.SUPERVISOR_TRADERS)
         const allTraders: TraderEntry[] = storedTraders ? JSON.parse(storedTraders) : [];
 
         if (allTraders.some((trader) => trader.name === trimmedName)) {
@@ -75,7 +75,7 @@ export default function SupervisorRegister() {
             };
 
             const updatedTraders = [...allTraders, newTrader];
-            localStorage.setItem(TRADERS_KEY, JSON.stringify(updatedTraders));
+            localStorage.setItem(STORAGE_KEYS.SUPERVISOR_TRADERS, JSON.stringify(updatedTraders));
 
             const qrPayload = {
                 title: "SHOW CODE TO TRADER",

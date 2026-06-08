@@ -5,8 +5,7 @@ import { validateCustomerQrData } from "../utils/validateQr.ts";
 import { useSequenceScanner } from "../hooks/useSequenceScanner.ts";
 import type { SequenceSummary } from "../hooks/useSequenceScanner.ts";
 import SequenceScannerLayout from "../components/SequenceScannerLayout.tsx";
-
-const TRANSACTIONS_KEY = "customerTransactions";
+import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
 
 export default function CustomerScan() {
     const navigate = useNavigate();
@@ -21,7 +20,7 @@ export default function CustomerScan() {
             customerData: parsedData.customerData
         };
 
-        const allTransactions: Transaction[] = JSON.parse(localStorage.getItem(TRANSACTIONS_KEY) || "[]");
+        const allTransactions: Transaction[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.CUSTOMER_TRANSACTIONS) || "[]");
         const isDuplicate = allTransactions.some(transaction => transaction.id === newTransaction.id);
 
         if (isDuplicate) {
@@ -31,10 +30,10 @@ export default function CustomerScan() {
     }, []);
 
     const onFinalize = useCallback((summary: SequenceSummary) => {
-        const allTransactions: Transaction[] = JSON.parse(localStorage.getItem(TRANSACTIONS_KEY) || "[]");
+        const allTransactions: Transaction[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.CUSTOMER_TRANSACTIONS) || "[]");
 
         if (summary.successfulTransactions.length > 0) {
-            localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify([...allTransactions, ...summary.successfulTransactions]));
+            localStorage.setItem(STORAGE_KEYS.CUSTOMER_TRANSACTIONS, JSON.stringify([...allTransactions, ...summary.successfulTransactions]));
 
             const isSingle = summary.totalExpected === 1;
             const title = isSingle ? "YOU GOT" : summary.successfulTransactions.length === summary.totalExpected ? "SHARE SUCCESSFUL" : "PARTIAL SHARE";

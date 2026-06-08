@@ -3,9 +3,7 @@ import { useEffect, useState } from "react";
 import type { Transaction, CustomerEntry } from "../utils/types.ts";
 import {Screen, Title, Button, ButtonContainer, Paragraph} from "../styles/common.styles.ts";
 import { PointsGrid } from "../styles/points.styles.ts";
-
-const CUSTOMER_KEY = "customerData";
-const TRANSACTIONS_KEY = "customerTransactions";
+import {STORAGE_KEYS} from "../utils/localStorageKeys.ts";
 
 export default function CustomerCashout() {
     const navigate = useNavigate();
@@ -14,13 +12,13 @@ export default function CustomerCashout() {
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
     useEffect(() => {
-        const storedCustomerData = localStorage.getItem(CUSTOMER_KEY);
+        const storedCustomerData = localStorage.getItem(STORAGE_KEYS.CUSTOMER_DATA);
         if (storedCustomerData) {
             const customerData: CustomerEntry = JSON.parse(storedCustomerData);
             setName(`${customerData.name}#${customerData.id}`);
         }
 
-        const storedTransactions = localStorage.getItem(TRANSACTIONS_KEY)
+        const storedTransactions = localStorage.getItem(STORAGE_KEYS.CUSTOMER_TRANSACTIONS)
         if (storedTransactions) {
             const parsedTransactions: Transaction[] = JSON.parse(storedTransactions);
             setTransactions(parsedTransactions);
@@ -68,7 +66,7 @@ export default function CustomerCashout() {
             qrData: qrDataList
         };
 
-        localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(remainingTransactions));
+        localStorage.setItem(STORAGE_KEYS.CUSTOMER_TRANSACTIONS, JSON.stringify(remainingTransactions));
         navigate("/customer/cashout/qr", { state: qrPayload });
     }
 

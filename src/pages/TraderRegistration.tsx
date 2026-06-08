@@ -4,12 +4,11 @@ import type { TraderEntry } from "../utils/types.ts";
 import QrScanHandler from "../components/QrScanHandler";
 import { useLocalStorage } from "usehooks-ts";
 import { validateTraderQrData } from "../utils/validateQr.ts";
-
-const TRADER_KEY = "traderData";
+import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
 
 export default function TraderRegistration() {
     const navigate = useNavigate();
-    const [, setTraderData] = useLocalStorage<TraderEntry | null>(TRADER_KEY, null);
+    const [, setTraderData] = useLocalStorage<TraderEntry | null>(STORAGE_KEYS.TRADER_DATA, null);
 
     const handleScanSuccess = useCallback(
         (scanResults: string) => {

@@ -18,6 +18,7 @@ import TraderRegistration from "./pages/TraderRegistration.tsx";
 import TraderPoints from "./pages/TraderPoints.tsx";
 import Breadcrumbs from "./components/Breadcrumbs";
 import Footer from "./components/footer.tsx";
+import { STORAGE_KEYS } from "./utils/localStorageKeys.ts";
 
 export default function App() {
     return (
@@ -31,10 +32,10 @@ export default function App() {
                         <Routes>
                             <Route path="/" element={<Home />} />
 
-                            <Route element={<ProtectedRoute storageKey="customerData" path="/customer" requireData={false} />}>
+                            <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.CUSTOMER_DATA} path="/customer" requireData={false} />}>
                                 <Route path="/customer/register" element={<CustomerRegistration />} />
                             </Route>
-                            <Route element={<ProtectedRoute storageKey="customerData" path="/customer/register" requireData={true} />}>
+                            <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.CUSTOMER_DATA} path="/customer/register" requireData={true} />}>
                                 <Route path="/customer" element={<CustomerMain />} />
                                 <Route path="/customer/scan" element={<CustomerScan />} />
                                 <Route path="/customer/scan/results" element={<ScanResults />} />
@@ -42,11 +43,11 @@ export default function App() {
                                 <Route path="/customer/cashout/qr" element={<QrPrinter />} />
                             </Route>
 
-                            <Route element={<ProtectedRoute storageKey="traderData" path="/trader" requireData={false} />}>
+                            <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.TRADER_DATA} path="/trader" requireData={false} />}>
                                 <Route path="/trader/register" element={<TraderRegistration />} />
                                 <Route path="/trader/register/results" element={<ScanResults />} />
                             </Route>
-                            <Route element={<ProtectedRoute storageKey="traderData" path="/trader/register" requireData={true} />}>
+                            <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.TRADER_DATA} path="/trader/register" requireData={true} />}>
                                 <Route path="/trader" element={<TraderMain />} />
                                 <Route path="/trader/points" element={<TraderPoints />} />
                                 <Route path="/trader/points/qr" element={<QrPrinter />} />

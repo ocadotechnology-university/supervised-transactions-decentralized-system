@@ -1,4 +1,5 @@
 import type { Transaction } from "./types";
+import {STORAGE_KEYS} from "./localStorageKeys.ts";
 
 function isValidTransaction(data: any): data is Transaction {
     return(
@@ -34,7 +35,7 @@ function getUsedTransactions(): Transaction[] {
     const allKeys = Object.keys(localStorage);
 
     allKeys.forEach(key => {
-        if (key === "trader" || key === "traders") {
+        if (key === STORAGE_KEYS.SUPERVISOR_TRADERS) {
             return;
         }
 

@@ -4,8 +4,8 @@ import { useLocalStorage } from "usehooks-ts";
 import {generateId} from "../utils/crypto.ts";
 import type { CustomerEntry } from "../utils/types.ts";
 import { Screen, Title, ButtonContainer, Button, Input, ErrorText } from "../styles/common.styles.ts";
+import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
 
-const CUSTOMER_KEY = "customerData";
 const MAX_NAME_LENGTH = 20;
 
 export default function CustomerRegistration() {
@@ -13,7 +13,7 @@ export default function CustomerRegistration() {
 
     const [name, setName] = useState("");
     const [nameError, setNameError] = useState("");
-    const [, setCustomerData] = useLocalStorage<CustomerEntry | null>(CUSTOMER_KEY, null);
+    const [, setCustomerData] = useLocalStorage<CustomerEntry | null>(STORAGE_KEYS.CUSTOMER_DATA, null);
 
     const checkNameValidationError = (trimmedName: string): string | null => {
         if (!trimmedName) {
