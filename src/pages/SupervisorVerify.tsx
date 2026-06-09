@@ -7,6 +7,7 @@ import { useSequenceScanner } from "../hooks/useSequenceScanner.ts";
 import type { SequenceSummary } from "../hooks/useSequenceScanner.ts";
 import SequenceScannerLayout from "../components/SequenceScannerLayout.tsx";
 import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
+import {startSession} from "../utils/startSession.ts";
 
 const verifyTransactionCrypto = async (transactionData: Transaction, message: object, foundTrader: TraderEntry): Promise<boolean> => {
     try {
@@ -75,6 +76,8 @@ export default function SupervisorVerify() {
 
     const onFinalize = useCallback((summary: SequenceSummary) => {
         if (summary.successfulTransactions.length > 0) {
+            startSession()
+
             const updatedTraders = allTradersRef.current.map(trader => {
                 const deduction = pointsDeductionMapRef.current.get(trader.name);
                 return deduction ? { ...trader, points: trader.points - deduction } : trader;
@@ -89,7 +92,7 @@ export default function SupervisorVerify() {
                 localStorage.setItem(STORAGE_KEYS.SUPERVISOR_RANKING, JSON.stringify(updatedRanking));
             }
 
-            const title = summary.successfulTransactions.length === summary.totalExpected ? "VERIFICATION SUCCESSFUL" : "PARTIAL VERIFICATION";
+            const title = summary.successfulTransactions.length === summary.totalExpected ? "Verification successful" : "Partial verification";
             navigate("/supervisor/verify/results", {
                 state: {
                     title,
@@ -102,7 +105,7 @@ export default function SupervisorVerify() {
         } else {
             navigate("/supervisor/verify/results", {
                 state: {
-                    title: "VERIFICATION FAILED",
+                    title: "Verification failed",
                     subtitle: `Verified 0 of ${summary.totalExpected} transactions for customer ${currentCustomerRef.current}`,
                     errors: summary.errors,
                     path: "/supervisor"
@@ -114,7 +117,7 @@ export default function SupervisorVerify() {
     const onFatalError = useCallback((errorMsg: string) => {
         navigate("/supervisor/verify/results", {
             state: {
-                title: "VERIFICATION FAILED",
+                title: "Verification failed",
                 subtitle: "Could not establish sequence.",
                 errors: [errorMsg],
                 path: "/supervisor"
@@ -132,7 +135,7 @@ export default function SupervisorVerify() {
 
     return (
         <SequenceScannerLayout
-            title="SCAN CASHOUT"
+            title="Scan cashout"
             expectedQrCount={scanner.expectedQrCount}
             scannedQrCount={scanner.scannedQrCount}
             pendingQrCount={scanner.pendingQrCount}

@@ -1,6 +1,5 @@
 import QrScanHandler from "./QrScanHandler";
-import { Button, ButtonContainer } from "../styles/common.styles.ts";
-import { AdditionalButtonWrapper, SequenceScannerWrapper } from "../styles/SequenceScannerLayout.styles.ts";
+import { Button } from "../styles/common.styles.ts";
 
 type SequenceScannerLayoutProps = {
     title: string;
@@ -13,31 +12,28 @@ type SequenceScannerLayoutProps = {
 }
 
 export default function SequenceScannerLayout({ title, expectedQrCount, scannedQrCount, pendingQrCount, successfulCount, onScanSuccess, onFinalizeEarly }: SequenceScannerLayoutProps) {
-    const sequenceSubtitle = expectedQrCount && expectedQrCount > 1 ? `SCANNED ${scannedQrCount} OF ${expectedQrCount}` : "";
+    const sequenceSubtitle = expectedQrCount && expectedQrCount > 1 ? `Scanned ${scannedQrCount} of ${expectedQrCount}` : "";
 
     const showEarlyFinish = scannedQrCount > 0 && expectedQrCount && scannedQrCount < expectedQrCount;
+    const isQrScanPending = pendingQrCount > 0;
+    const buttonVariant = isQrScanPending ? "pending" : "ready";
+
+    const earlyFinishButton = showEarlyFinish ? (
+        <Button
+            onClick={onFinalizeEarly}
+            disabled={isQrScanPending}
+            variant={buttonVariant}
+        >
+            {isQrScanPending ? `Verifying ${pendingQrCount}...` : `Finish early (${successfulCount} valid)`}
+        </Button>
+    ) : null;
 
     return (
-        <SequenceScannerWrapper>
-            <QrScanHandler
-                title={title}
-                subtitle={sequenceSubtitle}
-                scanSuccessHandler={onScanSuccess}
-            />
-
-            {showEarlyFinish && (
-                <AdditionalButtonWrapper>
-                    <ButtonContainer>
-                        <Button
-                            onClick={onFinalizeEarly}
-                            disabled={pendingQrCount > 0}
-                            style={{ backgroundColor: pendingQrCount > 0 ? "#918f8f" : "#e55555" }}
-                        >
-                            {pendingQrCount > 0 ? `VERIFYING ${pendingQrCount}...` : `FINISH EARLY (${successfulCount} VALID)`}
-                        </Button>
-                    </ButtonContainer>
-                </AdditionalButtonWrapper>
-            )}
-        </SequenceScannerWrapper>
+        <QrScanHandler
+            title={title}
+            subtitle={sequenceSubtitle}
+            scanSuccessHandler={onScanSuccess}
+            additionalButton={earlyFinishButton}
+        />
     );
 }

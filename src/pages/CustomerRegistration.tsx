@@ -6,7 +6,7 @@ import type { CustomerEntry } from "../utils/types.ts";
 import { Screen, Title, ButtonContainer, Button, Input, ErrorText } from "../styles/common.styles.ts";
 import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
 
-const MAX_NAME_LENGTH = 20;
+const MAX_NAME_LENGTH = 16;
 
 export default function CustomerRegistration() {
     const navigate = useNavigate();
@@ -39,7 +39,6 @@ export default function CustomerRegistration() {
         const payload: CustomerEntry = {
             name: trimmedName.toUpperCase(),
             id: generateId(),
-            timestamp: Date.now(),
         };
 
         setCustomerData(payload);
@@ -47,10 +46,10 @@ export default function CustomerRegistration() {
 
     return (
         <Screen>
-            <Title>CUSTOMER REGISTRATION</Title>
+            <Title>Customer registration</Title>
 
             <Input
-                placeholder="ENTER YOUR NAME"
+                placeholder={"Enter your name".toUpperCase()}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
             />
@@ -58,11 +57,11 @@ export default function CustomerRegistration() {
 
             <ButtonContainer>
                 <Button onClick={handleRegister}>
-                    OK
+                    Ok
                 </Button>
 
                 <Button onClick={() => navigate("/", { replace: true })}>
-                    BACK
+                    Back
                 </Button>
             </ButtonContainer>
         </Screen>

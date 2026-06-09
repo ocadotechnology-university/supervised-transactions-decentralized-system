@@ -2,15 +2,33 @@ import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
     html, body, #root {
-        height: 100%;
         margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        scroll-behavior: smooth;
     }
 `;
 
-export const Screen = styled.div`
-    min-height: 100vh;
+export const AppLayout = styled.div`
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    background-color: #eaeaea;
+    height: 100dvh;
+`;
+
+export const MainContent = styled.main`
+    flex: 1;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+`;
+
+export const Screen = styled.div`
+    height: 100%;
+    width: 100%;
+    background-color: ${({ theme }) => theme.colors.background};
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,19 +43,35 @@ export const Title = styled.h1`
     text-align: center;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    color: ${({ theme }) => theme.colors.text};
+    text-transform: uppercase;
 `;
 
-export const ButtonContainer = styled.div`
+export const ButtonContainer = styled.div<{ marginTop?: string }>`
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 20px;
     width: 100%;
     max-width: 320px;
+    margin-top: ${({ marginTop }) => marginTop || "0px"};
 `;
 
-export const Button = styled.button`
-    background-color: #111;
-    color: white;
+const EARLY_SEQUENCE_READY_COLOR = "#e55555";
+const EARLY_SEQUENCE_PENDING_COLOR = "#918f8f";
+const EARLY_SEQUENCE_TEXT_COLOR = "#000000";
+
+type ButtonVariant = "pending" | "ready";
+
+export const Button = styled.button<{ variant?: ButtonVariant; isSelected?: boolean}>`
+    background-color: ${({ theme, variant }) => {
+        switch (variant) {
+            case "ready": return EARLY_SEQUENCE_READY_COLOR;
+            case "pending": return EARLY_SEQUENCE_PENDING_COLOR;
+            default: return theme.colors.buttonBackground;
+        }
+    }};
+    color: ${({ theme, variant }) =>
+            variant === "ready" || variant === "pending" ? EARLY_SEQUENCE_TEXT_COLOR : theme.colors.buttonText};
     padding: 18px;
     border: none;
     border-radius: 8px;
@@ -45,6 +79,16 @@ export const Button = styled.button`
     letter-spacing: 1px;
     font-family: 'Balsamiq Sans', cursive;
     cursor: pointer;
+    box-shadow: 0 4px 12px ${({ theme, variant }) => {
+        switch (variant) {
+            case "ready": return EARLY_SEQUENCE_READY_COLOR;
+            case "pending": return EARLY_SEQUENCE_PENDING_COLOR;
+            default: return theme.colors.buttonBackground;
+        }
+    }}40;
+    text-transform: uppercase;
+    opacity: ${({ isSelected }) => (isSelected === false ? 0.5 : 1)};
+    transition: opacity 0.1s ease-in-out;
 `;
 
 export const Input = styled.input`
@@ -53,15 +97,16 @@ export const Input = styled.input`
     padding: 16px;
     margin-bottom: 30px;
     border-radius: 25px;
-    border: 1px solid #ccc;
+    border: 1px solid ${({ theme }) => theme.colors.inputBorder};
     text-align: center;
     font-size: 16px;
     font-family: 'Balsamiq Sans', cursive;
     background: transparent;
+    color: ${({ theme }) => theme.colors.text};
 `;
 
 export const ErrorText = styled.p`
-    color: red;
+    color: ${({ theme }) => theme.colors.error};
     font-size: 14px;
     margin-top: -10px;
     margin-bottom: 10px;
@@ -73,4 +118,5 @@ export const Paragraph = styled.p`
     margin-top: -10px;
     margin-bottom: 10px;
     text-align: center;
+    color: ${({ theme }) => theme.colors.text};
 `;

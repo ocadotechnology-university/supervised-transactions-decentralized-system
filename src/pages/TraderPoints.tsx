@@ -5,6 +5,7 @@ import { Button, ButtonContainer, ErrorText, Screen, Title } from "../styles/com
 import { PointsGrid } from "../styles/points.styles.ts";
 import { importKey, signData, encodeData, bufferToBase64, generateId } from "../utils/crypto.ts";
 import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
+import {startSession} from "../utils/startSession.ts";
 
 const POINT_VALUES = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
@@ -48,7 +49,7 @@ export default function TraderPoints() {
             const signature = bufferToBase64(signatureBuffer);
 
             const qrPayload = {
-                title: "SHOW CODE TO CUSTOMER",
+                title: "Show code to customer",
                 qrData: [{
                     message,
                     signature
@@ -60,7 +61,10 @@ export default function TraderPoints() {
                 points: trader.points - amount,
             };
 
+            startSession()
+
             localStorage.setItem(STORAGE_KEYS.TRADER_DATA, JSON.stringify(updatedTrader));
+
             navigate("/trader/points/qr", { state: qrPayload });
 
         } catch (error) {
@@ -75,7 +79,7 @@ export default function TraderPoints() {
 
     return (
         <Screen>
-            <Title>SELECT POINT AMOUNT</Title>
+            <Title>Select point amount</Title>
 
             <PointsGrid>
                 {POINT_VALUES.map((val: number) => (
@@ -88,10 +92,10 @@ export default function TraderPoints() {
                 ))}
             </PointsGrid>
 
-            <ButtonContainer style={{ marginTop: "40px" }}>
+            <ButtonContainer marginTop="40px">
                 {error && <ErrorText>{error}</ErrorText>}
                 <Button onClick={() => navigate(-1)}>
-                    BACK
+                    Back
                 </Button>
             </ButtonContainer>
         </Screen>

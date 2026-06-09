@@ -6,6 +6,7 @@ import { useSequenceScanner } from "../hooks/useSequenceScanner.ts";
 import type { SequenceSummary } from "../hooks/useSequenceScanner.ts";
 import SequenceScannerLayout from "../components/SequenceScannerLayout.tsx";
 import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
+import {startSession} from "../utils/startSession.ts";
 
 export default function CustomerScan() {
     const navigate = useNavigate();
@@ -33,10 +34,12 @@ export default function CustomerScan() {
         const allTransactions: Transaction[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.CUSTOMER_TRANSACTIONS) || "[]");
 
         if (summary.successfulTransactions.length > 0) {
+            startSession()
+
             localStorage.setItem(STORAGE_KEYS.CUSTOMER_TRANSACTIONS, JSON.stringify([...allTransactions, ...summary.successfulTransactions]));
 
             const isSingle = summary.totalExpected === 1;
-            const title = isSingle ? "YOU GOT" : summary.successfulTransactions.length === summary.totalExpected ? "SHARE SUCCESSFUL" : "PARTIAL SHARE";
+            const title = isSingle ? "You got" : summary.successfulTransactions.length === summary.totalExpected ? "transfer successful" : "partial transfer";
             const subtitle = isSingle ? undefined : `Received ${summary.successfulTransactions.length} of ${summary.totalExpected} transactions`;
 
             navigate("/customer/scan/results", {
@@ -53,7 +56,7 @@ export default function CustomerScan() {
 
             navigate("/customer/scan/results", {
                 state: {
-                    title: "TRANSACTION FAILED",
+                    title: "Transaction failed",
                     subtitle,
                     errors: summary.errors,
                     path: "/customer"
@@ -65,7 +68,7 @@ export default function CustomerScan() {
     const onFatalError = useCallback((errorMsg: string) => {
         navigate("/customer/scan/results", {
             state: {
-                title: "TRANSACTION FAILED",
+                title: "Transaction failed",
                 subtitle: "Could not establish sequence.",
                 errors: [errorMsg],
                 path: "/customer"
@@ -83,7 +86,7 @@ export default function CustomerScan() {
 
     return (
         <SequenceScannerLayout
-            title="SCAN TRANSACTION"
+            title="Scan transaction"
             expectedQrCount={scanner.expectedQrCount}
             scannedQrCount={scanner.scannedQrCount}
             pendingQrCount={scanner.pendingQrCount}

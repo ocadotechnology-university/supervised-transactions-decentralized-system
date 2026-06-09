@@ -5,7 +5,6 @@ export const validateTraderQrData = (data: any): data is TraderEntry => {
         data &&
         typeof data.name === "string" &&
         typeof data.points === "number" &&
-        typeof data.timestamp === "number" &&
         !!data.key
     );
 };

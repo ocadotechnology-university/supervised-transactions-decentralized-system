@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { Transaction, CustomerEntry } from "../utils/types.ts";
-import { Screen, Title, Button, ButtonContainer } from "../styles/common.styles.ts";
+import {Screen, Title, Button, ButtonContainer, Paragraph} from "../styles/common.styles.ts";
 import { PointsGrid } from "../styles/points.styles.ts";
 import {STORAGE_KEYS} from "../utils/localStorageKeys.ts";
 
@@ -62,7 +62,7 @@ export default function CustomerCashout() {
         }));
 
         const qrPayload = {
-            title: "SHOW CODES TO SUPERVISOR FOR VERIFICATION OR TO CUSTOMER TO SHARE",
+            title: "Show codes to supervisor or to customer",
             qrData: qrDataList
         };
 
@@ -72,7 +72,8 @@ export default function CustomerCashout() {
 
     return (
         <Screen>
-            <Title>SELECT TRANSACTIONS</Title>
+            <Title>Select transactions</Title>
+            <Paragraph>Selected transactions will be removed from your account</Paragraph>
 
             {transactions.length > 0 ? (
                 <PointsGrid>
@@ -82,9 +83,7 @@ export default function CustomerCashout() {
                             <Button
                                 key={transaction.id}
                                 onClick={() => toggleSelect(transaction.id)}
-                                style={{
-                                    opacity: isSelected ? 1 : 0.5,
-                                }}
+                                isSelected={isSelected}
                             >
                                 {transaction.points}
                             </Button>
@@ -92,16 +91,16 @@ export default function CustomerCashout() {
                     })}
                 </PointsGrid>
             ) : (
-                <Title>NO TRANSACTIONS</Title>
+                <Title>No transactions</Title>
             )}
 
-            <ButtonContainer style={{ marginTop: "40px"}}>
+            <ButtonContainer marginTop="40px">
                 <Button onClick={handleCashoutSequence}>
-                    CASHOUT/SHARE {selectedIds.size} SELECTED
+                    Cashout/Transfer {selectedIds.size} selected
                 </Button>
 
                 <Button onClick={() => navigate(-1)}>
-                    BACK
+                    Back
                 </Button>
             </ButtonContainer>
         </Screen>

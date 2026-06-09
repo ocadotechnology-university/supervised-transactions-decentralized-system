@@ -1,7 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import type { TraderEntry } from "../utils/types.ts";
-import { Button, ButtonContainer, Screen, Title } from "../styles/common.styles.ts";
+import {Button, ButtonContainer, Screen, Title} from "../styles/common.styles.ts";
 import { Circle, PointsContainer, PointsLabel, PointsValue } from "../styles/points.styles.ts";
 import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
 
@@ -32,12 +32,12 @@ export default function TraderMain() {
                 <Circle>
                     <PointsValue>{points}</PointsValue>
                 </Circle>
-                <PointsLabel>POINTS</PointsLabel>
+                <PointsLabel>Points</PointsLabel>
             </PointsContainer>
 
             <ButtonContainer>
                 <Button onClick={() => navigate("/trader/points")}>
-                    TRANSFER POINTS
+                    Transfer points
                 </Button>
             </ButtonContainer>
         </Screen>

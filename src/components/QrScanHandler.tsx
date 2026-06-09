@@ -1,7 +1,7 @@
-import {useEffect, useRef, useState} from 'react';
+import {type ReactNode, useEffect, useRef, useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import QrScanner from 'qr-scanner';
-import {Button, ButtonContainer, ErrorText, Input, Paragraph, Screen, Title} from "../styles/common.styles.ts";
+import { Button, ButtonContainer, ErrorText, Input, Paragraph, Screen, Title } from "../styles/common.styles.ts";
 import { Video, VideoContainer, ScannerWrapper } from "../styles/QrScanHandler.styles.ts";
 
 type QrScanProps = {
@@ -64,11 +64,12 @@ type QrScanHandlerProps = {
     title: string;
     subtitle?: string;
     scanSuccessHandler: (result: string) => void;
+    additionalButton?: ReactNode;
 }
 
 type InputMode = "menu" | "camera" | "manual";
 
-export default function QrScanHandler({ title, subtitle, scanSuccessHandler }: QrScanHandlerProps) {
+export default function QrScanHandler({ title, subtitle, scanSuccessHandler, additionalButton }: QrScanHandlerProps) {
     const navigate = useNavigate();
 
     const [mode, setMode] = useState<InputMode>("menu");
@@ -85,13 +86,13 @@ export default function QrScanHandler({ title, subtitle, scanSuccessHandler }: Q
             {mode === "menu" && (
                 <ButtonContainer>
                     <Button onClick={() => setMode("camera")}>
-                        SCAN QR CODE
+                        Scan QR code
                     </Button>
                     <Button onClick={() => setMode("manual")}>
-                        ENTER DATA MANUALLY
+                        Enter data manually
                     </Button>
                     <Button onClick={() => navigate(-1)}>
-                        BACK
+                        Back
                     </Button>
                 </ButtonContainer>
             )}
@@ -103,8 +104,9 @@ export default function QrScanHandler({ title, subtitle, scanSuccessHandler }: Q
                     </ScannerWrapper>
 
                     <ButtonContainer>
+                        {additionalButton}
                         <Button onClick={() => setMode("menu")}>
-                            CANCEL
+                            Cancel
                         </Button>
                     </ButtonContainer>
                 </>
@@ -113,17 +115,18 @@ export default function QrScanHandler({ title, subtitle, scanSuccessHandler }: Q
             {mode === "manual" && (
                 <>
                     <Input
-                        placeholder="RAW QR DATA"
+                        placeholder={"Raw QR data".toUpperCase()}
                         value={manualInput}
                         onChange={(e) => setManualInput(e.target.value)}
                     />
 
                     <ButtonContainer>
                         <Button onClick={() => scanSuccessHandler(manualInput)}>
-                            OK
+                            Ok
                         </Button>
+                        {additionalButton}
                         <Button onClick={() => setMode("menu")}>
-                            CANCEL
+                            Cancel
                         </Button>
                     </ButtonContainer>
                 </>

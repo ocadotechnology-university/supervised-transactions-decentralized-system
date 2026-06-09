@@ -63,11 +63,11 @@ export default function QrPrinter() {
     if (!qrPayload || qrData.length === 0) {
         return (
             <Screen>
-                <Title>NO DATA</Title>
+                <Title>No data</Title>
 
                 <ButtonContainer>
                     <Button onClick={() => navigate(-1)}>
-                        BACK
+                        Back
                     </Button>
                 </ButtonContainer>
             </Screen>
@@ -107,11 +107,11 @@ export default function QrPrinter() {
 
             <ButtonContainer>
                 <Button onClick={() => setShowRawData(!showRawData)}>
-                    {showRawData ? "SHOW QR CODE" : "SHOW RAW DATA"}
+                    {showRawData ? "Show QR code" : "Show raw data"}
                 </Button>
 
                 <Button onClick={() => navigate(-1)}>
-                    DONE
+                    Done
                 </Button>
             </ButtonContainer>
         </Screen>

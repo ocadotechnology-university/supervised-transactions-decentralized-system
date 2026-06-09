@@ -4,4 +4,5 @@ export const STORAGE_KEYS = {
     TRADER_DATA: 'traderData',
     SUPERVISOR_TRADERS: 'supervisorTraders',
     SUPERVISOR_RANKING: 'supervisorRanking',
+    SESSION_TOKEN: 'sessionToken',
 } as const;

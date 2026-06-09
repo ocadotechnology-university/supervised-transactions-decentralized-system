@@ -18,7 +18,7 @@ export default function TraderRegistration() {
                 if (!validateTraderQrData(parsedResults)) {
                     navigate("/trader/register/results", {
                         state: {
-                            title: "INVALID QR CODE",
+                            title: "Invalid QR code",
                             path: "/",
                         } });
                     return;
@@ -29,7 +29,7 @@ export default function TraderRegistration() {
             } catch (error) {
                 navigate("/trader/register/results", {
                     state: {
-                        title: "INVALID QR CODE",
+                        title: "Invalid QR code",
                         path: "/",
                     } });
             }
@@ -39,7 +39,7 @@ export default function TraderRegistration() {
 
     return (
         <QrScanHandler
-            title="SCAN SUPERVISOR CODE"
+            title="Scan QR code from the supervisor"
             scanSuccessHandler = { handleScanSuccess }
         />
     );
