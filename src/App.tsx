@@ -7,6 +7,7 @@ import ScanResults from "./components/ScanResults";
 import SupervisorMain from "./pages/SupervisorMain";
 import SupervisorRegister from "./pages/SupervisorRegister";
 import SupervisorVerify from "./pages/SupervisorVerify.tsx";
+import SupervisorRanking from "./pages/SupervisorRanking.tsx";
 import CustomerRegistration from "./pages/CustomerRegistration.tsx";
 import CustomerMain from "./pages/CustomerMain.tsx";
 import CustomerScan from "./pages/CustomerScan.tsx";
@@ -14,6 +15,7 @@ import CustomerCashout from "./pages/CustomerCashout.tsx";
 import TraderMain from "./pages/TraderMain.tsx";
 import TraderRegistration from "./pages/TraderRegistration.tsx";
 import TraderPoints from "./pages/TraderPoints.tsx";
+import { STORAGE_KEYS } from "./utils/localStorageKeys.ts";
 
 export default function App() {
   return (
@@ -22,10 +24,10 @@ export default function App() {
           <Routes>
               <Route path="/" element={<Home />} />
 
-              <Route element={<ProtectedRoute storageKey="customerData" path="/customer" requireData={false} />}>
+              <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.CUSTOMER_DATA} path="/customer" requireData={false} />}>
                   <Route path="/customer/register" element={<CustomerRegistration />} />
               </Route>
-              <Route element={<ProtectedRoute storageKey="customerData" path="/customer/register" requireData={true} />}>
+              <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.CUSTOMER_DATA} path="/customer/register" requireData={true} />}>
                   <Route path="/customer" element={<CustomerMain />} />
                   <Route path="/customer/scan" element={<CustomerScan />} />
                   <Route path="/customer/scan/results" element={<ScanResults />} />
@@ -33,11 +35,11 @@ export default function App() {
                   <Route path="/customer/cashout/qr" element={<QrPrinter />} />
               </Route>
 
-              <Route element={<ProtectedRoute storageKey="traderData" path="/trader" requireData={false} />}>
+              <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.TRADER_DATA} path="/trader" requireData={false} />}>
                   <Route path="/trader/register" element={<TraderRegistration />} />
                   <Route path="/trader/register/results" element={<ScanResults />} />
               </Route>
-              <Route element={<ProtectedRoute storageKey="traderData" path="/trader/register" requireData={true} />}>
+              <Route element={<ProtectedRoute storageKey={STORAGE_KEYS.TRADER_DATA} path="/trader/register" requireData={true} />}>
                   <Route path="/trader" element={<TraderMain />} />
                   <Route path="/trader/points" element={<TraderPoints />} />
                   <Route path="/trader/points/qr" element={<QrPrinter />} />
@@ -49,6 +51,7 @@ export default function App() {
                   <Route path="register/qr" element={<QrPrinter />} />
                   <Route path="verify" element={<SupervisorVerify />} />
                   <Route path="verify/results" element={<ScanResults />} />
+                  <Route path="ranking" element={<SupervisorRanking />} />
               </Route>
           </Routes>
       </Router>

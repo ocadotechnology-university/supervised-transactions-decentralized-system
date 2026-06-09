@@ -6,8 +6,7 @@ import { validateSupervisorQrData } from "../utils/validateQr.ts";
 import { useSequenceScanner } from "../hooks/useSequenceScanner.ts";
 import type { SequenceSummary } from "../hooks/useSequenceScanner.ts";
 import SequenceScannerLayout from "../components/SequenceScannerLayout.tsx";
-
-const TRADERS_KEY = "traders";
+import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
 
 const verifyTransactionCrypto = async (transactionData: Transaction, message: object, foundTrader: TraderEntry): Promise<boolean> => {
     try {
@@ -30,7 +29,7 @@ export default function SupervisorVerify() {
     const allTradersRef = useRef<TraderEntry[]>([]);
 
     useEffect(() => {
-        allTradersRef.current = JSON.parse(localStorage.getItem(TRADERS_KEY) || "[]");
+        allTradersRef.current = JSON.parse(localStorage.getItem(STORAGE_KEYS.SUPERVISOR_TRADERS) || "[]");
     }, []);
 
     const processTransaction = useCallback(async (parsedData: ScannedCashout) => {
@@ -51,8 +50,8 @@ export default function SupervisorVerify() {
         };
 
         if (localStorage.getItem(transactionData.signature)) {
-            const originalTransaction: Transaction = JSON.parse(localStorage.getItem(transactionData.signature)!);
-            return { error: `Duplicate transaction (already scanned by customer ${originalTransaction.customerData}).` };
+            const originalTransaction = JSON.parse(localStorage.getItem(transactionData.signature)!);
+            return { error: `Duplicate transaction (already scanned by customer ${originalTransaction}).` };
         }
 
         const foundTrader = allTradersRef.current.find(transaction => transaction.name === transactionData.name);
@@ -80,8 +79,15 @@ export default function SupervisorVerify() {
                 const deduction = pointsDeductionMapRef.current.get(trader.name);
                 return deduction ? { ...trader, points: trader.points - deduction } : trader;
             });
-            localStorage.setItem(TRADERS_KEY, JSON.stringify(updatedTraders));
-            summary.successfulTransactions.forEach(transaction => localStorage.setItem(transaction.signature, JSON.stringify(transaction)));
+            localStorage.setItem(STORAGE_KEYS.SUPERVISOR_TRADERS, JSON.stringify(updatedTraders));
+            summary.successfulTransactions.forEach(transaction => localStorage.setItem(transaction.signature, JSON.stringify(transaction.customerData)));
+
+            const currentRanking = JSON.parse(localStorage.getItem(STORAGE_KEYS.SUPERVISOR_RANKING) || "{}");
+            const rankingPointsTotal = currentCustomerRef.current ? (currentRanking[currentCustomerRef.current] || 0) + summary.totalPoints : summary.totalPoints;
+            if (currentCustomerRef.current) {
+                const updatedRanking = { ...currentRanking, [currentCustomerRef.current]: rankingPointsTotal };
+                localStorage.setItem(STORAGE_KEYS.SUPERVISOR_RANKING, JSON.stringify(updatedRanking));
+            }
 
             const title = summary.successfulTransactions.length === summary.totalExpected ? "VERIFICATION SUCCESSFUL" : "PARTIAL VERIFICATION";
             navigate("/supervisor/verify/results", {
