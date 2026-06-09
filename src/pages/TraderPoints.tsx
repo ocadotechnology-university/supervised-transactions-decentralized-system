@@ -79,7 +79,7 @@ export default function TraderPoints() {
 
     return (
         <Screen>
-            <Title>SELECT POINT AMOUNT</Title>
+            <Title>Select point amount</Title>
 
             <PointsGrid>
                 {POINT_VALUES.map((val: number) => (
@@ -92,10 +92,10 @@ export default function TraderPoints() {
                 ))}
             </PointsGrid>
 
-            <ButtonContainer style={{ marginTop: "40px" }}>
+            <ButtonContainer marginTop="40px">
                 {error && <ErrorText>{error}</ErrorText>}
                 <Button onClick={() => navigate(-1)}>
-                    BACK
+                    Back
                 </Button>
             </ButtonContainer>
         </Screen>

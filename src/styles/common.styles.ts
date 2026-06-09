@@ -47,17 +47,31 @@ export const Title = styled.h1`
     text-transform: uppercase;
 `;
 
-export const ButtonContainer = styled.div`
+export const ButtonContainer = styled.div<{ marginTop?: string }>`
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 100%;
     max-width: 320px;
+    margin-top: ${({ marginTop }) => marginTop || "0px"};
 `;
 
-export const Button = styled.button`
-    background-color: ${({ theme }) => theme.colors.buttonBackground};
-    color: ${({ theme }) => theme.colors.buttonText};
+const EARLY_SEQUENCE_READY_COLOR = "#e55555";
+const EARLY_SEQUENCE_PENDING_COLOR = "#918f8f";
+const EARLY_SEQUENCE_TEXT_COLOR = "#000000";
+
+type ButtonVariant = "pending" | "ready";
+
+export const Button = styled.button<{ variant?: ButtonVariant; isSelected?: boolean}>`
+    background-color: ${({ theme, variant }) => {
+        switch (variant) {
+            case "ready": return EARLY_SEQUENCE_READY_COLOR;
+            case "pending": return EARLY_SEQUENCE_PENDING_COLOR;
+            default: return theme.colors.buttonBackground;
+        }
+    }};
+    color: ${({ theme, variant }) =>
+            variant === "ready" || variant === "pending" ? EARLY_SEQUENCE_TEXT_COLOR : theme.colors.buttonText};
     padding: 18px;
     border: none;
     border-radius: 8px;
@@ -65,8 +79,16 @@ export const Button = styled.button`
     letter-spacing: 1px;
     font-family: 'Balsamiq Sans', cursive;
     cursor: pointer;
-    box-shadow: 0 4px 12px ${({ theme }) => theme.colors.buttonBackground}40;
+    box-shadow: 0 4px 12px ${({ theme, variant }) => {
+        switch (variant) {
+            case "ready": return EARLY_SEQUENCE_READY_COLOR;
+            case "pending": return EARLY_SEQUENCE_PENDING_COLOR;
+            default: return theme.colors.buttonBackground;
+        }
+    }}40;
     text-transform: uppercase;
+    opacity: ${({ isSelected }) => (isSelected === false ? 0.5 : 1)};
+    transition: opacity 0.1s ease-in-out;
 `;
 
 export const Input = styled.input`

@@ -83,9 +83,7 @@ export default function CustomerCashout() {
                             <Button
                                 key={transaction.id}
                                 onClick={() => toggleSelect(transaction.id)}
-                                style={{
-                                    opacity: isSelected ? 1 : 0.5,
-                                }}
+                                isSelected={isSelected}
                             >
                                 {transaction.points}
                             </Button>
@@ -96,7 +94,7 @@ export default function CustomerCashout() {
                 <Title>No transactions</Title>
             )}
 
-            <ButtonContainer style={{ marginTop: "40px"}}>
+            <ButtonContainer marginTop="40px">
                 <Button onClick={handleCashoutSequence}>
                     Cashout/Transfer {selectedIds.size} selected
                 </Button>

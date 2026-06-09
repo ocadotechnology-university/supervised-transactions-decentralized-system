@@ -15,14 +15,16 @@ export default function SequenceScannerLayout({ title, expectedQrCount, scannedQ
     const sequenceSubtitle = expectedQrCount && expectedQrCount > 1 ? `Scanned ${scannedQrCount} of ${expectedQrCount}` : "";
 
     const showEarlyFinish = scannedQrCount > 0 && expectedQrCount && scannedQrCount < expectedQrCount;
+    const isQrScanPending = pendingQrCount > 0;
+    const buttonVariant = isQrScanPending ? "pending" : "ready";
 
     const earlyFinishButton = showEarlyFinish ? (
         <Button
             onClick={onFinalizeEarly}
-            disabled={pendingQrCount > 0}
-            style={{ backgroundColor: pendingQrCount > 0 ? "#918f8f" : "#e55555" }}
+            disabled={isQrScanPending}
+            variant={buttonVariant}
         >
-            {pendingQrCount > 0 ? `Verifying ${pendingQrCount}...` : `Finish early (${successfulCount} valid)`}
+            {isQrScanPending ? `Verifying ${pendingQrCount}...` : `Finish early (${successfulCount} valid)`}
         </Button>
     ) : null;
 

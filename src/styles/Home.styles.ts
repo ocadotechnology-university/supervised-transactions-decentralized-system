@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button } from "./common.styles.ts";
+import { Button, Title } from "./common.styles.ts";
 
 export const HomeContent = styled.div`
     display: flex;
@@ -35,7 +35,7 @@ export const ScrollTrack = styled.div`
 `;
 
 export const RoleCard = styled.div`
-    flex: 0 0 100%; 
+    flex: 0 0 100%;
     scroll-snap-align: center;
     scroll-snap-stop: always;
     display: flex;
@@ -49,6 +49,11 @@ export const RoleCard = styled.div`
     box-sizing: border-box;
     position: relative;
     box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+`;
+
+export const CardTitle = styled(Title).attrs({ as: "h2" })`
+    font-size: 24px;
+    margin: 10px 0;
 `;
 
 export const InfoButton = styled.button`
@@ -104,4 +109,20 @@ export const InfoDialog = styled.dialog`
         background: rgba(0, 0, 0, 0.4);
         backdrop-filter: blur(4px);
     }
+`;
+
+export const DialogContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+export const DialogTitle = styled(Title).attrs({ as: "h3" })`
+    font-size: 20px;
+    margin-top: 0;
+`;
+
+export const DialogCloseButton = styled(Button)`
+    padding: 10px 24px;
+    width: auto;
 `;

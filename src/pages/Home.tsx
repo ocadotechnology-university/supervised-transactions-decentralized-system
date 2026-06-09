@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useRef} from "react";
 import { ThemeProvider } from "styled-components";
-import {Screen, Title, ErrorText, Button, Paragraph} from "../styles/common.styles.ts";
-import { HomeContent, CardCarouselContainer, ScrollTrack, RoleCard, InfoButton, EnterRoleButton, InfoDialog } from "../styles/Home.styles.ts";
+import {Screen, Title, ErrorText, Paragraph} from "../styles/common.styles.ts";
+import {HomeContent, CardCarouselContainer, ScrollTrack, RoleCard, InfoButton, EnterRoleButton, InfoDialog, CardTitle, DialogContent, DialogTitle, DialogCloseButton} from "../styles/Home.styles.ts";
 import { getThemeByRole } from "../styles/theme.ts";
 import type { UserRole } from "../styles/theme.ts";
 
@@ -110,9 +110,7 @@ export default function Home() {
                                             i
                                         </InfoButton>
 
-                                        <Title as="h2" style={{ fontSize: "24px", margin: "10px 0" }}>
-                                            {role.name}
-                                        </Title>
+                                        <CardTitle>{role.name}</CardTitle>
 
                                         <EnterRoleButton onClick={() => handleRoleClick(role)}>
                                             Continue
@@ -126,13 +124,17 @@ export default function Home() {
 
                 <ThemeProvider theme={getThemeByRole(roles[roleIndex].roleType)}>
                     <InfoDialog ref={dialogRef} onClick={closeInfo}>
-                        <div onClick={(e) => e.stopPropagation()}>
-                            <Title as="h3" style={{ fontSize: "20px", marginTop: 0 }}>Role Details</Title>
+                        <DialogContent onClick={(e) => e.stopPropagation()}>
+
+                            <DialogTitle>Role Details</DialogTitle>
+
                             <Paragraph>{infoText}</Paragraph>
-                            <Button onClick={closeInfo} style={{ padding: "10px 24px", width: "auto" }}>
+
+                            <DialogCloseButton onClick={closeInfo}>
                                 Close
-                            </Button>
-                        </div>
+                            </DialogCloseButton>
+
+                        </DialogContent>
                     </InfoDialog>
                 </ThemeProvider>
 
