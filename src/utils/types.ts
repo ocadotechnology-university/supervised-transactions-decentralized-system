@@ -31,14 +31,12 @@ export type ScannedCashout = {
 export type CustomerEntry = {
     name: string;
     id: string;
-    timestamp: number;
 };
 
 export type TraderEntry = {
     name: string;
     points: number;
     key: JsonWebKey;
-    timestamp: number;
 };
 
 export type LeaderboardEntry = {

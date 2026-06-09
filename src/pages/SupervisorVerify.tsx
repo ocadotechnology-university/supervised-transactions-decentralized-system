@@ -7,6 +7,7 @@ import { useSequenceScanner } from "../hooks/useSequenceScanner.ts";
 import type { SequenceSummary } from "../hooks/useSequenceScanner.ts";
 import SequenceScannerLayout from "../components/SequenceScannerLayout.tsx";
 import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
+import {startSession} from "../utils/startSession.ts";
 
 const verifyTransactionCrypto = async (transactionData: Transaction, message: object, foundTrader: TraderEntry): Promise<boolean> => {
     try {
@@ -75,6 +76,8 @@ export default function SupervisorVerify() {
 
     const onFinalize = useCallback((summary: SequenceSummary) => {
         if (summary.successfulTransactions.length > 0) {
+            startSession()
+
             const updatedTraders = allTradersRef.current.map(trader => {
                 const deduction = pointsDeductionMapRef.current.get(trader.name);
                 return deduction ? { ...trader, points: trader.points - deduction } : trader;

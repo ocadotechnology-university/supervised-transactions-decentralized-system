@@ -5,6 +5,7 @@ import { Button, ButtonContainer, ErrorText, Screen, Title } from "../styles/com
 import { PointsGrid } from "../styles/points.styles.ts";
 import { importKey, signData, encodeData, bufferToBase64, generateId } from "../utils/crypto.ts";
 import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
+import {startSession} from "../utils/startSession.ts";
 
 const POINT_VALUES = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
@@ -60,7 +61,10 @@ export default function TraderPoints() {
                 points: trader.points - amount,
             };
 
+            startSession()
+
             localStorage.setItem(STORAGE_KEYS.TRADER_DATA, JSON.stringify(updatedTrader));
+
             navigate("/trader/points/qr", { state: qrPayload });
 
         } catch (error) {

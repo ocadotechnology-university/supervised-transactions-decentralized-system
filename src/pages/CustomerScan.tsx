@@ -6,6 +6,7 @@ import { useSequenceScanner } from "../hooks/useSequenceScanner.ts";
 import type { SequenceSummary } from "../hooks/useSequenceScanner.ts";
 import SequenceScannerLayout from "../components/SequenceScannerLayout.tsx";
 import { STORAGE_KEYS } from "../utils/localStorageKeys.ts";
+import {startSession} from "../utils/startSession.ts";
 
 export default function CustomerScan() {
     const navigate = useNavigate();
@@ -33,6 +34,8 @@ export default function CustomerScan() {
         const allTransactions: Transaction[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.CUSTOMER_TRANSACTIONS) || "[]");
 
         if (summary.successfulTransactions.length > 0) {
+            startSession()
+
             localStorage.setItem(STORAGE_KEYS.CUSTOMER_TRANSACTIONS, JSON.stringify([...allTransactions, ...summary.successfulTransactions]));
 
             const isSingle = summary.totalExpected === 1;
