@@ -6,6 +6,9 @@ import { HomeContent, CardCarouselContainer, ScrollTrack, RoleCard, InfoButton, 
 import { getThemeByRole } from "../styles/theme.ts";
 import type { UserRole } from "../styles/theme.ts";
 
+const customerDescription = "As a Customer, You will gain points from Traders via QR codes. Later, You can cashout these points to a Supervisor, who will verify their validity and update Your placement in the ranking. Alternatively, You can transfer these points to another Customer."
+const traderDescription = "As a Trader, You will transfer points to different Customers, based on their performance. To become a Trader, You need to scan a registration QR code from a Supervisor, that contains Your cryptographic key and assigned point pool. "
+const supervisorDescription = "As a Supervisor, You will manage the session: register Traders, verify Customers' points and display the ranking."
 const errorMessage = "Your browser is not supported. Please update your browser.";
 
 type RoleDef = {
@@ -33,21 +36,21 @@ export default function Home() {
             name: "CUSTOMER",
             path: "/customer",
             roleType: "customer",
-            description: "Role description",
+            description: customerDescription,
             isValid: () => hasRandomValues
         },
         {
             name: "TRADER",
             path: "/trader",
             roleType: "trader",
-            description: "Role description",
+            description: traderDescription,
             isValid: () => hasSubtleCrypto && hasBase64Methods
         },
         {
             name: "SUPERVISOR",
             path: "/supervisor",
             roleType: "supervisor",
-            description: "Role description",
+            description: supervisorDescription,
             isValid: () => hasSubtleCrypto && hasBase64Methods
         }
     ];
