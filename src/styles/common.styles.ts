@@ -44,6 +44,7 @@ export const Title = styled.h1`
     word-wrap: break-word;
     overflow-wrap: break-word;
     color: ${({ theme }) => theme.colors.text};
+    text-transform: uppercase;
 `;
 
 export const ButtonContainer = styled.div`
@@ -65,6 +66,7 @@ export const Button = styled.button`
     font-family: 'Balsamiq Sans', cursive;
     cursor: pointer;
     box-shadow: 0 4px 12px ${({ theme }) => theme.colors.buttonBackground}40;
+    text-transform: uppercase;
 `;
 
 export const Input = styled.input`

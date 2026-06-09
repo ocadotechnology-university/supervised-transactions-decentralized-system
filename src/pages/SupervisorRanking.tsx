@@ -42,7 +42,7 @@ export default function SupervisorRanking() {
 
     return (
         <Screen>
-            <Title>TOP 10 CUSTOMERS</Title>
+            <Title>Top 10 customers</Title>
 
             <LeaderboardContainer>
                 {hasData ? (
@@ -54,7 +54,7 @@ export default function SupervisorRanking() {
 
             <ButtonContainer>
                 <Button className="button" onClick={() => navigate(-1)}>
-                        BACK
+                        Back
                 </Button>
             </ButtonContainer>
         </Screen>

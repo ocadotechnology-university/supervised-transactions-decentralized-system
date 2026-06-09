@@ -76,7 +76,7 @@ export default function SupervisorRegister() {
             localStorage.setItem(STORAGE_KEYS.SUPERVISOR_TRADERS, JSON.stringify(updatedTraders));
 
             const qrPayload = {
-                title: "SHOW CODE TO TRADER",
+                title: "Show code to trader",
                 qrData: [{
                     name: trimmedName,
                     points: parsedPoints,
@@ -94,17 +94,17 @@ export default function SupervisorRegister() {
 
     return (
         <Screen>
-            <Title>ENTER TRADER DETAILS</Title>
+            <Title>Enter trader details</Title>
 
             <Input
-                placeholder="TRADER NAME"
+                placeholder={"Trader name".toUpperCase()}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
             />
             {nameError && <ErrorText>{nameError}</ErrorText>}
 
             <Input
-                placeholder="POINT POOL"
+                placeholder={"Point pool".toUpperCase()}
                 value={points}
                 onChange={(e) => setPoints(e.target.value)}
             />
@@ -112,11 +112,11 @@ export default function SupervisorRegister() {
 
             <ButtonContainer>
                 <Button onClick={handleGenerate}>
-                    OK
+                    Ok
                 </Button>
 
                 <Button onClick={() => navigate("/supervisor")}>
-                    BACK
+                    Back
                 </Button>
             </ButtonContainer>
         </Screen>

@@ -46,10 +46,10 @@ export default function CustomerRegistration() {
 
     return (
         <Screen>
-            <Title>CUSTOMER REGISTRATION</Title>
+            <Title>Customer registration</Title>
 
             <Input
-                placeholder="ENTER YOUR NAME"
+                placeholder={"Enter your name".toUpperCase()}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
             />
@@ -57,11 +57,11 @@ export default function CustomerRegistration() {
 
             <ButtonContainer>
                 <Button onClick={handleRegister}>
-                    OK
+                    Ok
                 </Button>
 
                 <Button onClick={() => navigate("/", { replace: true })}>
-                    BACK
+                    Back
                 </Button>
             </ButtonContainer>
         </Screen>

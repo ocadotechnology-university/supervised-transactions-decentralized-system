@@ -86,13 +86,13 @@ export default function QrScanHandler({ title, subtitle, scanSuccessHandler, add
             {mode === "menu" && (
                 <ButtonContainer>
                     <Button onClick={() => setMode("camera")}>
-                        SCAN QR CODE
+                        Scan QR code
                     </Button>
                     <Button onClick={() => setMode("manual")}>
-                        ENTER DATA MANUALLY
+                        Enter data manually
                     </Button>
                     <Button onClick={() => navigate(-1)}>
-                        BACK
+                        Back
                     </Button>
                 </ButtonContainer>
             )}
@@ -106,7 +106,7 @@ export default function QrScanHandler({ title, subtitle, scanSuccessHandler, add
                     <ButtonContainer>
                         {additionalButton}
                         <Button onClick={() => setMode("menu")}>
-                            CANCEL
+                            Cancel
                         </Button>
                     </ButtonContainer>
                 </>
@@ -115,18 +115,18 @@ export default function QrScanHandler({ title, subtitle, scanSuccessHandler, add
             {mode === "manual" && (
                 <>
                     <Input
-                        placeholder="RAW QR DATA"
+                        placeholder={"Raw QR data".toUpperCase()}
                         value={manualInput}
                         onChange={(e) => setManualInput(e.target.value)}
                     />
 
                     <ButtonContainer>
                         <Button onClick={() => scanSuccessHandler(manualInput)}>
-                            OK
+                            Ok
                         </Button>
                         {additionalButton}
                         <Button onClick={() => setMode("menu")}>
-                            CANCEL
+                            Cancel
                         </Button>
                     </ButtonContainer>
                 </>

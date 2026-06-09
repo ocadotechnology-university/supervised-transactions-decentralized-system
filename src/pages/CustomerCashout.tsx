@@ -62,7 +62,7 @@ export default function CustomerCashout() {
         }));
 
         const qrPayload = {
-            title: "SHOW CODES TO SUPERVISOR OR TO CUSTOMER",
+            title: "Show codes to supervisor or to customer",
             qrData: qrDataList
         };
 
@@ -72,7 +72,7 @@ export default function CustomerCashout() {
 
     return (
         <Screen>
-            <Title>SELECT TRANSACTIONS</Title>
+            <Title>Select transactions</Title>
             <Paragraph>Selected transactions will be removed from your account</Paragraph>
 
             {transactions.length > 0 ? (
@@ -93,16 +93,16 @@ export default function CustomerCashout() {
                     })}
                 </PointsGrid>
             ) : (
-                <Title>NO TRANSACTIONS</Title>
+                <Title>No transactions</Title>
             )}
 
             <ButtonContainer style={{ marginTop: "40px"}}>
                 <Button onClick={handleCashoutSequence}>
-                    CASHOUT/SHARE {selectedIds.size} SELECTED
+                    Cashout/Transfer {selectedIds.size} selected
                 </Button>
 
                 <Button onClick={() => navigate(-1)}>
-                    BACK
+                    Back
                 </Button>
             </ButtonContainer>
         </Screen>

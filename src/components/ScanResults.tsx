@@ -20,10 +20,10 @@ export default function ScanResults() {
     if (!resultsData) {
         return (
             <Screen>
-                <Title>NO DATA</Title>
+                <Title>No data</Title>
                 <ButtonContainer>
                     <Button onClick={() => navigate(-1)}>
-                        BACK
+                        Back
                     </Button>
                 </ButtonContainer>
             </Screen>
@@ -43,7 +43,7 @@ export default function ScanResults() {
                     <Circle>
                         <PointsValue>{resultsData.points}</PointsValue>
                     </Circle>
-                    <PointsLabel>POINTS</PointsLabel>
+                    <PointsLabel>Points</PointsLabel>
                 </PointsContainer>
             )}
 
@@ -62,11 +62,11 @@ export default function ScanResults() {
 
             <ButtonContainer>
                 <Button onClick={() => navigate(-1)}>
-                    SCAN AGAIN
+                    Scan again
                 </Button>
 
                 <Button onClick={() => navigate(resultsData.path, { replace: true })}>
-                    DONE
+                    Done
                 </Button>
             </ButtonContainer>
         </Screen>

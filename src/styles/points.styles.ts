@@ -35,6 +35,7 @@ export const PointsLabel = styled.h2`
     color: ${({ theme }) => theme.colors.text};
     margin: 0;
     letter-spacing: 2px;
+    text-transform: uppercase;
 `;
 
 export const PointsGrid = styled.div`

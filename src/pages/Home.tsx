@@ -90,7 +90,7 @@ export default function Home() {
     return (
         <Screen>
             <HomeContent>
-                <Title>WHO ARE YOU?</Title>
+                <Title>Who are you?</Title>
 
                 {error && <ErrorText>{error}</ErrorText>}
 
@@ -115,7 +115,7 @@ export default function Home() {
                                         </Title>
 
                                         <EnterRoleButton onClick={() => handleRoleClick(role)}>
-                                            CONTINUE
+                                            Continue
                                         </EnterRoleButton>
                                     </RoleCard>
                                 </ThemeProvider>
@@ -130,7 +130,7 @@ export default function Home() {
                             <Title as="h3" style={{ fontSize: "20px", marginTop: 0 }}>Role Details</Title>
                             <Paragraph>{infoText}</Paragraph>
                             <Button onClick={closeInfo} style={{ padding: "10px 24px", width: "auto" }}>
-                                CLOSE
+                                Close
                             </Button>
                         </div>
                     </InfoDialog>

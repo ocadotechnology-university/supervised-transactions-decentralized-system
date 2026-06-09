@@ -40,16 +40,16 @@ export default function CustomerMain() {
                 <Circle>
                     <PointsValue>{points}</PointsValue>
                 </Circle>
-                <PointsLabel>POINTS</PointsLabel>
+                <PointsLabel>Points</PointsLabel>
             </PointsContainer>
 
             <ButtonContainer>
                 <Button onClick={() => navigate("/customer/scan")}>
-                    SCAN TRANSACTION
+                    Scan transactions
                 </Button>
 
                 <Button onClick={() => navigate("/customer/cashout")}>
-                    CASHOUT/SHARE POINTS
+                    Cashout/Transfer points
                 </Button>
             </ButtonContainer>
         </Screen>

@@ -49,7 +49,7 @@ export default function TraderPoints() {
             const signature = bufferToBase64(signatureBuffer);
 
             const qrPayload = {
-                title: "SHOW CODE TO CUSTOMER",
+                title: "Show code to customer",
                 qrData: [{
                     message,
                     signature

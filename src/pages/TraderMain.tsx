@@ -32,12 +32,12 @@ export default function TraderMain() {
                 <Circle>
                     <PointsValue>{points}</PointsValue>
                 </Circle>
-                <PointsLabel>POINTS</PointsLabel>
+                <PointsLabel>Points</PointsLabel>
             </PointsContainer>
 
             <ButtonContainer>
                 <Button onClick={() => navigate("/trader/points")}>
-                    TRANSFER POINTS
+                    Transfer points
                 </Button>
             </ButtonContainer>
         </Screen>

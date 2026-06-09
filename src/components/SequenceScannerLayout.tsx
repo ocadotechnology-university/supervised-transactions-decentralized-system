@@ -12,7 +12,7 @@ type SequenceScannerLayoutProps = {
 }
 
 export default function SequenceScannerLayout({ title, expectedQrCount, scannedQrCount, pendingQrCount, successfulCount, onScanSuccess, onFinalizeEarly }: SequenceScannerLayoutProps) {
-    const sequenceSubtitle = expectedQrCount && expectedQrCount > 1 ? `SCANNED ${scannedQrCount} OF ${expectedQrCount}` : "";
+    const sequenceSubtitle = expectedQrCount && expectedQrCount > 1 ? `Scanned ${scannedQrCount} of ${expectedQrCount}` : "";
 
     const showEarlyFinish = scannedQrCount > 0 && expectedQrCount && scannedQrCount < expectedQrCount;
 
@@ -22,7 +22,7 @@ export default function SequenceScannerLayout({ title, expectedQrCount, scannedQ
             disabled={pendingQrCount > 0}
             style={{ backgroundColor: pendingQrCount > 0 ? "#918f8f" : "#e55555" }}
         >
-            {pendingQrCount > 0 ? `VERIFYING ${pendingQrCount}...` : `FINISH EARLY (${successfulCount} VALID)`}
+            {pendingQrCount > 0 ? `Verifying ${pendingQrCount}...` : `Finish early (${successfulCount} valid)`}
         </Button>
     ) : null;
 

@@ -39,7 +39,7 @@ export default function CustomerScan() {
             localStorage.setItem(STORAGE_KEYS.CUSTOMER_TRANSACTIONS, JSON.stringify([...allTransactions, ...summary.successfulTransactions]));
 
             const isSingle = summary.totalExpected === 1;
-            const title = isSingle ? "YOU GOT" : summary.successfulTransactions.length === summary.totalExpected ? "SHARE SUCCESSFUL" : "PARTIAL SHARE";
+            const title = isSingle ? "You got" : summary.successfulTransactions.length === summary.totalExpected ? "transfer successful" : "partial transfer";
             const subtitle = isSingle ? undefined : `Received ${summary.successfulTransactions.length} of ${summary.totalExpected} transactions`;
 
             navigate("/customer/scan/results", {
@@ -56,7 +56,7 @@ export default function CustomerScan() {
 
             navigate("/customer/scan/results", {
                 state: {
-                    title: "TRANSACTION FAILED",
+                    title: "Transaction failed",
                     subtitle,
                     errors: summary.errors,
                     path: "/customer"
@@ -68,7 +68,7 @@ export default function CustomerScan() {
     const onFatalError = useCallback((errorMsg: string) => {
         navigate("/customer/scan/results", {
             state: {
-                title: "TRANSACTION FAILED",
+                title: "Transaction failed",
                 subtitle: "Could not establish sequence.",
                 errors: [errorMsg],
                 path: "/customer"
@@ -86,7 +86,7 @@ export default function CustomerScan() {
 
     return (
         <SequenceScannerLayout
-            title="SCAN TRANSACTION"
+            title="Scan transaction"
             expectedQrCount={scanner.expectedQrCount}
             scannedQrCount={scanner.scannedQrCount}
             pendingQrCount={scanner.pendingQrCount}

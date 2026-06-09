@@ -6,17 +6,17 @@ export default function SupervisorMain() {
 
     return (
         <Screen>
-            <Title>CHOOSE ACTION</Title>
+            <Title>Choose action</Title>
 
             <ButtonContainer>
                 <Button onClick={() => navigate("/supervisor/register")}>
-                    REGISTER TRADERS
+                    Register traders
                 </Button>
                 <Button onClick={() => navigate("/supervisor/verify")}>
-                    VERIFY POINTS
+                    Verify points
                 </Button>
                 <Button onClick={() => navigate("/supervisor/ranking")}>
-                    RANKING
+                    Ranking
                 </Button>
             </ButtonContainer>
         </Screen>
