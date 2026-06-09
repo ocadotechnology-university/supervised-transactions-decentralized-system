@@ -72,4 +72,7 @@ export const Separator = styled.span`
     opacity: 0.45;
     font-size: 18px;
     user-select: none;
+    &::after {
+        content: "›";
+    }
 `;

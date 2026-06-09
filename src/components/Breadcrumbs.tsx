@@ -37,9 +37,7 @@ export default function Breadcrumbs() {
 
                 return (
                     <BreadcrumbItem key={to}>
-                        <Separator aria-hidden="true">
-                            ›
-                        </Separator>
+                        <Separator aria-hidden="true"/>
 
                         {isLast ? (
                             <BreadcrumbCurrent aria-current="page">
