@@ -64,14 +64,12 @@ export default function SupervisorRegister() {
             const privJwk = await exportKey(keys.privateKey);
             const pubJwk = await exportKey(keys.publicKey);
 
-            const now = Date.now();
             const parsedPoints = Number(trimmedPoints);
 
             const newTrader: TraderEntry = {
                 name: trimmedName,
                 points: parsedPoints,
                 key: pubJwk,
-                timestamp: now,
             };
 
             const updatedTraders = [...allTraders, newTrader];
@@ -83,7 +81,6 @@ export default function SupervisorRegister() {
                     name: trimmedName,
                     points: parsedPoints,
                     key: privJwk,
-                    timestamp: now,
                 }]
             };
 

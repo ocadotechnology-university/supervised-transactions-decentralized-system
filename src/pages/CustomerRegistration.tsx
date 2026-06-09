@@ -39,7 +39,6 @@ export default function CustomerRegistration() {
         const payload: CustomerEntry = {
             name: trimmedName.toUpperCase(),
             id: generateId(),
-            timestamp: Date.now(),
         };
 
         setCustomerData(payload);
